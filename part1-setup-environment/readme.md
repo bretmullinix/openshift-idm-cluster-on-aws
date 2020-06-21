@@ -1,4 +1,4 @@
-# Installation of OpenShit Cluster and IDM on AWS
+# Setup your Environment
 
 Last updated: 06.21.2020
 
