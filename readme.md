@@ -11,7 +11,7 @@ Test Driven Development (TDD).
 ## Prerequisites
 
 A working knowledge of Ansible.  You can learn about Ansible by reading the this
-[repo]("https://github.com/bretmullinix/ansible-for-beginners").
+[repo](https://github.com/bretmullinix/ansible-for-beginners).
 
 A working knowledge of Ansible Molecule.  You can learn about Ansible Molecule by
 reading ths
