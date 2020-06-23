@@ -131,7 +131,7 @@ of RedHat IDM (FreeIPA) on AWS.
             name of **idm.example.com**. We are now
             back in the **Green** state for the
             **Red, Green, Refactor** iteration of Test
-            Driven Development (TDD)
+            Driven Development (TDD).
         
         
         
