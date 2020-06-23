@@ -6,6 +6,7 @@ driver:
 platforms:
   - name: instance
     image: centos:8
+    hostname: idm.example.com
     pre_build_image: true
     command: /sbin/init
     tmpfs:
@@ -17,6 +18,8 @@ provisioner:
   name: ansible
 verifier:
   name: ansible
+  options:
+    v: 4
 scenario:
   name: default
   test_sequence:
