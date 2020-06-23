@@ -106,23 +106,23 @@ of RedHat IDM (FreeIPA) on AWS.
 
           ``` 
          
-        1. cd ../..
-        1. Run `molecule converge`
-        1. Run `molecule verify`
+      1. cd ../..
+      1. Run `molecule converge`
+      1. Run `molecule verify`
 
             The test should fail.  We haven't written any
             code or configuration to name the docker instance.
             The purpose of the test in TDD is to
             first prove that a test fails without writing any
             code.
-        1. Run `molecule destroy`
-        1. Add the following line under the **platforms**
+      1. Run `molecule destroy`
+      1. Add the following line under the **platforms**
         **--name** attribute in the **molecule.yml** and
         save the file.
         
             hostname: idm.example.com
-        1. Run `molecule converge`
-        1. Run `molecule verify`.  
+      1. Run `molecule converge`
+      1. Run `molecule verify`.  
         
             Verification should
             be successful.  We added configuration to the
