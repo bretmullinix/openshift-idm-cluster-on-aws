@@ -54,6 +54,7 @@ of RedHat IDM (FreeIPA) on AWS.
             - destroy
 
         ```
+     
      1. Create the **prepare.yml** and add the following
      contents:
      
@@ -104,7 +105,7 @@ of RedHat IDM (FreeIPA) on AWS.
                  when: ansible_fqdn != "idm.example.com"
 
           ``` 
-
+         
         1. cd ../..
         1. Run `molecule converge`
         1. Run `molecule verify`
