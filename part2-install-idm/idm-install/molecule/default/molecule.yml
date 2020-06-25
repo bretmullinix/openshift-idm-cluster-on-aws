@@ -1,6 +1,8 @@
 ---
 dependency:
   name: galaxy
+ansible:
+  config_file: ../ansible.cfg
 driver:
   name: docker
 platforms:

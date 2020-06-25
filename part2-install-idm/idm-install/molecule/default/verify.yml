@@ -20,3 +20,28 @@
       fail:
         msg:  "Your host name is '{{ ansible_fqdn }}' and should be 'idm.example.com'"
       when: ansible_fqdn != "idm.example.com"
+
+    - name: collect facts about system services
+      service_facts:
+      register: services_state
+
+    - name: Debug Service Facts
+      debug:
+        msg: "{{item.key}}"
+      with_dict: "{{ services_state.ansible_facts.services }}"
+
+    - name:  Determine if firewalld exists
+      set_fact:
+        firewalld_service_exists: true
+      loop: "{{ lookup('dict', services_state.ansible_facts.services) }}"
+      when: "'firewalld.service' in item.key"
+
+    - name: Pass if firewalld service exists
+      debug:
+        msg: "Firewalld exists!!!"
+      when: firewalld_service_exists is defined
+
+    - name: Fail if firewalld service doesn't exist
+      fail:
+        msg: "The firewalld servece does not exist"
+      when: firewalld_service_exists is not defined

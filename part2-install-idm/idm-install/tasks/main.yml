@@ -1,2 +1,7 @@
 ---
 # tasks file for idm-install
+
+- name: Install Firewalld Service
+  yum:
+    name: firewalld
+    state: present
