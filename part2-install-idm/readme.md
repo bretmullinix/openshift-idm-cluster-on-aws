@@ -11,6 +11,17 @@ of RedHat IDM (FreeIPA) on AWS.
 ## Procedure
 1. Activate your virtual environment created in
 [part1](../part1-setup-environment).
+
+1. Open up a terminal window.
+
+1. Copy the **ansible.cfg** down from the git repo under the
+folder **part2-install-idm**.
+
+1. Set the path to the **ansible.cfg** by setting the environment variable:
+
+    `ANSIBLE_CONFIG=$(pwd)/ansible.cfg`
+
+1.  Run `ANSIBLE_CONFIG`
   
 1. Create the Ansible Molecule role called **idm-install**
 
