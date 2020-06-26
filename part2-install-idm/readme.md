@@ -14,6 +14,8 @@ of RedHat IDM (FreeIPA) on AWS.
 
 1. Open up a terminal window.
 
+1. mkdir **part2-install-idm**
+
 1. Copy the **ansible.cfg** down from the git repo under the
 folder **part2-install-idm**.
 
