@@ -23,8 +23,6 @@ folder **part2-install-idm**.
 
     `ANSIBLE_CONFIG=$(pwd)/ansible.cfg`
 
-1.  Run `ANSIBLE_CONFIG`
-
 1. Copy the **Dockerfile** down from the git repo under the
 folder **part2-install-idm**  
 
