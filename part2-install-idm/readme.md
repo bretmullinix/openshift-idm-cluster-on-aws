@@ -1,6 +1,6 @@
 # Installation of IDM on AWS
 
-Last updated: 06.23.2020
+Last updated: 06.26.2020
 
 ## Purpose
 

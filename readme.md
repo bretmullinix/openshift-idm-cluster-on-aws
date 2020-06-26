@@ -1,6 +1,6 @@
 # Installation of OpenShit Cluster and IDM on AWS
 
-Last updated: 06.21.2020
+Last updated: 06.26.2020
 
 ## Purpose
 
