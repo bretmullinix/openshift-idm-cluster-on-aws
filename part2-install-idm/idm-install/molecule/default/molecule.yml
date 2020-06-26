@@ -7,7 +7,7 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: centos:8
+    image: part2-install-idm-image
     hostname: idm.example.com
     pre_build_image: true
     command: /sbin/init

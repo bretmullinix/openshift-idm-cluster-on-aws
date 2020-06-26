@@ -1,0 +1,15 @@
+- name:  Determine if firewalld exists
+  set_fact:
+    firewalld_service_exists: true
+  loop: "{{ lookup('dict', services_state.ansible_facts.services) }}"
+  when: "'firewalld.service' in item.key"
+
+- name: Pass if firewalld service exists
+  debug:
+    msg: "Firewalld exists!!!"
+  when: firewalld_service_exists is defined
+
+- name: Fail if firewalld service doesn't exist
+  fail:
+    msg: "The firewalld servece does not exist"
+  when: firewalld_service_exists is not defined
