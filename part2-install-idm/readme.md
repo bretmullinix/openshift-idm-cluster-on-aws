@@ -125,7 +125,7 @@ folder **part2-install-idm**
         
             hostname: idm.example.com
       1. Run `molecule converge`
-      1. Run `molecule verify`.  
+      1. Run `molecule verify`
         
             Verification should
             be successful.  We added configuration to the
