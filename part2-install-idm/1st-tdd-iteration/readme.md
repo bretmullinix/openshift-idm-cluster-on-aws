@@ -8,6 +8,8 @@ The purpose of this iteration is to add the host name to the target servers.
 
 ## Procedure
 
+1. cd idm-install/molecule/default
+
 1. **RED** --> Test for the existence of the Host Name
     
     1. rm verify.yml

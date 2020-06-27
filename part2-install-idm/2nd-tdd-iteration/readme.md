@@ -7,6 +7,7 @@ Last updated: 06.27.2020
 The purpose of this iteration is to add **firewalld** to the target servers.
 
 ## Procedure
+1. cd idm-install/molecule/default
 
 1. **RED** --> Test for the existence of **firewalld**.
     
