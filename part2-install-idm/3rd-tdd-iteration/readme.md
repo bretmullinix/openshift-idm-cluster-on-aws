@@ -196,9 +196,9 @@ The purpose of this iteration is to start and enable **firewalld** on the target
               when: firewall_service.status != 'enabled'
         ```
     
-        We have removed two loops that populated the firewall started and
+        We removed two loops that populated the firewall started and
         firewall enabled boolean variables, and we add readability
-        by explicitly showing that were checking for the firewall service is running
+        by checking to see if the firewall service is running
         and enabled in the **when** conditions.
      1. We take another look at our code and our refactoring is complete.
 
