@@ -98,6 +98,8 @@ folder **part2-install-idm**
    on the image.
    
 1. <a name="2ndTDD"></a> Add **firewalld** with the [2nd TDD Iteration](./2nd-tdd-iteration).
+
+1. <a name="3rdTDD"></a> Start and enable **firewalld** with the [3rd TDD Iteration](./3rd-tdd-iteration).
    
 
         
