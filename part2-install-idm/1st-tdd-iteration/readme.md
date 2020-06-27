@@ -1,5 +1,7 @@
 # 1st TDD Iteration --> Add a Host Name
 
+Last updated: 06.27.2020
+
 ## Purpose
 
 The purpose of this iteration is to add the host name to the target servers.
