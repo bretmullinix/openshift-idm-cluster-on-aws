@@ -1,0 +1,21 @@
+---
+
+- name: Pass if firewalld service is started
+  debug:
+    msg: "Firewalld is started!!!"
+  when: firewall_service.state == 'running'
+
+- name: Fail if firewalld service is not started
+  fail:
+    msg: "The firewalld service is not started"
+  when: firewall_service.state != 'running'
+
+- name: Pass if firewalld service is enabled
+  debug:
+    msg: "Firewalld is enabled!!!"
+  when: firewall_service.status == 'enabled'
+
+- name: Fail if firewalld service is not enabled
+  fail:
+    msg: "The firewalld service is not enabled"
+  when: firewall_service.status != 'enabled'

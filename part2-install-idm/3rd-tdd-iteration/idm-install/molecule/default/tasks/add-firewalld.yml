@@ -1,0 +1,9 @@
+- name: Pass if firewalld service exists
+  debug:
+    msg: "Firewalld exists!!!"
+  when: firewall_service is defined
+
+- name: Fail if firewalld service doesn't exist
+  fail:
+    msg: "The firewalld servece does not exist"
+  when: firewall_service is not defined
