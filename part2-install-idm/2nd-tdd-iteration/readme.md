@@ -37,7 +37,7 @@ The purpose of this iteration is to add **firewalld** to the target servers.
     1. Run `molecule verify`.  The test should fail.  The test represents
        the **Red** in the **Red, Green, Refactor** iteration of TDD.
 
-1. Green --> Add **firewalld** to the ansible role.
+1. **Green** --> Add **firewalld** to the ansible role.
      
     1. cd molecule/default
         
@@ -60,7 +60,7 @@ The purpose of this iteration is to add **firewalld** to the target servers.
     1. Run `molecule verify`. The test should pass.  The test represents
     the **Green** in the **Red, Green, Refactor** iteration of TDD.
 
-1. Refactor --> Does any of the code need **Refactoring**?
+1. **Refactor** --> Does any of the code need **Refactoring**?
 
     1. The **verify.yml** looks a little messy.  Lets us extract the **firewalld**
         tasks out into a file and reference the file from verify.yml.
