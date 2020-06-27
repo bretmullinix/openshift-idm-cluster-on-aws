@@ -53,7 +53,7 @@ The purpose of this iteration is to add the host name to the target servers.
             code.
       1. Run `molecule destroy`
 
-1. **Green** --> Add the host name to the **molecule.yml** file.
+1. **GREEN** --> Add the host name to the **molecule.yml** file.
     1. Add the following line under the **platforms**
         **--name** attribute in the **molecule.yml** and
         save the file.
@@ -71,7 +71,8 @@ The purpose of this iteration is to add the host name to the target servers.
             **Red, Green, Refactor** iteration of Test
             Driven Development (TDD).
       1. Run `molecule destroy`
-1. **Refactor** --> Does any of the code or configuration need refactoring?
+      
+1. **REFACTOR** --> Does any of the code or configuration need refactoring?
 
     Currently, we don't seem to have any code that needs to be **Refactored**.
 
