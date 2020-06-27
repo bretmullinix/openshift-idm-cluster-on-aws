@@ -83,7 +83,7 @@ folder **part2-install-idm**
 
     ```
 
-1. Add a **host name** using the [1st TDD Iteration](./1st-tdd-iteration).
+1. <a name="1stTDD"></a> Add a **host name** using the [1st TDD Iteration](./1st-tdd-iteration).
 
 1. cd idm-install/molecule/default/
 
@@ -97,8 +97,8 @@ folder **part2-install-idm**
    The task above gathers facts about the **services** installed
    on the image.
    
-1. Add **firewalld** with the [2nd TDD Iteration](./2nd-tdd-iteration)
-    
+1. <a name="2ndTDD"></a> Add **firewalld** with the [2nd TDD Iteration](./2nd-tdd-iteration)
+   
 
         
         
