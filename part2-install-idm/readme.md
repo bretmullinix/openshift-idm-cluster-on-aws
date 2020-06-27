@@ -97,7 +97,7 @@ folder **part2-install-idm**
    The task above gathers facts about the **services** installed
    on the image.
    
-1. <a name="2ndTDD"></a> Add **firewalld** with the [2nd TDD Iteration](./2nd-tdd-iteration)
+1. <a name="2ndTDD"></a> Add **firewalld** with the [2nd TDD Iteration](./2nd-tdd-iteration).
    
 
         
