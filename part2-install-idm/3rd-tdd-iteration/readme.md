@@ -55,19 +55,16 @@ The purpose of this iteration is to start and enable **firewalld** on the target
 
 1. **GREEN** --> Add the tasks to start and enable **firewalld** to the ansible role.
      
-    1. cd molecule/default
-        
     1. Add the following tasks to the end of the **tasks/main.yml** file.
-        
-    ```yaml
-      - name: Start Firewalld Service
-        service:
-          name: firewalld
-          state: started
-          enabled: yes
-    ```   
-           
-    The task will start and enable **firewalld**.
+    
+        ```yaml
+        - name: Start Firewalld Service
+          service:
+            name: firewalld
+            state: started
+            enabled: yes
+       ```
+        The task will start and enable **firewalld**.
         
     1. cd ../..
     
@@ -200,7 +197,8 @@ The purpose of this iteration is to start and enable **firewalld** on the target
         firewall enabled boolean variables, and we add readability
         by checking to see if the firewall service is running
         and enabled in the **when** conditions.
-     1. We take another look at our code and our refactoring is complete.
+     1. We take another look at our code, and our refactoring is complete.
+     1. Run `molecule test` to ensure our roll works as intended.
 
 We have started and enabled **firewalld** and completed our 3rd TDD iteration.
 
