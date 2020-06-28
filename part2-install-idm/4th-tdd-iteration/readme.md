@@ -1,4 +1,4 @@
-# 4th TDD Iteration --> Open Ports for FreeIPA
+# 4th TDD Iteration --> Open Ports for RedHat IDM
 
 Last updated: 06.28.2020
 
