@@ -41,33 +41,31 @@ The purpose of this iteration is to open ports for IDM on the target servers.
 
 1. **GREEN** --> Add the task to open the ports.
      
-    1. cd molecule/default
-        
     1. Add the following task to the end of the **tasks/main.yml** file.
-        
-    ```yaml
-    - name: Open Ports for IDM
-      firewalld:
-        port: "{{ item }}"
-        permanent: true
-        immediate: true
-        state: enabled
-      with_items:
-        - "80/tcp"
-        - "443/tcp"
-        - "389/tcp"
-        - "636/tcp"
-        - "88/tcp"
-        - "88/udp"
-        - "464/tcp"
-        - "464/udp"
-        - "53/tcp"
-        - "53/udp"
-        - "123/udp"         
-    ```   
-           
-    The task will open the necessary ports for IDM.
-        
+    
+        ```yaml
+       - name: Open Ports for IDM
+                firewalld:
+                  port: "{{ item }}"
+                  permanent: true
+                  immediate: true
+                  state: enabled
+                with_items:
+                  - "80/tcp"
+                  - "443/tcp"
+                  - "389/tcp"
+                  - "636/tcp"
+                  - "88/tcp"
+                  - "88/udp"
+                  - "464/tcp"
+                  - "464/udp"
+                  - "53/tcp"
+                  - "53/udp"
+                  - "123/udp"     
+       ```
+
+         The task will open the necessary ports for IDM.
+   
     1. cd ../..
     
     1. Run `molecule converge`.  The command runs the **tasks/main.yml**
