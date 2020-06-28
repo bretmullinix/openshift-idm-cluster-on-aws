@@ -4,7 +4,7 @@ Last updated: 06.28.2020
 
 ## Purpose
 
-The purpose of this iteration is to open ports for FreeIPA on the target servers.
+The purpose of this iteration is to open ports for IDM on the target servers.
 
 ## Procedure
 1. cd idm-install/molecule/default
