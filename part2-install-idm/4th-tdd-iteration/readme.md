@@ -14,6 +14,10 @@ The purpose of this iteration is to open ports for IDM on the target servers.
     1. Add the following code to the end of **verify.yml**.
         
         ```yaml
+        - name: Register variable for open ports
+          command:  firewall-cmd --list-ports
+          register: open_ports
+       
         - name: Fail if an IDM Port is closed
           fail:
             msg: "The port '{{ item }}' is not open."
