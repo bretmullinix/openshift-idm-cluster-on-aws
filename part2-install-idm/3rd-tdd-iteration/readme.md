@@ -9,7 +9,7 @@ The purpose of this iteration is to start and enable **firewalld** on the target
 ## Procedure
 1. cd idm-install/molecule/default
 
-1. **RED** --> Test to see if **firewalld** is started.
+1. **RED** --> Test to see if **firewalld** is started and enabled.
     
     1. Add the following code to the end of **verify.yml**.
         
@@ -53,9 +53,9 @@ The purpose of this iteration is to start and enable **firewalld** on the target
     1. Run `molecule verify`.  The test should fail.  The test represents
        the **Red** in the **Red, Green, Refactor** iteration of TDD.
 
-1. **GREEN** --> Add the tasks to start and enable **firewalld** to the ansible role.
+1. **GREEN** --> Add the task to start and enable **firewalld** to the ansible role.
      
-    1. Add the following tasks to the end of the **tasks/main.yml** file.
+    1. Add the following task to the end of the **tasks/main.yml** file.
     
         ```yaml
         - name: Start Firewalld Service
@@ -69,14 +69,14 @@ The purpose of this iteration is to start and enable **firewalld** on the target
     1. cd ../..
     
     1. Run `molecule converge`.  The command runs the **tasks/main.yml**
-    and installs **firewalld**.
+    which installs, starts, and enables **firewalld**.
     
     1. Run `molecule verify`. The test should pass.  The test represents
     the **Green** in the **Red, Green, Refactor** iteration of TDD.
 
 1. **REFACTOR** --> Does any of the code need **Refactoring**?
 
-    1. The **verify.yml** looks a little messy.  Lets us extract the new **firewalld**
+    1. The **verify.yml** looks a little messy.  Let's extract the new **firewalld**
         tasks into a file and reference the file from verify.yml.
         
     1. cd molecule/default/tasks
@@ -134,7 +134,7 @@ The purpose of this iteration is to start and enable **firewalld** on the target
     
     We have one more refactoring to do.  When you ran **molecule verify**,
     we were looping through the services many times to get boolean statuses.
-    This is inefficient.  Lets capture the firewalld service information in a
+    This was inefficient.  Let's capture the firewalld service information in a
     variable and reference it when we populate the variables.
     
     1. Add the following content to the **verify.yml** file after the task titled
@@ -193,9 +193,9 @@ The purpose of this iteration is to start and enable **firewalld** on the target
               when: firewall_service.status != 'enabled'
         ```
     
-        We removed two loops that populated the firewall started and
-        firewall enabled boolean variables, and we add readability
-        by checking to see if the firewall service is running
+        We removed two loops that populated the "firewall started" and
+        "firewall enabled" boolean variables, and we added readability
+        by checking to see if the firewall service was running
         and enabled in the **when** conditions.
      1. We take another look at our code, and our refactoring is complete.
      1. Run `molecule test` to ensure our roll works as intended.
