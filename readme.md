@@ -1,6 +1,6 @@
 # Installation of OpenShit Cluster and IDM on AWS
 
-Last updated: 06.28.2020
+Last updated: 06.29.2020
 
 ## Purpose
 
@@ -18,6 +18,8 @@ reading this
 [repo](https://github.com/bretmullinix/ansible-molecule-for-beginners).
 
 A working knowledge of Docker.
+
+A working knowledge of Python.
 
 ## Procedure
 

@@ -1,6 +1,6 @@
 # Installation of IDM on AWS
 
-Last updated: 06.27.2020
+Last updated: 06.29.2020
 
 ## Purpose
 
@@ -102,6 +102,9 @@ folder **part2-install-idm**
 1. <a name="3rdTDD"></a> Start and enable **firewalld** with the [3rd TDD Iteration](./3rd-tdd-iteration).
 
 1. <a name="4thTDD"></a> Open the necessary ports for IDM with the [4th TDD Iteration](./4th-tdd-iteration).
+
+1. <a name="5thTDD"></a> Enable DNF IDM module with the [5th TDD Iteration](./5th-tdd-iteration).
+   
    
 
         
