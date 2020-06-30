@@ -56,3 +56,17 @@
       get_dnf_modules:
         module_name: idm
         enabled: true
+
+    - name: Gather the rpm package facts
+      package_facts:
+        manager: auto
+
+    - name: Populate the installed IPA Server fact
+      set_fact:
+        ipa_server_installed: ansible_facts.packages['ipa-server']
+      when: "'ipa-server' in ansible_facts.packages"
+
+    - name: Fail if IPA Server is Not Installed
+      fail:
+        msg: "IPA Server is not installed"
+      when: ipa_server_installed is not defined

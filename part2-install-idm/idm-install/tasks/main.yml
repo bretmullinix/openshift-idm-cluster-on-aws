@@ -23,3 +23,11 @@
 - name: Enable IDM module
   shell:
     cmd: dnf module enable -y idm:DL1
+
+- name: Install the Latest Version of IDM.  Please wait this could take a couple of minutes....
+  dnf:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - ipa-server
+    - ipa-server-dns
