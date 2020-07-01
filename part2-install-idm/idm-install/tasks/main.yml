@@ -28,3 +28,12 @@
   dnf:
     name: ['ipa-server', 'ipa-server-dns']
     state: latest
+
+- name: Configure IDM.  Please wait this could take a couple of minutes....
+  shell:
+    cmd: >
+      ipa-server-install -a '{{ idm_admin_password }}'
+                         --hostname={{ idm_fqdn }}
+                         -r {{ idm_domain_name | upper }}
+                         -p '{{ idm_admin_password }}'
+                         -n {{ idm_domain_name }} -U
