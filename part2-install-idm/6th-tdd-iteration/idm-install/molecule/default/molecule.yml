@@ -1,0 +1,31 @@
+---
+dependency:
+  name: galaxy
+ansible:
+  config_file: ../ansible.cfg
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: part2-install-idm-image
+    hostname: idm.example.com
+    pre_build_image: true
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+provisioner:
+  name: ansible
+  log: true
+verifier:
+  name: ansible
+scenario:
+  name: default
+  test_sequence:
+    - create
+    - prepare
+    - converge
+    - verify
+    - destroy

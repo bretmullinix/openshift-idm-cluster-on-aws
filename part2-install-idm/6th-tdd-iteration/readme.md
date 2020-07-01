@@ -1,6 +1,6 @@
 # 6th TDD Iteration --> Install RedHat IDM
 
-Last updated: 06.30.2020
+Last updated: 07.01.2020
 
 ## Purpose
 
@@ -14,30 +14,33 @@ The purpose of this iteration is to install IDM on the target servers.
     1. Add the following code to the end of **verify.yml**.
         
         ```yaml
-        - name: Register variable for open ports
-          command:  firewall-cmd --list-ports
-          register: open_ports
-       
-        - name: Fail if an IDM Port is closed
-          fail:
-            msg: "The port '{{ item }}' is not open."
-          with_items:
-            - "80/tcp"
-            - "443/tcp"
-            - "389/tcp"
-            - "636/tcp"
-            - "88/tcp"
-            - "88/udp"
-            - "464/tcp"
-            - "464/udp"
-            - "53/tcp"
-            - "53/udp"
-            - "123/udp"
-          when: "'{{ item }}' not in open_ports.stdout"
+         - name: Gather the rpm package facts
+           package_facts:
+             manager: auto
+     
+         - name: Populate the installed IPA Server fact
+           set_fact:
+             ipa_server_installed: ansible_facts.packages['ipa-server']
+           when: "'ipa-server' in ansible_facts.packages"
+     
+         - name: Fail if IPA Server is Not Installed
+           fail:
+             msg: "IPA Server is not installed"
+           when: ipa_server_installed is not defined
+     
+         - name: Populate the installed IPA Server DNS fact
+           set_fact:
+             ipa_server_dns_installed: ansible_facts.packages['ipa-server-dns']
+           when: "'ipa-server' in ansible_facts.packages"
+     
+         - name: Fail if IPA Server DNS is Not Installed
+           fail:
+             msg: "IPA Server DNS is not installed"
+           when: ipa_server_dns_installed is not defined
 
         ```
            
-        The tasks above checks to see if the necessary ports for IDM are open.
+        The tasks above checks to see if the IDM is installed.
         
     1. cd ../..
     1. Run `molecule verify`.  The test should fail.  The test represents
@@ -48,97 +51,70 @@ The purpose of this iteration is to install IDM on the target servers.
     1. Add the following task to the end of the **tasks/main.yml** file.
     
         ```yaml
-       - name: Open Ports for IDM
-                firewalld:
-                  port: "{{ item }}"
-                  permanent: true
-                  immediate: true
-                  state: enabled
-                with_items:
-                  - "80/tcp"
-                  - "443/tcp"
-                  - "389/tcp"
-                  - "636/tcp"
-                  - "88/tcp"
-                  - "88/udp"
-                  - "464/tcp"
-                  - "464/udp"
-                  - "53/tcp"
-                  - "53/udp"
-                  - "123/udp"     
+         - name: Install the Latest Version of IDM.  Please wait this could take a couple of minutes....
+           dnf:
+             name: ['ipa-server', 'ipa-server-dns']
+             state: latest
        ```
 
-         The task will open the necessary ports for IDM.
+         The task will install the IDM software.
    
     1. cd ../..
     
     1. Run `molecule converge`.  The command runs the **tasks/main.yml**
-    and opens the necessary ports.
+    and installs IDM.  This task will take 5-10 minutes to install.
     
     1. Run `molecule verify`. The test should pass.  The test represents
     the **Green** in the **Red, Green, Refactor** iteration of TDD.
 
 1. **REFACTOR** --> Does any of the code need **Refactoring**?
 
-    1. The **main/tasks.yml** and **verify.yml** look a 
-    little messy with all the ports listed in both files.
-    Let's remove the ports and use a variable instead.
+    1. The **verify.yml** looks a 
+    little messy with all the tasks checking for the
+    existence of IDM.  Let's move the tasks to a separate file.
     
-        1. Add the following to the **vars/main.yml**
+        1. Create the file **molecule/default/tasks/check-if-idm-is-installed.yml**  
+        1. Edit the file and add the following content:
         
             ```yaml
-           open_idm_ports:
-             - "80/tcp"
-             - "443/tcp"
-             - "389/tcp"
-             - "636/tcp"
-             - "88/tcp"
-             - "88/udp"
-             - "464/tcp"
-             - "464/udp"
-             - "53/tcp"
-             - "53/udp"
-             - "123/udp"
-           ```
-        1. In the **tasks/main.yml**, change the task to the following:
-        
-            ```yaml
-            - name: Open Ports for IDM
-              firewalld:
-                port: "{{ item }}"
-                permanent: true
-                immediate: true
-                state: enabled
-              with_items: "{{ open_idm_ports }}"
-           ```
-        
-        1. In the **molecule/default/verify.yml**, change the task to the following:
-        
-            ```yaml
-            - name: Fail if an IDM Port is Closed
+            - name: Gather the rpm package facts
+              package_facts:
+                manager: auto
+            
+            - name: Populate the installed IPA Server fact
+              set_fact:
+                ipa_server_installed: ansible_facts.packages['ipa-server']
+              when: "'ipa-server' in ansible_facts.packages"
+            
+            - name: Fail if IPA Server is Not Installed
               fail:
-                msg: "The port '{{ item }}' is not open."
-              with_items: "{{ open_idm_ports }}"
-              when: "'{{ item }}' not in open_ports.stdout"
-           ```
-       
-        1. In the **molecule/default/verify.yml**, make the following task the
-        first task in the playbook.
+                msg: "IPA Server is not installed"
+              when: ipa_server_installed is not defined
+            
+            - name: Populate the installed IPA Server DNS fact
+              set_fact:
+                ipa_server_dns_installed: ansible_facts.packages['ipa-server-dns']
+              when: "'ipa-server' in ansible_facts.packages"
+            
+            - name: Fail if IPA Server DNS is Not Installed
+              fail:
+                msg: "IPA Server DNS is not installed"
+              when: ipa_server_dns_installed is not defined
+            ```
+        1. In the **molecule/default/verify.yml**, remove the content above from the
+        file.
+        1. In the **molecule/default/verify.yml**, add the following content to the end:
         
-           ```yaml
-               - name: Include the module vars file.
-                 include_vars:
-                   file: ../../vars/main.yml
-           ```  
-         
-           By default, molecule does not include the **vars/main.yml** in the
-           **verify.yml** file.  We have to explicitly add the variables.
+            ```yaml
+               - name: Check to see if IDM is installed
+                 include_tasks: tasks/check-if-idm-is-installed.yml
+           ```
         
         1. Run `molecule test` to ensure the role works as intended.
          
     1. We look at the role files and determine that no other refactoring is needed.
     We have completed our refactoring.
  
-We have enabled the necessary ports for RedHat IDM in our 4th TDD iteration.
+We have installed RedHat IDM in our 6th TDD iteration.
 
-[**<--Back to main instructions**](../readme.md#4thTDD)
+[**<--Back to main instructions**](../readme.md#6thTDD)
