@@ -104,7 +104,8 @@ folder **part2-install-idm**
 1. <a name="4thTDD"></a> Open the necessary ports for IDM with the [4th TDD Iteration](./4th-tdd-iteration).
 
 1. <a name="5thTDD"></a> Enable DNF IDM module with the [5th TDD Iteration](./5th-tdd-iteration).
-   
+  
+1. <a name="6thTDD"></a> Install IDM with the [6th TDD Iteration](./6th-tdd-iteration).
    
 
         
