@@ -29,6 +29,13 @@ folder **part2-install-idm**
 
 1. cd part2-install-idm
 
+1. Add **ipv6** support to Docker by editing your **/etc/docker/daemon.json** file
+and add the following content:
+
+    ```json
+    { "ipv6": true, "fixed-cidr-v6": "2001:db8:1::/64"}
+    ```
+1. Run `sudo systemctl restart docker` to allow for new **ipv6** setting.
 1. Run `docker build -t part2-install-idm-image .`
 
    The command above will create a docker image
@@ -106,6 +113,8 @@ folder **part2-install-idm**
 1. <a name="5thTDD"></a> Enable DNF IDM module with the [5th TDD Iteration](./5th-tdd-iteration).
   
 1. <a name="6thTDD"></a> Install IDM with the [6th TDD Iteration](./6th-tdd-iteration).
+
+1. <a name="7thTDD"></a> Configure IDM with the [7th TDD Iteration](./7th-tdd-iteration).
    
 
         

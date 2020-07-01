@@ -16,9 +16,13 @@ platforms:
       - /tmp
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
 provisioner:
   name: ansible
   log: true
+  config_options:
+    defaults:
+      vault_password_file: ${MOLECULE_PROJECT_DIRECTORY}/vault_secret
 verifier:
   name: ansible
 scenario:
