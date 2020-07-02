@@ -8,7 +8,7 @@ driver:
 platforms:
   - name: instance
     image: part2-install-idm-image
-    hostname: idm.example.com
+    hostname: idm.example5605.com
     pre_build_image: true
     command: /sbin/init
     tmpfs:

@@ -14,12 +14,12 @@
     - name: Install this only for local dev machine
       debug:
         msg: "Your hostname is correctly set to '{{ ansible_fqdn }}'."
-      when: ansible_fqdn == "idm.example.com"
+      when: ansible_fqdn == "idm.example5605.com"
 
     - name: You did not set the host name
       fail:
-        msg:  "Your host name is '{{ ansible_fqdn }}' and should be 'idm.example.com'"
-      when: ansible_fqdn != "idm.example.com"
+        msg:  "Your host name is '{{ ansible_fqdn }}' and should be 'idm.example5605.com'"
+      when: ansible_fqdn != "idm.example5605.com"
 
     - name: collect facts about system services
       service_facts:
