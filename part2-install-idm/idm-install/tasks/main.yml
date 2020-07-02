@@ -24,10 +24,15 @@
   shell:
     cmd: dnf module enable -y idm:DL1
 
+- name: Install sudo
+  yum:
+    name: sudo
+    state: present
+
 - name: Install the Latest Version of IDM.  Please wait this could take a couple of minutes....
-  dnf:
-    name: ['ipa-server', 'ipa-server-dns','freeipa-server', 'sudo']
-    state: latest
+  yum:
+    name: freeipa-server
+    state: present
 
 - name: Configure IDM.  Please wait this could take a couple of minutes....
   shell:
