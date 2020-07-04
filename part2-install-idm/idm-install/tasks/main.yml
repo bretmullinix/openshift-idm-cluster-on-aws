@@ -30,11 +30,14 @@
     state: present
 
 - name: Install the Latest Version of IDM.  Please wait this could take a couple of minutes....
-  yum:
-    name: freeipa-server
+  dnf:
+    name: "@{{ item }}"
     state: present
+  with_items:
+    - idm:DL1/server
+    - idm:DL1/dns
 
 - name: Configure IDM.  Please wait this could take a couple of minutes....
   shell:
     cmd: "ipa-server-install  --mkhomedir --setup-dns --no-forwarders -a '{{ idm_admin_password }}' -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}' -n {{ idm_domain_name }} -U"
-# ipa-server-install  --mkhomedir --no-forwarders --setup-dns -a 'redhatredhat'  -r EXAMPLE5605.COM -p 'redhatredhat' -n example5605.com -U "
+# ipa-server-install  --mkhomedir --no-forwarders --setup-dns -a 'redhatredhat'  -r EXAMPLE2020.COM -p 'redhatredhat' -n example2020.com -U "
