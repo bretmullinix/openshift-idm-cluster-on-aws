@@ -10,7 +10,7 @@ The purpose of this iteration is to configure IDM on the target servers.
 1. cd idm-install
 1. Make the file **vault_secret**
 1. Edit your **vault_secret** and add your ansible vault password.
-1. Run the following after replacing ~idm-admin-password~ with your idm admin password.
+1. Run the following after replacing \~idm-admin-password\~ with your idm admin password.
  
     ```
      ansible-vault  encrypt_string --vault-password-file vault_secret '~idm-admin-password~' --name idm_admin_password > encrypted_admin_password.txt
