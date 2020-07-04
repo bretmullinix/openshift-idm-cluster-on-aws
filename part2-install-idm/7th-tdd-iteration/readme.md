@@ -1,6 +1,6 @@
 # 7th TDD Iteration --> Configure RedHat IDM
 
-Last updated: 07.01.2020
+Last updated: 07.04.2020
 
 ## Purpose
 
@@ -30,8 +30,8 @@ The purpose of this iteration is to configure IDM on the target servers.
    ```
 
 1. Whatever you set your **idm_fqdn** name to, make sure you update the 
-**hostname** in your **molecule.yml** file to be the same, or your IDM server will not work in
-the docker container. 
+**hostname** in your **molecule.yml** file to be the same, or
+your IDM server will not work in the docker container. 
 
 1. Copy the **idm_admin_password** in the **../encrypted_admin_password.txt**
 to the **main.yml** file.  
@@ -72,11 +72,11 @@ with the following section:
         - name: Configure IDM.  Please wait this could take a couple of minutes....
           shell:
             cmd: >
-              ipa-server-install -a '{{ idm_admin_password }}'
-                                 --hostname={{ idm_fqdn }}
-                                 -r {{ idm_domain_name | upper }}
-                                 -p '{{ idm_admin_password }}'
-                                 -n {{ idm_domain_name }} -U
+             ipa-server-install  --mkhomedir
+                --setup-dns --no-forwarders 
+                -a '{{ idm_admin_password }}' 
+                -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}' 
+                -n {{ idm_domain_name }} -U
        ```
 
          The task will configure the IDM server.
@@ -90,53 +90,10 @@ with the following section:
     the **Green** in the **Red, Green, Refactor** iteration of TDD.
 
 1. **REFACTOR** --> Does any of the code need **Refactoring**?
-
-    1. The **verify.yml** looks a 
-    little messy with all the tasks checking for the
-    existence of IDM.  Let's move the tasks to a separate file.
-    
-        1. Create the file **molecule/default/tasks/check-if-idm-is-installed.yml**  
-        1. Edit the file and add the following content:
-        
-            ```yaml
-            - name: Gather the rpm package facts
-              package_facts:
-                manager: auto
-            
-            - name: Populate the installed IPA Server fact
-              set_fact:
-                ipa_server_installed: ansible_facts.packages['ipa-server']
-              when: "'ipa-server' in ansible_facts.packages"
-            
-            - name: Fail if IPA Server is Not Installed
-              fail:
-                msg: "IPA Server is not installed"
-              when: ipa_server_installed is not defined
-            
-            - name: Populate the installed IPA Server DNS fact
-              set_fact:
-                ipa_server_dns_installed: ansible_facts.packages['ipa-server-dns']
-              when: "'ipa-server' in ansible_facts.packages"
-            
-            - name: Fail if IPA Server DNS is Not Installed
-              fail:
-                msg: "IPA Server DNS is not installed"
-              when: ipa_server_dns_installed is not defined
-            ```
-        1. In the **molecule/default/verify.yml**, remove the content above from the
-        file.
-        1. In the **molecule/default/verify.yml**, add the following content to the end:
-        
-            ```yaml
-               - name: Check to see if IDM is installed
-                 include_tasks: tasks/check-if-idm-is-installed.yml
-           ```
-        
-        1. Run `molecule test` to ensure the role works as intended.
          
-    1. We look at the role files and determine that no other refactoring is needed.
+    1. We look at the role files and determine that no refactoring is needed.
     We have completed our refactoring.
  
-We have installed RedHat IDM in our 6th TDD iteration.
+We have configured RedHat IDM in our 7th TDD iteration.
 
-[**<--Back to main instructions**](../readme.md#6thTDD)
+[**<--Back to main instructions**](../readme.md#7thTDD)
