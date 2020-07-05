@@ -51,10 +51,13 @@ The purpose of this iteration is to install IDM on the target servers.
     1. Add the following task to the end of the **tasks/main.yml** file.
     
         ```yaml
-         - name: Install the Latest Version of IDM.  Please wait this could take a couple of minutes....
-           dnf:
-             name: ['ipa-server', 'ipa-server-dns']
-             state: latest
+        - name: Install the Latest Version of IDM.  Please wait this could take 5-10 minutes....
+          dnf:
+            name: "@{{ item }}"
+            state: present
+          with_items:
+            - idm:DL1/server
+            - idm:DL1/dns
        ```
 
          The task will install the IDM software.

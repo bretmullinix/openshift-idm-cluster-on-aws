@@ -69,7 +69,7 @@ with the following section:
     1. Add the following task to the end of the **tasks/main.yml** file.
     
         ```yaml
-        - name: Configure IDM.  Please wait this could take a couple of minutes....
+        - name: Configure IDM.  Please wait this could take 15-30 minutes....
           shell:
             cmd: >
              ipa-server-install  --mkhomedir
