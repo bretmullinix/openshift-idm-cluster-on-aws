@@ -1,0 +1,59 @@
+---
+dependency:
+  name: galaxy
+ansible:
+  config_file: ../ansible.cfg
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: part2-install-idm-image
+    hostname: idm.example2020.com
+    pre_build_image: true
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmpm
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    exposed_ports:
+      - 443/tcp  # https
+      - 80/tcp   # http
+      - 389/tcp  # ldap
+      - 636/tcp  # ldaps
+      - 88/tcp   # kerberos
+      - 88/udp   # kerberos
+      - 464/tcp  # kpassword
+      - 464/udp  # kpassword
+      - 53/tcp   # dns
+      - 53/udp   # dns
+      - 123/udp  # telnet
+    published_ports:
+      - 0.0.0.0:8443:443/tcp          # https:          8443
+      - 0.0.0.0:8081:80/tcp           # http:           8081
+      - 0.0.0.0:8389:389/tcp          # ldap:           8389
+      - 0.0.0.0:8636:636/tcp          # ldaps:          8636
+      - 0.0.0.0:8888:88/tcp           # kerberos tcp:   8888
+      - 0.0.0.0:8889:88/udp           # kerberos udp:   8889
+      - 0.0.0.0:8464:464/tcp          # kpassword tcp:  8464
+      - 0.0.0.0:8465:464/udp          # kpassword udp:  8465
+      - 0.0.0.0:17053:53/tcp          # dns tcp:        17053
+      - 0.0.0.0:17054:53/udp          # dns udp:        17054
+      - 0.0.0.0:59123:123/udp         # telnet:         59123
+provisioner:
+  name: ansible
+  log: true
+  config_options:
+    defaults:
+      vault_password_file: ${MOLECULE_PROJECT_DIRECTORY}/vault_secret
+verifier:
+  name: ansible
+scenario:
+  name: default
+  test_sequence:
+    - create
+    - prepare
+    - converge
+    - verify
+    - destroy
