@@ -55,24 +55,29 @@ with the following section:
     1. Add the following code to the end of **verify.yml**.
         
         ```yaml
-            - name: Get the IDM Servers IP Address
-              shell:
-                cmd: >
-                  dig +short {{ ansible_fqdn }} A
-              register: output_dig_server_ip_address
-                
-            - name: Check to make sure IDM is configured for DNS
-              fail:
-                msg: "IDM DNS is not configured.  No IP Address is returned when a DIG is performed."
-              when: output_dig_server_ip_address["stdout"] == ""
-        
-            - name: Check to make sure IDM is a server registered with itself
-              ipa_host:
-                name: "{{ ansible_fqdn }}"
-                state: present
-                ipa_host: "{{ ansible_fqdn }}"
-                ipa_user: admin
-                ipa_pass: "{{  idm_admin_password }}"
+         - name: Get the IDM Servers IP Address
+           shell:
+             cmd: >
+               dig +short {{ ansible_fqdn }} A
+           register: output_dig_server_ip_address
+         
+         
+         - name: Check to make sure IDM is configured for DNS
+           fail:
+             msg: "IDM DNS is not configured.  No IP Address is returned when a DIG is performed."
+           when: output_dig_server_ip_address["stdout"] == ""
+         
+         - name: Print out IDM IP Address
+           debug:
+             msg: "IDM IP Address = {{ output_dig_server_ip_address['stdout'] }}"
+         
+         - name: Check to make sure IDM is a server registered with itself
+           ipa_host:
+             name: "{{ ansible_fqdn }}"
+             state: present
+             ipa_host: "{{ ansible_fqdn }}"
+             ipa_user: admin
+             ipa_pass: "{{  idm_admin_password }}"
         ```
            
         The tasks above checks to see if the IDM is configured.
@@ -129,6 +134,7 @@ with the following section:
         1. Edit the file and add the following content:
         
             ```yaml
+           
            - name: Get the IDM Servers IP Address
              shell:
                cmd: >
@@ -140,6 +146,10 @@ with the following section:
              fail:
                msg: "IDM DNS is not configured.  No IP Address is returned when a DIG is performed."
              when: output_dig_server_ip_address["stdout"] == ""
+           
+           - name: Print out IDM IP Address
+             debug:
+               msg: "IDM IP Address = {{ output_dig_server_ip_address['stdout'] }}"
            
            - name: Check to make sure IDM is a server registered with itself
              ipa_host:
