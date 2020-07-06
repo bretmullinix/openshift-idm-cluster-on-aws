@@ -86,14 +86,10 @@ with the following section:
     1. Add the following task to the end of the **tasks/main.yml** file.
     
         ```yaml
-        - name: Configure IDM.  Please wait this could take 15-30 minutes....
-          shell:
-            cmd: >
-             ipa-server-install  --mkhomedir 
-                --setup-dns --no-forwarders 
-                -a '{{ idm_admin_password }}' 
-                -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}' 
-                -n {{ idm_domain_name }} -U
+       - name: Configure IDM.  Please wait this could take 15-30 minutes....
+         shell:
+           cmd: >
+              ipa-server-install  --mkhomedir --setup-dns --no-forwarders  -a '{{ idm_admin_password }}' -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}'  -n {{ idm_domain_name }} -U
        ```
 
          The task will configure the IDM server.
