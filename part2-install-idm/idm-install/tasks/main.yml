@@ -37,7 +37,11 @@
     - idm:DL1/server
     - idm:DL1/dns
 
-- name: Configure IDM.  Please wait this could 15-30 minutes....
-  shell:
-    cmd: "ipa-server-install  --mkhomedir --setup-dns --no-forwarders -a '{{ idm_admin_password }}' -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}' -n {{ idm_domain_name }} -U"
-# ipa-server-install  --mkhomedir --no-forwarders --setup-dns -a 'redhatredhat'  -r EXAMPLE2020.COM -p 'redhatredhat' -n example2020.com -U "
+- name: Configure IDM.  Please wait this could take 15-30 minutes....
+    shell:
+      cmd: >
+        ipa-server-install  --mkhomedir
+           --setup-dns --no-forwarders
+           -a '{{ idm_admin_password }}'
+           -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}'
+           -n {{ idm_domain_name }} -U

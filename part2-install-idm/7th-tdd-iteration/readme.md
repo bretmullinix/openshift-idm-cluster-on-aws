@@ -1,6 +1,6 @@
 # 7th TDD Iteration --> Configure RedHat IDM
 
-Last updated: 07.04.2020
+Last updated: 07.06.2020
 
 ## Purpose
 
@@ -55,7 +55,24 @@ with the following section:
     1. Add the following code to the end of **verify.yml**.
         
         ```yaml
+            - name: Get the IDM Servers IP Address
+              shell:
+                cmd: >
+                  dig +short {{ ansible_fqdn }} A
+              register: output_dig_server_ip_address
+                
+            - name: Check to make sure IDM is configured for DNS
+              fail:
+                msg: "IDM DNS is not configured.  No IP Address is returned when a DIG is performed."
+              when: output_dig_server_ip_address["stdout"] == ""
         
+            - name: Check to make sure IDM is a server registered with itself
+              ipa_host:
+                name: "{{ ansible_fqdn }}"
+                state: present
+                ipa_host: "{{ ansible_fqdn }}"
+                ipa_user: admin
+                ipa_pass: "{{  idm_admin_password }}"
         ```
            
         The tasks above checks to see if the IDM is configured.
@@ -72,7 +89,7 @@ with the following section:
         - name: Configure IDM.  Please wait this could take 15-30 minutes....
           shell:
             cmd: >
-             ipa-server-install  --mkhomedir
+             ipa-server-install  --mkhomedir 
                 --setup-dns --no-forwarders 
                 -a '{{ idm_admin_password }}' 
                 -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}' 
@@ -84,14 +101,54 @@ with the following section:
     1. cd ../..
     
     1. Run `molecule converge`.  The command runs the **tasks/main.yml**
-    and installs IDM.  This task will take 5-10 minutes to install.
+    and installs IDM.  This task will take 15-30 minutes to install.
     
     1. Run `molecule verify`. The test should pass.  The test represents
     the **Green** in the **Red, Green, Refactor** iteration of TDD.
 
 1. **REFACTOR** --> Does any of the code need **Refactoring**?
+
+    1. The **verify.yml** looks a 
+    little messy with all the tasks checking for the
+    configuration of IDM.  Let's move the tasks to a separate file.
+    
+        1. Create the file **molecule/default/tasks/check-if-idm-is-configured.yml**  
+        1. Edit the file and add the following content:
+        
+            ```yaml
+           - name: Get the IDM Servers IP Address
+             shell:
+               cmd: >
+                 dig +short {{ ansible_fqdn }} A
+             register: output_dig_server_ip_address
+           
+           
+           - name: Check to make sure IDM is configured for DNS
+             fail:
+               msg: "IDM DNS is not configured.  No IP Address is returned when a DIG is performed."
+             when: output_dig_server_ip_address["stdout"] == ""
+           
+           - name: Check to make sure IDM is a server registered with itself
+             ipa_host:
+               name: "{{ ansible_fqdn }}"
+               state: present
+               ipa_host: "{{ ansible_fqdn }}"
+               ipa_user: admin
+               ipa_pass: "{{  idm_admin_password }}"
+            ```
+        1. In the **molecule/default/verify.yml**, remove the content above from the
+        file.
+        1. In the **molecule/default/verify.yml**, add the following content to the end:
+        
+            ```yaml
+                 - name: Check to see if IDM is configured
+                   include_tasks: tasks/check-if-idm-is-configured.yml
+           ```
+        
+        1. Run `molecule test` (the whole process can take 30-45 minutes) 
+        to ensure the role works as intended.
          
-    1. We look at the role files and determine that no refactoring is needed.
+    1. We look at the role files and determine that no other refactoring is needed.
     We have completed our refactoring.
  
 We have configured RedHat IDM in our 7th TDD iteration.
