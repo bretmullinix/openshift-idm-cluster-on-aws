@@ -120,9 +120,11 @@ with the following section:
               [host ip] [host name]
               ```
 
-        1. In the output, take the ip address and add the following line to the
-      **/etc/hosts**.  This will allow you to access your IDM server using
-      your web browser.
+        1. Open a web browser and navigate to your host.  You should see the
+           following screen:
+                      
+            ![image](../../images/idm_server_in_browser_installedl_in_docker_container.png)
+                      
      
 1. **REFACTOR** --> Does any of the code need **Refactoring**?
 
@@ -167,7 +169,8 @@ with the following section:
                  - name: Check to see if IDM is configured
                    include_tasks: tasks/check-if-idm-is-configured.yml
            ```
-        
+         
+        1. Run `molecule verify`
         1. Run `molecule destroy`
         1. Run `molecule test` (the whole process can take 30-45 minutes) 
         to ensure the role works as intended.
@@ -175,6 +178,7 @@ with the following section:
     1. We look at the role files and determine that no other refactoring is needed.
     We have completed our refactoring.
  
+
 We have configured RedHat IDM in our 7th TDD iteration.
 
 [**<--Back to main instructions**](../readme.md#7thTDD)
