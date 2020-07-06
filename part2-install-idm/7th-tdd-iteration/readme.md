@@ -102,6 +102,23 @@ with the following section:
     1. Run `molecule verify`. The test should pass.  The test represents
     the **Green** in the **Red, Green, Refactor** iteration of TDD.
 
+        1. Capture the value of the **idm_fqdn** variable in the
+        **defaults/main.yml**.  This value represents your host name for IDM.
+        1. Capture the **verify.yml** output of the task
+        **Print out IDM IP Address**.  The output should be the ip address
+        of the IDM server.
+        1. Edit your **/etc/hosts** file and add the following line, 
+           replacing the **[host ip]** and **[host name]** with the output
+           captured above for the ip address and host name for IDM.
+        
+              ```yaml
+              [host ip] [host name]
+              ```
+
+        1. In the output, take the ip address and add the following line to the
+      **/etc/hosts**.  This will allow you to access your IDM server using
+      your web browser.
+     
 1. **REFACTOR** --> Does any of the code need **Refactoring**?
 
     1. The **verify.yml** looks a 
@@ -141,6 +158,7 @@ with the following section:
                    include_tasks: tasks/check-if-idm-is-configured.yml
            ```
         
+        1. Run `molecule destroy`
         1. Run `molecule test` (the whole process can take 30-45 minutes) 
         to ensure the role works as intended.
          

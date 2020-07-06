@@ -10,6 +10,11 @@
     msg: "IDM DNS is not configured.  No IP Address is returned when a DIG is performed."
   when: output_dig_server_ip_address["stdout"] == ""
 
+- name: Print out IDM IP Address
+  debug:
+    msg: "IDM IP Address = {{ output_dig_server_ip_address['stdout'] }}"
+
+
 - name: Check to make sure IDM is a server registered with itself
   ipa_host:
     name: "{{ ansible_fqdn }}"
