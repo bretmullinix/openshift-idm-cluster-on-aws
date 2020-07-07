@@ -1,6 +1,6 @@
 # 2nd TDD Iteration --> Add firewalld
 
-Last updated: 06.27.2020
+Last updated: 07.07.2020
 
 ## Purpose
 

@@ -33,12 +33,12 @@ The purpose of this iteration is to add the host name to the target servers.
            - name: Install this only for local dev machine
              debug:
                msg: "Your hostname is correctly set to '{{ ansible_fqdn }}'."
-             when: ansible_fqdn == "idm.example5606.com"
+             when: ansible_fqdn == "idm.example2020.com"
        
            - name: You did not set the host name
              fail:
-               msg:  "Your host name is '{{ ansible_fqdn }}' and should be 'idm.example5606.com'"
-             when: ansible_fqdn != "idm.example5606.com"
+               msg:  "Your host name is '{{ ansible_fqdn }}' and should be 'idm.example2020.com'"
+             when: ansible_fqdn != "idm.example2020.com"
     
       ``` 
          
@@ -58,7 +58,7 @@ The purpose of this iteration is to add the host name to the target servers.
         **--name** attribute in the **molecule.yml** and
         save the file.
         
-            hostname: idm.example5606.com
+            hostname: idm.example2020.com
       1. Run `molecule converge`
       1. Run `molecule verify`
         
@@ -66,7 +66,7 @@ The purpose of this iteration is to add the host name to the target servers.
             be successful.  We added configuration to the
             **molecule.yml** to spin up the docker
             container with the fully qualified domain
-            name of **idm.example5606.com**. We are now
+            name of **idm.example2020.com**. We are now
             back in the **Green** state for the
             **Red, Green, Refactor** iteration of Test
             Driven Development (TDD).
