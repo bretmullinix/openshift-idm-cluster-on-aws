@@ -1,0 +1,8 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+
+    - name: Run a simple command on the EC2 instance
+      shell:
+        cmd: "echo 'We have configured AWS and launched the EC2 instance.'"

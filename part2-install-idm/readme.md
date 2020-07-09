@@ -146,9 +146,13 @@ and add the following content:
 
 1. <a name="7thTDD"></a> Configure IDM with the [7th TDD Iteration](./7th-tdd-iteration).
 
-   
+    We have completed the installation of IDM using a Docker container.  Our
+    next step is install IDM on AWS.  The process of installing IDM on AWS
+    should involve using Test Driven Design (TDD) so that we test our installation
+    and configuration and flesh out any design problems early.
+    
+1. <a name="8thTDD"></a> Configure Ansible Molecule to use AWS in the [8th TDD Iteration](./8th-tdd-iteration).
 
-        
         
         
         
