@@ -141,13 +141,37 @@ create the **aws** scenario.
 
 1. **GREEN** --> Configure Ansible Molecule for AWS.
      
-    1. Add the following at the beginning of the **molecule/aws/create.yml**
+     1. Configure AWS Security Credentials by creating the file 
+         **\~/.aws/credentials** and add the following content
+         replacing the access key and access secret key with your keys.
+
+        ```text
+        [Credentials]
+        aws_access_key_id = <your_access_key_here>
+        aws_secret_access_key = <your_secret_key_here>
+        ```
+     1. Configure AWS region that you plan on using by creating the file
+     **\~/.aws/config** and add the following content:
+     
+         ```text
+         [default]
+         region=us-east-1
+         output=json
+         ```
+     
+     
+     1. Add the following at the beginning of the **molecule/aws/create.yml**
     
         ```yaml
-       - name: Configure IDM.  Please wait this could take 15-30 minutes....
-         shell:
-           cmd: >
-              ipa-server-install  --mkhomedir --setup-dns --no-forwarders  -a '{{ idm_admin_password }}' -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}'  -n {{ idm_domain_name }} -U
+      - name: create a VPC with dedicated tenancy and a couple of tags
+        ec2_vpc_net:
+          name: Module_dev2
+          cidr_block: 10.10.0.0/16
+          region: us-east-1
+          tags:
+            module: ec2_vpc_net
+            this: works
+          tenancy: dedicated
        ```
 
          The task will configure the IDM server.
