@@ -7,6 +7,122 @@
   tasks:
 
     # TODO: Developer must implement and populate 'server' variable
+    # Terminate every running instance in a region. Use with EXTREME caution.
+    - name: create a new ec2 key pair, returns generated private key
+      ec2_key:
+        name: my_keypair
+        state: absent
+
+    - name: create a new ec2 key pair, returns generated private key
+      ec2_key:
+        name: my_keypair
+      register: key_pair_details
+
+    - name: Set Key Pair Facts
+      set_fact:
+        aws_keypair: "{{ key_pair_details['key'] }}"
+
+    - name: Show Key Pair Information
+      debug:
+        msg: "Here is your key pair:  {{ aws_keypair }}"
+
+    - name: Copy the private key to a file so we can ssh into it
+      copy:
+        content: "{{ aws_keypair['private_key'] }}"
+        dest: "./aws_private_key"
+      vars:
+        ansible_python_interpreter:  /vms/harddrive/home_directory/bmullini/Documents/redhat_tools/python/virtual_environments/IntelliJ/bin/python3.7
+
+
+    - ec2_instance:
+        state: absent
+        filters:
+          instance-state-name: running
+
+
+    - name: create a VPC with dedicated tenancy and a couple of tags
+      ec2_vpc_net:
+        name: vpc_openshift_idm
+        cidr_block: 10.10.0.0/16
+        region: us-east-1
+        tags:
+          module: ec2_vpc_net
+          this: works
+        tenancy: dedicated
+      register: ec2_vpc_net
+
+    - name: Set the VPC Fact
+      set_fact:
+        vpc: "{{ ec2_vpc_net.vpc }}"
+
+
+    - name: debug vpc object
+      debug:
+        msg: "{{ vpc }}"
+
+    - name: create ec2 vpc internet gateway
+      # create an internet gateway for the vpc
+      ec2_vpc_igw:
+        vpc_id: "{{ vpc.id }}"
+        state: present
+        tags:
+          Name: "openshift_cluster_idm_gateway"
+      register: igw_result
+
+    - name: create ec2 vpc subnet
+      # create the subnet for the vpc with a cidr block
+      ec2_vpc_subnet:
+        vpc_id: "{{ vpc.id }}"
+        state: present
+        cidr: "10.10.1.0/24"
+        # enable public ip
+        map_public: yes
+        resource_tags:
+          Name: "cluster_subnet"
+      register: subnet_result
+
+    - name: Set the VPC Subnet Fact
+      set_fact:
+        vpc_subnet: "{{ subnet_result['subnet'] }}"
+
+    - name: Debug Subnet
+      debug:
+        msg: "Here is your subnet:  {{ vpc_subnet.id }}"
+
+    - name: openshift cluster with idm ec2 group
+      ec2_group:
+        name: openshift_idm_security_group
+        description: The security group for the Openshift Cluster with IDM
+        vpc_id: "{{ vpc.id }}"
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+          - proto: icmp
+            from_port: -1 # icmp type, -1 = any type
+            to_port:  -1 # icmp subtype, -1 = any subtype
+            cidr_ip: 10.10.0.0/16
+
+  # start an instance with a public IP address
+    - name: Create IDM EC2 Instance
+      ec2_instance:
+        name: "idm-instance"
+        key_name: "my_keypair"
+        vpc_subnet_id: "{{ vpc_subnet.id }}"
+        instance_type:  t2.medium
+        security_group: "openshift_idm_security_group"
+        network:
+          assign_public_ip: true
+        image_id: ami-08fe69d7cd45a2897
+
+    - name: fail it on purpose
+      fail:
+        msg: "failed it on purpose"
 
     - when: server.changed | default(false) | bool
       block:
