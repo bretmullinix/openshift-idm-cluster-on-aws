@@ -1,19 +1,24 @@
 # 8th TDD Iteration --> Configure Ansible Molecule to use AWS EC2 Instances.
 
-Last updated: 07.06.2020
+Last updated: 07.21.2020
 
 ## Purpose
 
 The purpose of this iteration is to configure Ansible Molecule to use
 AWS EC2 instances for the IDM ansible role testing.
 
-## Installation
-
-1. Make sure you activate your virtual environment
-1. Run the following command `pip install boto boto3 molecule[ec2]`.
-    These software packages allow interaction with Amazon AWS.
-
 ## Procedure
+
+1. Open up a terminal
+1. Activate your virtual environment
+1. Create the following environment variables:
+
+      ```shell script
+            AWS_REGION="us-east-1"
+            AWS_ACCESS_KEY_ID="<your aws access key id: should be in your credentials.csv file>"
+            AWS_SECRET_ACCESS_KEY="<your aws secret access key:  should be in your credentials.csv file>"
+      ```
+
 1. cd idm-install
 1. In order to keep the **Docker** testing separate from **AWS** testing,
 we will create a scenario called **aws**.  Run the following command to
@@ -113,7 +118,6 @@ create the **aws** scenario.
                 when: server.changed | default(false) | bool
           ```
 
-
 1. **RED** --> Test when no configuration has been added for AWS.
     
     1. cd molecule/aws
@@ -141,120 +145,48 @@ create the **aws** scenario.
 
 1. **GREEN** --> Configure Ansible Molecule for AWS.
      
-     1. Configure AWS Security Credentials by creating the file 
-         **\~/.aws/credentials** and add the following content
-         replacing the access key and access secret key with your keys.
-
-        ```text
-        [Credentials]
-        aws_access_key_id = <your_access_key_here>
-        aws_secret_access_key = <your_secret_key_here>
-        ```
-     1. Configure AWS region that you plan on using by creating the file
-     **\~/.aws/config** and add the following content:
+      1. Open the **create.yml** file for editing.
+      1. Create your vpc by adding the following task after the **tasks** section:
      
-         ```text
-         [default]
-         region=us-east-1
-         output=json
-         ```
-     
-     
-     1. Add the following at the beginning of the **molecule/aws/create.yml**
-    
-        ```yaml
-      - name: create a VPC with dedicated tenancy and a couple of tags
-        ec2_vpc_net:
-          name: Module_dev2
-          cidr_block: 10.10.0.0/16
-          region: us-east-1
-          tags:
-            module: ec2_vpc_net
-            this: works
-          tenancy: dedicated
-       ```
-
-         The task will configure the IDM server.
-   
-    1. cd ../..
-    
-    1. Run `molecule converge`.  The command runs the **tasks/main.yml**
-    and installs IDM.  This task will take 15-30 minutes to install.
-    
-    1. Run `molecule verify`. The test should pass.  The test represents
-    the **Green** in the **Red, Green, Refactor** iteration of TDD.
-
-        1. Capture the value of the **idm_fqdn** variable in the
-        **defaults/main.yml**.  This value represents your host name for IDM.
-        1. Capture the **verify.yml** output of the task
-        **Print out IDM IP Address**.  The output should be the ip address
-        of the IDM server.
-        1. Edit your **/etc/hosts** file and add the following line, 
-           replacing the **[host ip]** and **[host name]** with the output
-           captured above for the ip address and host name for IDM.
-        
-              ```yaml
-              [host ip] [host name]
-              ```
-
-        1. Open a web browser and navigate to your host.  You should see the
-           following screen:
-                      
-            ![image](../../images/idm_server_in_browser_installedl_in_docker_container.png)
-                      
-     
-1. **REFACTOR** --> Does any of the code need **Refactoring**?
-
-    1. The **verify.yml** looks a 
-    little messy with all the tasks checking for the
-    configuration of IDM.  Let's move the tasks to a separate file.
-    
-        1. Create the file **molecule/default/tasks/check-if-idm-is-configured.yml**  
-        1. Edit the file and add the following content:
-        
-            ```yaml
-           
-           - name: Get the IDM Servers IP Address
-             shell:
-               cmd: >
-                 dig +short {{ ansible_fqdn }} A
-             register: output_dig_server_ip_address
-           
-           
-           - name: Check to make sure IDM is configured for DNS
-             fail:
-               msg: "IDM DNS is not configured.  No IP Address is returned when a DIG is performed."
-             when: output_dig_server_ip_address["stdout"] == ""
-           
-           - name: Print out IDM IP Address
-             debug:
-               msg: "IDM IP Address = {{ output_dig_server_ip_address['stdout'] }}"
-           
-           - name: Check to make sure IDM is a server registered with itself
-             ipa_host:
-               name: "{{ ansible_fqdn }}"
-               state: present
-               ipa_host: "{{ ansible_fqdn }}"
-               ipa_user: admin
-               ipa_pass: "{{  idm_admin_password }}"
-            ```
-        1. In the **molecule/default/verify.yml**, remove the content above from the
-        file.
-        1. In the **molecule/default/verify.yml**, add the following content to the end:
-        
-            ```yaml
-                 - name: Check to see if IDM is configured
-                   include_tasks: tasks/check-if-idm-is-configured.yml
+           ```yaml
+                - name: create a VPC with dedicated tenancy and a couple of tags
+                  ec2_vpc_net:
+                    name: vpc_openshift_idm
+                    cidr_block: 10.10.0.0/16
+                    region: us-east-1
+                    tags:
+                      module: ec2_vpc_net
+                      this: works
+                    tenancy: dedicated
+                  register: ec2_vpc_net
            ```
+      1. Add the following task to create the **vpc** variable,
+        you will use it throughout your **create.yml**.
+        
+          ```yaml
+              - name: Set the VPC Fact
+                set_fact:
+                  vpc: "{{ ec2_vpc_net.vpc }}"
+          ```
+      1. Find an Amazon Centos 8 AMI (Image Id) by
+         going [here](https://wiki.centos.org/Cloud/AWS).  Copy the
+         ami and add it to a file for later.
          
-        1. Run `molecule verify`
-        1. Run `molecule destroy`
-        1. Run `molecule test` (the whole process can take 30-45 minutes) 
-        to ensure the role works as intended.
-         
-    1. We look at the role files and determine that no other refactoring is needed.
-    We have completed our refactoring.
- 
+      1. Create the vpc gateway by adding the following task.
+      
+          ```yaml
+              - name: create ec2 vpc internet gateway
+                # create an internet gateway for the vpc
+                ec2_vpc_igw:
+                  vpc_id: "{{ vpc.id }}"
+                  state: present
+                  tags:
+                    Name: "openshift_cluster_idm_gateway"
+                register: igw_result
+          ```
+
+
+:construction:
 
 We have configured RedHat IDM in our 7th TDD iteration.
 

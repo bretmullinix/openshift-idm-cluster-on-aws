@@ -8,14 +8,15 @@
 
     # TODO: Developer must implement and populate 'server' variable
     # Terminate every running instance in a region. Use with EXTREME caution.
-    - name: create a new ec2 key pair, returns generated private key
-      ec2_key:
-        name: my_keypair
-        state: absent
+#    - name: create a new ec2 key pair, returns generated private key
+#      ec2_key:
+#        name: my_keypair
+#        state: absent
 
     - name: create a new ec2 key pair, returns generated private key
       ec2_key:
         name: my_keypair
+        state: present
       register: key_pair_details
 
     - name: Set Key Pair Facts
@@ -26,18 +27,12 @@
       debug:
         msg: "Here is your key pair:  {{ aws_keypair }}"
 
-    - name: Copy the private key to a file so we can ssh into it
-      copy:
-        content: "{{ aws_keypair['private_key'] }}"
-        dest: "./aws_private_key"
-      vars:
-        ansible_python_interpreter:  /vms/harddrive/home_directory/bmullini/Documents/redhat_tools/python/virtual_environments/IntelliJ/bin/python3.7
-
-
-    - ec2_instance:
-        state: absent
-        filters:
-          instance-state-name: running
+#    - name: Copy the private key to a file so we can ssh into it
+#      copy:
+#        content: "{{ aws_keypair['private_key'] }}"
+#        dest: "./aws_private_key"
+#      vars:
+#        ansible_python_interpreter:  /vms/harddrive/home_directory/bmullini/Documents/redhat_tools/python/virtual_environments/IntelliJ/bin/python3.7
 
 
     - name: create a VPC with dedicated tenancy and a couple of tags

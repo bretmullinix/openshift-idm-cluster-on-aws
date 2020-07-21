@@ -1,0 +1,26 @@
+---
+- name: Create the AWS private key that can be used to SSH into your EC2 instances
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+     aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+     aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+     aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+  tasks:
+    - name: Print out AWS region
+      debug:
+        var: aws_region
+
+    - name: "Create the private key to access our ec2 instances"
+      ec2_key:
+        name: my_keypair
+        state: present
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{ aws_region }}"
+      register: key_pair_details
+
+    - name: "Print the AWS Key Pair Information"
+      debug:
+        var: key_pair_details

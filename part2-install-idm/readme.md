@@ -150,7 +150,27 @@ and add the following content:
     next step is install IDM on AWS.  The process of installing IDM on AWS
     should involve using Test Driven Design (TDD) so that we test our installation
     and configuration and flesh out any design problems early.
-    
+
+
+1. Open up a terminal
+1. Activate your virtual environment
+1. Install the required AWS software needed to interact with AWS:
+
+      ```pip install boto boto3 molecule[ec2]```
+
+1. Create the following environment variables:
+
+      ```shell script
+      AWS_REGION="us-east-1"
+      AWS_ACCESS_KEY_ID="<your aws access key id: should be in your credentials.csv file>"
+      AWS_SECRET_ACCESS_KEY="<your aws secret access key:  should be in your credentials.csv file>"
+      ```
+1. Create the AWS public and private key called **my_keypair** by running the following:
+
+     ```shell script
+      ansible-playbook create-private-key-for-ec2-instances.yml
+     ```
+   
 1. <a name="8thTDD"></a> Configure Ansible Molecule to use AWS in the [8th TDD Iteration](./8th-tdd-iteration).
 
         
