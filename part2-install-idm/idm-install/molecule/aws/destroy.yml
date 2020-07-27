@@ -19,74 +19,9 @@
         dest: "{{ molecule_instance_config }}"
       when: server.changed | default(false) | bool
 
-    - name: Get EC2 VPC Information
-      ec2_vpc_net:
-        name: vpc_openshift_idm
-        cidr_block: 10.10.0.0/16
-        region: us-east-1
-        tags:
-          module: ec2_vpc_net
-          this: works
-        tenancy: dedicated
-      register: ec2_vpc_net
-
-    - name: Set the VPC Fact
-      set_fact:
-        vpc: "{{ ec2_vpc_net.vpc }}"
-
-    - name: Get EC2 VPC Subnet Information
-      # create the subnet for the vpc with a cidr block
-      ec2_vpc_subnet:
-        vpc_id: "{{ vpc.id }}"
-        cidr: "10.10.1.0/24"
-        # enable public ip
-        map_public: yes
-        resource_tags:
-          Name: "cluster_subnet"
-      register: subnet_result
-      when: vpc is defined
-
-    - name: Set the VPC Subnet Fact
-      set_fact:
-        vpc_subnet: "{{ subnet_result['subnet'] }}"
-
-    - name: Debug Subnet
-      debug:
-        msg: "Here is your subnet:  {{ vpc_subnet.id }}"
-
-
-    - name: Delete the Openshift cluster With IDM EC2 Group
-      ec2_group:
-        name: openshift_idm_security_group
-        description: The security group for the Openshift Cluster with IDM
-        vpc_id: "{{ vpc.id }}"
+    # start an instance with a public IP address
+    - name: Create IDM EC2 Instance
+      ec2_instance:
+        name: "idm-instance"
         state: absent
 
-
-    - name: Delete EC2 VPC Subnet
-      # create the subnet for the vpc with a cidr block
-      ec2_vpc_subnet:
-        vpc_id: "{{ vpc.id }}"
-        state: absent
-        cidr: "10.10.1.0/24"
-
-
-    - name: Delete EC2 Gateway
-      # create an internet gateway for the vpc
-      ec2_vpc_igw:
-        vpc_id: "{{vpc.id }}"
-        state: absent
-
-    - name: Delete EC2 Security Group
-      ec2_group:
-        name: openshift_idm_security_group
-        description: The security group for the Openshift Cluster with IDM
-        vpc_id: "{{ vpc.id }}"
-        state: absent
-
-    - name: Delete the Openshift Cluster VPC
-      ec2_vpc_net:
-        name: vpc_openshift_idm
-        state: absent
-        cidr_block: 10.10.0.0/16
-        region: us-east-1
