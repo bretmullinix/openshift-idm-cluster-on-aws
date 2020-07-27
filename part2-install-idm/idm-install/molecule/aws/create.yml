@@ -113,7 +113,12 @@
         security_group: "openshift_idm_security_group"
         network:
           assign_public_ip: true
-        image_id: ami-08fe69d7cd45a2897
+        image_id: ami-00594b9c138e6303d
+      register: ec2_facts
+
+    - name: Print EC2 facts
+      debug:
+        var: ec2_facts
 
     - name: fail it on purpose
       fail:

@@ -10,8 +10,7 @@ amis = sorted(response['Images'],
                       key=lambda x: x['CreationDate'],
                                     reverse=True)
 for ami in amis:
-    name = ami.get("Name")
-    if name and 'centos' in name.lower():
-      print('Name: ' + name)
+    print('')
+    print(ami)
 
-print(amis[0])
+

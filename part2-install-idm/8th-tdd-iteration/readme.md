@@ -184,6 +184,87 @@ create the **aws** scenario.
                     Name: "openshift_cluster_idm_gateway"
                 register: igw_result
           ```
+         Notice how the **vpc.id** is needed to create the gateway.
+         
+      1. Create the vpc subnet by adding the following task.
+      
+            ```yaml
+                 - name: create ec2 vpc subnet
+                   # create the subnet for the vpc with a cidr block
+                   ec2_vpc_subnet:
+                     vpc_id: "{{ vpc.id }}"
+                     state: present
+                     cidr: "10.10.1.0/24"
+                     # enable public ip
+                     map_public: yes
+                     resource_tags:
+                       Name: "cluster_subnet"
+                   register: subnet_result
+            ```
+         Notice how the **vpc.id** is needed to create the subnet.  Also,
+         notice how the subnet is "10.10.1.0/24"
+         
+      1. Add the following to create your **vpc_subnet** variable.  The
+      variable contains the subnet id among other elements.
+      
+          ```yaml
+             - name: Set the VPC Subnet Fact
+                set_fact:
+                  vpc_subnet: "{{ subnet_result['subnet'] }}"
+          ```
+
+      1. Add the following to create the security group for your vpc.  Notice
+      the **vpc.id** is used to assign to the security group.
+      
+          ```yaml
+             - name: openshift cluster with idm ec2 group
+                  ec2_group:
+                    name: openshift_idm_security_group
+                    description: The security group for the Openshift Cluster with IDM
+                    vpc_id: "{{ vpc.id }}"
+                    rules:
+                      - proto: tcp
+                        from_port: 80
+                        to_port: 80
+                        cidr_ip: 0.0.0.0/0
+                      - proto: tcp
+                        from_port: 22
+                        to_port: 22
+                        cidr_ip: 0.0.0.0/0
+                      - proto: icmp
+                        from_port: -1 # icmp type, -1 = any type
+                        to_port:  -1 # icmp subtype, -1 = any subtype
+                        cidr_ip: 10.10.0.0/16
+         ```
+         Here we defined the security group for the vpc, and we open port 22
+         and port 80 for all inbound ports and ICMP for the network 10.10.0.0/16.
+         
+      1. Add the following to create your IDM EC2 instance.
+      
+            ```yaml
+             - name: Create IDM EC2 Instance
+                  ec2_instance:
+                    name: "idm-instance"
+                    key_name: "my_keypair"
+                    vpc_subnet_id: "{{ vpc_subnet.id }}"
+                    instance_type:  t2.medium
+                    security_group: "openshift_idm_security_group"
+                    network:
+                      assign_public_ip: true
+                    image_id: ami-00594b9c138e6303d   
+                  register: 
+                    ec2-facts
+            ```
+         The EC2 instance creates a VM based off of a Centos 8 image.  The
+         Centos 8 image was identified by running the Python script called
+         **describe_aws_images.py** and finding the **image_id** (ami_id).
+         The variable called **ec2_facts** was created to obtain the public ip
+         address for the VM to install the IDM software.  Notice:  The **image_id**
+         here might not be available in your region.  You will have to run the following:
+         `python describe_aws_images.py > amis.txt` and search for the **image** you want
+         to use.  If you choose an image, sometimes the playbook will fail until you
+         go online to accept the conditions of using the image.  Then, wait a little while,
+         and rerun your playbook.
 
 
 :construction:
