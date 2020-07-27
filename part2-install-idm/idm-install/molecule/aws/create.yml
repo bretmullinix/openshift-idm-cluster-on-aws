@@ -62,19 +62,22 @@
         state: present
         tags:
           Name: "openshift_cluster_idm_gateway"
-      register: igw_result
+      register: igw
 
     - name: create ec2 vpc subnet
       # create the subnet for the vpc with a cidr block
       ec2_vpc_subnet:
         vpc_id: "{{ vpc.id }}"
         state: present
-        cidr: "10.10.1.0/24"
+        cidr: "10.10.0.0/24"
         # enable public ip
         map_public: yes
         resource_tags:
           Name: "cluster_subnet"
+        tags:
+          Name: "openshift_subnet"
       register: subnet_result
+
 
     - name: Set the VPC Subnet Fact
       set_fact:
@@ -102,6 +105,20 @@
             from_port: -1 # icmp type, -1 = any type
             to_port:  -1 # icmp subtype, -1 = any subtype
             cidr_ip: 10.10.0.0/16
+        tags:
+          Name: "openshift_security_group"
+
+  # create routing to/from internet
+    - name: Route IGW
+      ec2_vpc_route_table:
+        vpc_id: "{{ vpc.id }}"
+        subnets:
+          - "{{ vpc_subnet.id }}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ igw.gateway_id  }}"
+        tags:
+          Name: "openshift_cluster_route"
 
   # start an instance with a public IP address
     - name: Create IDM EC2 Instance
