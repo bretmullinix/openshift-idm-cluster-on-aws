@@ -20,8 +20,7 @@
       when: server.changed | default(false) | bool
 
     # start an instance with a public IP address
-    - name: Create IDM EC2 Instance
+    - name: Delete IDM EC2 Instance
       ec2_instance:
         name: "idm-instance"
         state: absent
-

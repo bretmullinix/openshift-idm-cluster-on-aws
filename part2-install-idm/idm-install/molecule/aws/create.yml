@@ -6,16 +6,20 @@
   no_log: "{{ molecule_no_log }}"
   tasks:
 
+    - name: Include the variables needed for creation
+      include_vars:
+        file: "vars/main.yml"
+
     # TODO: Developer must implement and populate 'server' variable
     # Terminate every running instance in a region. Use with EXTREME caution.
 #    - name: create a new ec2 key pair, returns generated private key
 #      ec2_key:
-#        name: my_keypair
+#        name: "{{ aws_idm_key_pair }}"
 #        state: absent
 
     - name: create a new ec2 key pair, returns generated private key
       ec2_key:
-        name: my_keypair
+        name: "{{ aws_idm_key_pair }}"
         state: present
       register: key_pair_details
 
@@ -27,13 +31,13 @@
       debug:
         msg: "Here is your key pair:  {{ aws_keypair }}"
 
-#    - name: Copy the private key to a file so we can ssh into it
-#      copy:
-#        content: "{{ aws_keypair['private_key'] }}"
-#        dest: "./aws_private_key"
-#      vars:
-#        ansible_python_interpreter:  /vms/harddrive/home_directory/bmullini/Documents/redhat_tools/python/virtual_environments/IntelliJ/bin/python3.7
-
+    - name: Copy the private key to a file so we can ssh into it
+      copy:
+        content: "{{ aws_keypair['private_key'] }}"
+        dest: "{{ aws_idm_private_key }}"
+      vars:
+        ansible_python_interpreter:  /vms/harddrive/home_directory/bmullini/Documents/redhat_tools/python/virtual_environments/IntelliJ/bin/python3.7
+      when: create_private_key == true
 
     - name: create a VPC with dedicated tenancy and a couple of tags
       ec2_vpc_net:
@@ -119,9 +123,9 @@
   # start an instance with a public IP address
     - name: Create IDM EC2 Instance
       ec2_instance:
-        name: "idm-instance"
+        name: "{{ aws_idm_instance_name }}"
         wait: yes
-        key_name: "my_keypair"
+        key_name: "{{ aws_idm_key_pair }}"
         vpc_subnet_id: "{{ vpc_subnet.id }}"
         instance_type:  t2.medium
         security_group: "{{ security_group.group_id }}"
@@ -134,6 +138,14 @@
       debug:
         var: ec2_facts
 
+    - name: Set public ip address for ec2 instance
+      set_fact:
+        aws_idm_public_ip: "{{ ec2_facts.instances[0].network_interfaces[0].association.public_ip }}"
+
+    - name: Print the public ip address
+      debug:
+        var: aws_idm_public_ip
+
     - name: fail it on purpose
       fail:
         msg: "failed it on purpose"
@@ -145,9 +157,9 @@
             instance_conf_dict: {
               'instance': "{{ }}",
               'address': "{{ }}",
-              'user': "{{ }}",
-              'port': "{{ }}",
-              'identity_file': "{{ }}", }
+              'user': "centos",
+              'port': "22",
+              'identity_file': "{{ aws_idm_private_key }}", }
           with_items: "{{ server.results }}"
           register: instance_config_dict
 

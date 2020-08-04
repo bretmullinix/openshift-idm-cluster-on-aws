@@ -1,0 +1,175 @@
+{
+    "ec2_facts": {
+        "changed": true,
+        "failed": false,
+        "instance_ids": [
+            "i-0ea01046cb9b3edd7"
+        ],
+        "instances": [
+            {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2020-08-04T16:04:02+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-00722715eb7375b22"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "56a6e84a090e4fb7a59423e6d2ec674c",
+                "cpu_options": {
+                    "core_count": 2,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-00594b9c138e6303d",
+                "instance_id": "i-0ea01046cb9b3edd7",
+                "instance_type": "t2.medium",
+                "key_name": "my_keypair",
+                "launch_time": "2020-08-04T16:04:01+00:00",
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "association": {
+                            "ip_owner_id": "amazon",
+                            "public_dns_name": "ec2-3-80-19-219.compute-1.amazonaws.com",
+                            "public_ip": "3.80.19.219"
+                        },
+                        "attachment": {
+                            "attach_time": "2020-08-04T16:04:01+00:00",
+                            "attachment_id": "eni-attach-0dafc215e49904abb",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0ad7490f113687ad1",
+                                "group_name": "openshift_idm_security_group"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "06:2b:3c:44:83:9d",
+                        "network_interface_id": "eni-00ffbd355463bd4af",
+                        "owner_id": "873087958818",
+                        "private_dns_name": "ip-10-10-0-161.ec2.internal",
+                        "private_ip_address": "10.10.0.161",
+                        "private_ip_addresses": [
+                            {
+                                "association": {
+                                    "ip_owner_id": "amazon",
+                                    "public_dns_name": "ec2-3-80-19-219.compute-1.amazonaws.com",
+                                    "public_ip": "3.80.19.219"
+                                },
+                                "primary": true,
+                                "private_dns_name": "ip-10-10-0-161.ec2.internal",
+                                "private_ip_address": "10.10.0.161"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0d24af5761c9451bf",
+                        "vpc_id": "vpc-06fb421afaf018845"
+                    }
+                ],
+                "placement": {
+                    "availability_zone": "us-east-1e",
+                    "group_name": "",
+                    "tenancy": "default"
+                },
+                "private_dns_name": "ip-10-10-0-161.ec2.internal",
+                "private_ip_address": "10.10.0.161",
+                "product_codes": [
+                    {
+                        "product_code_id": "ch784gfvzisrv2q9xgjsmzcp3",
+                        "product_code_type": "marketplace"
+                    }
+                ],
+                "public_dns_name": "ec2-3-80-19-219.compute-1.amazonaws.com",
+                "public_ip_address": "3.80.19.219",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0ad7490f113687ad1",
+                        "group_name": "openshift_idm_security_group"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0d24af5761c9451bf",
+                "tags": {
+                    "Name": "idm-instance"
+                },
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-06fb421afaf018845"
+            }
+        ],
+        "spec": {
+            "BlockDeviceMappings": [],
+            "ClientToken": "56a6e84a090e4fb7a59423e6d2ec674c",
+            "ImageId": "ami-00594b9c138e6303d",
+            "InstanceType": "t2.medium",
+            "KeyName": "my_keypair",
+            "MaxCount": 1,
+            "MinCount": 1,
+            "NetworkInterfaces": [
+                {
+                    "AssociatePublicIpAddress": true,
+                    "DeviceIndex": 0,
+                    "Groups": [
+                        "sg-0ad7490f113687ad1"
+                    ],
+                    "SubnetId": "subnet-0d24af5761c9451bf"
+                }
+            ],
+            "TagSpecifications": [
+                {
+                    "ResourceType": "volume",
+                    "Tags": [
+                        {
+                            "Key": "Name",
+                            "Value": "idm-instance"
+                        }
+                    ]
+                },
+                {
+                    "ResourceType": "instance",
+                    "Tags": [
+                        {
+                            "Key": "Name",
+                            "Value": "idm-instance"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+

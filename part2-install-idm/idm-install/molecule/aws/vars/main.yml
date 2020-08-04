@@ -1,0 +1,4 @@
+aws_idm_instance_name: "idm-instance"
+aws_idm_key_pair: "my_keypair"
+aws_idm_private_key: "{{ role_path }}/files/aws_private_key"
+create_private_key: false
