@@ -6,3 +6,9 @@ create_private_key: false
 aws_default_image_size: 8
 aws_idm_image_size: 20
 aws_idm_ami: "ami-00594b9c138e6303d"
+
+aws_idm_instances:
+  - name: "{{ aws_idm_instance_name }}"
+    public_ip: "10.10.10.55"
+    user: "centos"
+    port: 22

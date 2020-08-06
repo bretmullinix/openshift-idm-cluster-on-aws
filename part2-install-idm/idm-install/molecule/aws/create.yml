@@ -10,6 +10,18 @@
       include_vars:
         file: "vars/main.yml"
 
+    - name: Set molecule directory
+      set_fact:
+        molecule_ephemeral_directory: '{{ lookup(''env'', ''MOLECULE_EPHEMERAL_DIRECTORY'') }}'
+
+    - name: Print out molecule directory
+      debug:
+        var: molecule_ephemeral_directory
+
+    - name: Set the molecule directory private key
+      set_fact:
+        aws_molecule_private_key_file: "{{ molecule_ephemeral_directory }}/private_key"
+
     # TODO: Developer must implement and populate 'server' variable
     # Terminate every running instance in a region. Use with EXTREME caution.
     - name: create a new ec2 key pair, returns generated private key
@@ -39,6 +51,44 @@
       vars:
         ansible_python_interpreter:  /home/bmullini/Documents/redhat_tools/python/virtual_environments/IntelliJ/bin/python3.7
       when: create_private_key == true
+
+    - name: Copy the private key to the molecule config directory
+      copy:
+        src: "{{ aws_idm_private_key }}"
+        dest: "{{ aws_molecule_private_key_file }}"
+        mode: 0600
+
+    - name: Populate instance config dict
+      set_fact:
+        instance_conf_dict: {
+               'instance': "{{ item.name }}",
+                'address': "{{ item.public_ip }}",
+                'user': "{{ item.user  }}",
+                'port': "{{ item.port }}",
+                'identity_file': "{{ aws_molecule_private_key_file }}", }
+      with_items: "{{ aws_idm_instances }}"
+      register: instance_config_dict
+
+
+    - name: Debug variable
+      debug:
+        var: instance_config_dict
+
+
+    - name: Convert instance config dict to a list
+      set_fact:
+        instance_conf: "{{ instance_config_dict.results | map(attribute='ansible_facts.instance_conf_dict') | list }}"
+
+    - name: Print instance_conf list
+      debug:
+        var:  instance_conf
+
+    - name: Print instance_conf molecule file
+      debug:
+        msg:  "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
+
+    #- fail:
+     #   msg: "Fail on purpose"
 
     - name: create a VPC with dedicated tenancy and a couple of tags
       ec2_vpc_net:
@@ -121,7 +171,7 @@
 
 
     # Single instance with ssd gp2 root volume
-    - name: Create IDM EC2 Intance
+    - name: Create IDM EC2 Instance
       ec2:
         key_name: "{{ aws_idm_key_pair }}"
         group: "openshift_idm_security_group"
@@ -143,8 +193,6 @@
         exact_count: 1
       register: ec2_facts
 
-
-
     - name: Print EC2 facts
       debug:
         var: ec2_facts
@@ -153,36 +201,48 @@
       set_fact:
         aws_idm_public_ip: "{{ ec2_facts.tagged_instances[0].public_ip }}"
 
-    - name: Set public ip address for ec2 instance
+    - name: Populate instance config dict
       set_fact:
-        idm_instance_id: "{{ ec2_facts.tagged_instances[0].id }}"
+        instance_conf_dict: {
+               'instance': "{{ item.name }}",
+                'address': "{{ aws_idm_public_ip }}",
+                'user': "{{ item.user  }}",
+                'port': "{{ item.port }}",
+                'identity_file': "{{ aws_molecule_private_key_file }}",
+                'become_method': "sudo",
+                'become_ask_pass': false,
 
-    - name: Print the public ip address
+                }
+      with_items: "{{ aws_idm_instances }}"
+      register: instance_config_dict
+
+    - name: Debug variable
       debug:
-        var: aws_idm_public_ip
+        var: instance_config_dict
 
-    - when: server.changed | default(false) | bool
-      block:
-        - name: Populate instance config dict
-          set_fact:
-            instance_conf_dict: {
-              'instance': "{{ aws_idm_instance_name }}",
-              'address': "{{ aws_idm_public_ip }}",
-              'user': "centos",
-              'port': "22",
-              'identity_file': "{{ aws_idm_private_key }}", }
-          with_items: "{{ server.results }}"
-          register: instance_config_dict
 
-        - name: Convert instance config dict to a list
-          set_fact:
-            instance_conf: "{{ instance_config_dict.results | map(attribute='ansible_facts.instance_conf_dict') | list }}"
+    - name: Convert instance config dict to a list
+      set_fact:
+        instance_conf: "{{ instance_config_dict.results | map(attribute='ansible_facts.instance_conf_dict') | list }}"
 
-        - name: Print Instance Config Location
-          debug:
-            var: "{{ molecule_instance_config }}"
+    - name: Print instance_conf list
+      debug:
+        var:  instance_conf
 
-        - name: Dump instance config
-          copy:
-            content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
-            dest: "{{ molecule_instance_config }}"
+    - name: Dump instance config
+      copy:
+        content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
+        dest: "{{ molecule_instance_config }}"
+
+
+    - name: Wait for SSH
+      wait_for:
+        port: 22
+        host: "{{ aws_idm_public_ip }}"
+        search_regex: SSH
+        delay: 10
+        timeout: 320
+
+    - name: Wait for boot process to finish
+      pause:
+        minutes: 2
