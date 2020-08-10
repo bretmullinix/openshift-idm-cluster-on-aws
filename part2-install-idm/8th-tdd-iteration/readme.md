@@ -662,8 +662,6 @@ create the **aws** scenario.
     if you can make the code better for maintenance, usability, or any other valid reasons.
 
 
-:construction:
-
 We have configured RedHat IDM in our 8th TDD iteration.
 
 [**<--Back to main instructions**](../readme.md#8thTDD)
