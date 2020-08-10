@@ -1,0 +1,43 @@
+---
+# tasks file for idm-install
+
+- name: Install Firewalld Service
+  yum:
+    name: firewalld
+    state: present
+
+- name: Start Firewalld Service
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Open Ports for IDM
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  with_items: "{{ open_idm_ports }}"
+
+- name: Enable IDM module
+  shell:
+    cmd: dnf module enable -y idm:DL1
+
+- name: Install sudo
+  yum:
+    name: sudo
+    state: present
+
+- name: Install the Latest Version of IDM.  Please wait this could take 5-10 minutes....
+  dnf:
+    name: "@{{ item }}"
+    state: present
+  with_items:
+    - idm:DL1/server
+    - idm:DL1/dns
+
+- name: Configure IDM.  Please wait this could take 15-30 minutes....
+  shell:
+    cmd: >
+       ipa-server-install  --mkhomedir --setup-dns --no-forwarders  -a '{{ idm_admin_password }}' -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}'  -n {{ idm_domain_name }} -U

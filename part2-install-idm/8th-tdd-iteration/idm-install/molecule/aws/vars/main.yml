@@ -1,0 +1,20 @@
+idm_domain_name: example2020.com
+idm_fqdn: "idm.{{ idm_domain_name }}"
+aws_idm_instance_name: "idm-instance"
+aws_idm_key_pair: "my_keypair"
+role_path: "../.."
+aws_idm_private_key: "{{ role_path }}/files/aws_private_key"
+create_private_key: false
+aws_default_image_size: 8
+aws_idm_image_size: 30
+aws_idm_ami: "ami-00594b9c138e6303d"
+aws_vpc:
+  name: "aws_openshift_vpc"
+  label: "Openshift Cluster VPC"
+  gateway: "aws_openshift_vpc_gateway"
+  route_table: "aws_openshift_vpc_route_table"
+  security_group: "aws_openshift_vpc_security_group"
+aws_idm_instances:
+  - name: "{{ aws_idm_instance_name }}"
+    user: "centos"
+    port: 22

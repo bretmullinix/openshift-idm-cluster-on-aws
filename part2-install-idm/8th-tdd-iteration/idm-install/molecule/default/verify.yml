@@ -1,0 +1,68 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  tasks:
+
+    - name: Include the module vars file.
+      include_vars:
+        file: ../../defaults/main.yml
+
+    - name: Include the module vars file.
+      include_vars:
+        file: ../../vars/main.yml
+
+    - name: Run setup
+      setup:
+      register: output_setup
+    - name: Print setup
+      debug:
+        var: output_setup
+
+    - name: Install this only for local dev machine
+      debug:
+        msg: "Your hostname is correctly set to '{{ ansible_fqdn }}'."
+      when: ansible_fqdn == "idm.example2020.com"
+
+    - name: You did not set the host name
+      fail:
+        msg:  "Your host name is '{{ ansible_fqdn }}' and should be 'idm.example2020.com'"
+      when: ansible_fqdn != "idm.example2020.com"
+
+    - name: collect facts about system services
+      service_facts:
+      register: services_state
+
+    - name:  Get firewall service information
+      set_fact:
+        firewall_service: "{{ item.value }}"
+      loop: "{{ lookup('dict', services_state.ansible_facts.services) }}"
+      when: "'firewalld.service' in item.key"
+
+    - name:  Determine if firewalld exists
+      include_tasks: tasks/add-firewalld.yml
+
+    - name:  Determine if firewalld is started and enabled
+      include_tasks: tasks/start-and-enable-firewalld.yml
+
+    - name: Register variable for open ports
+      command:  firewall-cmd --list-ports
+      register: open_ports
+
+    - name: Fail if an IDM Port is Closed
+      fail:
+        msg: "The port '{{ item }}' is not open."
+      with_items: "{{ open_idm_ports }}"
+      when: "'{{ item }}' not in open_ports.stdout"
+
+    - name: Test if the IDM Module is Enabled.
+      get_dnf_modules:
+        module_name: idm
+        enabled: true
+
+    - name: Check to see if IDM is installed
+      include_tasks: tasks/check-if-idm-is-installed.yml
+
+    - name: Check to see if IDM is configured
+      include_tasks: tasks/check-if-idm-is-configured.yml

@@ -1,0 +1,23 @@
+- name: Gather the rpm package facts
+  package_facts:
+    manager: auto
+
+- name: Populate the installed IPA Server fact
+  set_fact:
+    ipa_server_installed: ansible_facts.packages['ipa-server']
+  when: "'ipa-server' in ansible_facts.packages"
+
+- name: Fail if IPA Server is Not Installed
+  fail:
+    msg: "IPA Server is not installed"
+  when: ipa_server_installed is not defined
+
+- name: Populate the installed IPA Server DNS fact
+  set_fact:
+    ipa_server_dns_installed: ansible_facts.packages['ipa-server-dns']
+  when: "'ipa-server' in ansible_facts.packages"
+
+- name: Fail if IPA Server DNS is Not Installed
+  fail:
+    msg: "IPA Server DNS is not installed"
+  when: ipa_server_dns_installed is not defined

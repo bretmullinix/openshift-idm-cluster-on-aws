@@ -1,0 +1,30 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  tasks:
+    - name: Include the variables needed for creation
+      include_vars:
+        file: "vars/main.yml"
+
+    - name: Set the hostname for IDM
+      hostname:
+        name: "{{ idm_fqdn }}"
+
+    - name: Make sure DNS server is set to 127.0.0.1
+      command: 'nmcli con mod "System eth0" ipv4.dns "127.0.0.1"'
+      register: connection_info
+      become: true
+
+    - name:  Check the output
+      debug:
+        var: connection_info
+
+    - name: Restart Network Connection
+      service:
+        name: NetworkManager
+        state: restarted
+
+    - name: "Include idm-install"
+      include_role:
+        name: "idm-install"
