@@ -378,23 +378,23 @@ create the **aws** scenario.
           all ip addresses (0.0.0.0/0) through the gateway.
               
       1. Add the following contents to the end of the **create.yml** file.
-               
+
           ```yaml
-        - name: create the aws security group for the vpc
-          ec2_group:
-            name: "{{ aws_vpc.security_group }}"
-            description: The security group for the AWS cluster
-            vpc_id: "{{ vpc_facts.id }}"
-            rules:
-              - proto: tcp
-                ports:
-                  - 80
-                  - 443
-                  - 22
-                cidr_ip: 0.0.0.0/0
-            tags:
-              Name: "{{ aws_vpc.security_group }}"
-          register: security_group
+            - name: create the aws security group for the vpc
+              ec2_group:
+                name: "{{ aws_vpc.security_group }}"
+                description: The security group for the AWS cluster
+                vpc_id: "{{ vpc_facts.id }}"
+                rules:
+                  - proto: tcp
+                    ports:
+                      - 80
+                      - 443
+                      - 22
+                    cidr_ip: 0.0.0.0/0
+                tags:
+                  Name: "{{ aws_vpc.security_group }}"
+              register: security_group
           ``` 
           
           This creates the security group for the vpc.  The cluster allows
