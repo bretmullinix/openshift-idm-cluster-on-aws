@@ -1,3 +1,5 @@
+idm_domain_name: example2020.com
+idm_fqdn: "idm.{{ idm_domain_name }}"
 aws_idm_instance_name: "idm-instance"
 aws_idm_key_pair: "my_keypair"
 role_path: "../.."
