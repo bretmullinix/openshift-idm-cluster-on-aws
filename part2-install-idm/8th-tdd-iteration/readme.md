@@ -666,4 +666,4 @@ create the **aws** scenario.
 
 We have configured RedHat IDM in our 8th TDD iteration.
 
-[**<--Back to main instructions**](../readme.md#7thTDD)
+[**<--Back to main instructions**](../readme.md#8thTDD)
