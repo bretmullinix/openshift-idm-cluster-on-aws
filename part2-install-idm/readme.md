@@ -173,8 +173,4 @@ and add the following content:
    
 1. <a name="8thTDD"></a> Configure Ansible Molecule to use AWS in the [8th TDD Iteration](./8th-tdd-iteration).
 
-        
-        
-        
-  
-:construction: Under Construction.....
+1. You have finished the IDM ansible role.  Please go back to the [table of contents](../readme.md) to continue.
