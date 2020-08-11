@@ -44,6 +44,8 @@ Python virtual environment and Ansible Molecule.
 
 1. Open up a terminal window.
 
+1. Make sure you **source** your virtual environment
+
 1. mkdir **part3-install-aws-infrastructure**
 
 1. Copy the **Dockerfile** down from the git repo under the
@@ -54,12 +56,13 @@ folder  **part3-install-aws-infrastructure**
 
    The command above will create a docker image
    on your machine called **part3-install-aws-infrastructure**.
-   The image ensures that python3, pip3, and ansible 2.9
+   The image ensures that python3, pip3, boto, boto3 and ansible 2.9
    are installed.  We installed **ansible** on the image
-   because the image will be used by **Molecule**, and
-   Molecule requires ansible to run tests.
+   because the image will be used by **molecule**, and
+   molecule requires ansible to run tests.  The Amazon ansible modules
+   require the  **boto** and **boto3** packages.
 
-1. Create the Ansible Molecule role called **idm-install**
+1. Create the Ansible Molecule role called **aws-infrastructure-install**
 
     1. Run `molecule init role --driver-name docker aws-infrastructure-install`
     1. Run `tree aws-infrastructure-install`
