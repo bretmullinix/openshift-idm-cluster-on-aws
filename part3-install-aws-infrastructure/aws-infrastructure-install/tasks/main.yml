@@ -1,0 +1,16 @@
+---
+# tasks file for aws-infrastructure-install
+
+- name: Create a VPC with dedicated tenancy and a couple of tags
+  ec2_vpc_net:
+    name: "{{ aws_infrastructure_install_vpc.name }}"
+    cidr_block: 192.168.0.0/16
+    dns_support: true
+    dns_hostnames: true
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    tags:
+      module: "{{ aws_infrastructure_install_vpc.label }}"
+    tenancy: default
+  register: ec2_vpc_net

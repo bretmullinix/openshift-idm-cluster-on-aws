@@ -1,0 +1,11 @@
+---
+# defaults file for aws-infrastructure-install
+aws_infrastructure_install_vpc:
+  name: "openshift_dev_vpc"
+  label: "Openshift Development Cluster VPC"
+  gateway: "openshift_dev_vpc_gateway"
+  route_table: "openshift_dev_vpc_route_table"
+  security_group: "openshift_dev_vpc_security_group"
+aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
