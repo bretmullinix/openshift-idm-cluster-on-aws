@@ -29,8 +29,15 @@ may **"follow"** the repo and see the repo develop.
 1. Setup your environment [here](./part1-setup-environment).
 1. Develop Ansible scripts to install RedHat IDM [here](./part2-install-idm).
 
+1. Develop Ansible scripts to install the AWS Infrastructure [here](./part3-install-aws-infrastructure).
+
     The development of this tutorial is in progress, you can follow along to see it evolve.
 
-1. Develop Ansible scripts to install RedHat OpenShift [here](./part3-install-openshift).
+1. Develop Ansible scripts to install the Quay [here](./part4-install-quay).
+
+    The development of this tutorial is in progress, you can follow along to see it evolve.
+
+
+1. Develop Ansible scripts to install RedHat OpenShift [here](part5-install-openshift).
 
     The tutorial has not been implemented.  
