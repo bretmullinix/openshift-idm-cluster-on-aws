@@ -35,7 +35,7 @@ may **"follow"** the repo and see the repo develop.
 
 1. Develop Ansible scripts to install the Quay [here](./part4-install-quay).
 
-    The development of this tutorial is in progress, you can follow along to see it evolve.
+    The tutorial has not been implemented.  
 
 
 1. Develop Ansible scripts to install RedHat OpenShift [here](part5-install-openshift).
