@@ -27,3 +27,11 @@
     resource_tags:
       Name: "{{ aws_infrastructure_install_vpc.subnets.data.name  }}"
   register: data_subnet_result
+
+- name: Set the Control VPC Subnet Fact
+  set_fact:
+    vpc_control_subnet: "{{ control_subnet_result['subnet'] }}"
+
+- name: Set the Data VPC Subnet Fact
+  set_fact:
+    vpc_data_subnet: "{{ data_subnet_result['subnet'] }}"
