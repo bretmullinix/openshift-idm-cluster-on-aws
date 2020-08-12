@@ -1,4 +1,4 @@
-# 1st TDD Iteration --> Add the AWS VPC Gateway
+# 3rd TDD Iteration --> Add the AWS VPC Gateway
 
 Last updated: 08.12.2020
 
