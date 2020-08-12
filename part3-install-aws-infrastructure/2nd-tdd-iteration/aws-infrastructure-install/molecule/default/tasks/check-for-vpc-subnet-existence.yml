@@ -1,0 +1,41 @@
+- name: Gather facts on the AWS Control Subnet
+  ec2_vpc_subnet_info:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      region: "{{ aws_region }}"
+      filters:
+            "tag:Name": "{{ aws_infrastructure_install_vpc.subnets.control.name }}"
+  register: vpc_info
+
+
+- name: Print the vpc info
+  debug:
+    var: vpc_info
+
+- name: Fail if the control subnet does not exist
+  fail:
+    msg:  "The subnet called '{{ aws_infrastructure_install_vpc.subnets.control.name  }}' does not exist."
+  when:
+    - vpc_info.subnets is defined
+    - vpc_info.subnets | length  == 0
+
+- name: Gather facts on the AWS Data Subnet
+  ec2_vpc_subnet_info:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      region: "{{ aws_region }}"
+      filters:
+            "tag:Name": "{{ aws_infrastructure_install_vpc.subnets.data.name }}"
+  register: vpc_info
+
+
+- name: Print the vpc info
+  debug:
+    var: vpc_info
+
+- name: Fail if the data subnet does not exist
+  fail:
+    msg:  "The subnet called '{{ aws_infrastructure_install_vpc.subnets.data.name  }}' does not exist."
+  when:
+    - vpc_info.subnets is defined
+    - vpc_info.subnets | length  == 0
