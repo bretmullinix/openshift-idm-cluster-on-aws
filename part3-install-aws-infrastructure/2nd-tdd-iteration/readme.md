@@ -150,7 +150,7 @@ The purpose of this iteration is to add the AWS VPC Subnets to the AWS environme
     1. Create the file called **create-vpc-subnets.yml**.
     1. Remove the tasks starting with the task **Create the ec2 vpc control subnet**
     and add them to the **create-vpc-subnets.yml** file.
-    1. Add the following task to include the new task file in the **verify.yml* file.
+    1. Add the following task to include the new task file in the **verify.yml** file.
         
           ```yaml
             - name:  Add the subnets
