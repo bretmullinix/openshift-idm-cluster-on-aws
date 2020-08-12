@@ -105,6 +105,6 @@ folder  **part3-install-aws-infrastructure**
 
 
     ```
-1. <a name="1stTDD"></a> Add the **vpn** with the [1st TDD Iteration](./1st-tdd-iteration).
+1. <a name="1stTDD"></a> Add the **vpc** with the [1st TDD Iteration](./1st-tdd-iteration).
 
 :construction: Under Construction.....
