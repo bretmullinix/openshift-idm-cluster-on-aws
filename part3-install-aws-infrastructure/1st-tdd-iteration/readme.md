@@ -18,39 +18,38 @@ The purpose of this iteration is to add the AWS VPC to the AWS environment.
     
     1. Create the **verify.yml** file and add the following contents:
     
-      ```yaml
-       ---
-      ---
-      # This is an example playbook to execute Ansible tests.
-      
-      - name: Verify
-        hosts: all
-        tasks:
-          - name: Include the module vars file.
-            include_vars:
-              file: ../../defaults/main.yml
-      
-          - name: Gather facts on the AWS VPC
-            ec2_vpc_net_info:
-                aws_access_key: "{{ aws_access_key }}"
-                aws_secret_key: "{{ aws_secret_key }}"
-                region: "{{ aws_region }}"
-                filters:
-                      "tag:Name": "{{ aws_infrastructure_install_vpc.name }}"
-            register: vpc_info
-      
-          - name: Print the vpc info
-            debug:
-              var: vpc_info
-      
-          - name: Fail if the VPC does not exist
-            fail:
-              msg:  "The VPC called '{{ aws_infrastructure_install_vpc.name }}' does not exist."
-            when:
-              - vpc_info.vpcs is defined
-              - vpc_info.vpcs | length  == 0
-    
-      ``` 
+          ```yaml
+          ---
+          # This is an example playbook to execute Ansible tests.
+          
+          - name: Verify
+            hosts: all
+            tasks:
+              - name: Include the module vars file.
+                include_vars:
+                  file: ../../defaults/main.yml
+          
+              - name: Gather facts on the AWS VPC
+                ec2_vpc_net_info:
+                    aws_access_key: "{{ aws_access_key }}"
+                    aws_secret_key: "{{ aws_secret_key }}"
+                    region: "{{ aws_region }}"
+                    filters:
+                          "tag:Name": "{{ aws_infrastructure_install_vpc.name }}"
+                register: vpc_info
+          
+              - name: Print the vpc info
+                debug:
+                  var: vpc_info
+          
+              - name: Fail if the VPC does not exist
+                fail:
+                  msg:  "The VPC called '{{ aws_infrastructure_install_vpc.name }}' does not exist."
+                when:
+                  - vpc_info.vpcs is defined
+                  - vpc_info.vpcs | length  == 0
+        
+          ``` 
          
       1. cd ../..
       1. Run `molecule converge`

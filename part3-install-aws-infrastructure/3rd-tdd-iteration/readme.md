@@ -19,31 +19,31 @@ The purpose of this iteration is to add the AWS VPC Gateway to the AWS environme
     
     1. Add the following contents to the end of the **verify.yml** file:
     
-      ```yaml
-
-       - name: Gather facts on the AWS Control Subnet
-         ec2_vpc_igw_info:
-           aws_access_key: "{{ aws_access_key }}"
-           aws_secret_key: "{{ aws_secret_key }}"
-           region: "{{ aws_region }}"
-           filters:
-                "tag:Name": "{{ aws_infrastructure_install_vpc.gatway }}"
-         register: gateway_info
-
-
-       - name: Print the vpc info
-         debug:
-           var: gateway_info
-
-       - name: Fail if the gateway does not exist
-         fail:
-           msg:  "The gateway called '{{ aws_infrastructure_install_vpc.gateway  }}' does not exist."
-         when:
-           - gateway_info.internet_gateways is defined
-           - gateway_info.internet_gateways | length  == 0
-
- 
-      ``` 
+          ```yaml
+    
+           - name: Gather facts on the AWS Control Subnet
+             ec2_vpc_igw_info:
+               aws_access_key: "{{ aws_access_key }}"
+               aws_secret_key: "{{ aws_secret_key }}"
+               region: "{{ aws_region }}"
+               filters:
+                    "tag:Name": "{{ aws_infrastructure_install_vpc.gatway }}"
+             register: gateway_info
+    
+    
+           - name: Print the vpc info
+             debug:
+               var: gateway_info
+    
+           - name: Fail if the gateway does not exist
+             fail:
+               msg:  "The gateway called '{{ aws_infrastructure_install_vpc.gateway  }}' does not exist."
+             when:
+               - gateway_info.internet_gateways is defined
+               - gateway_info.internet_gateways | length  == 0
+    
+     
+          ``` 
          
       1. cd ../..
       1. Run `molecule converge`
