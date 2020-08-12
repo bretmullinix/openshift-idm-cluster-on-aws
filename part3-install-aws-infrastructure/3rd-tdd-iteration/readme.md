@@ -92,7 +92,7 @@ The purpose of this iteration is to add the AWS VPC Gateway to the AWS environme
     1. Create the file called **check-for-vpc-gateway-existence.yml**.
     1. Remove the tasks starting with the task **Gather facts on the AWS VPC Gateway**
     and add them to the **check-for-vpc-gateway-existence.yml** file.
-    1. Add the following task to include the new task file in the **verify.yml* file.
+    1. Add the following task to include the new task file in the **verify.yml** file.
     
           ```yaml
             - name:  Determine if vpc exists
