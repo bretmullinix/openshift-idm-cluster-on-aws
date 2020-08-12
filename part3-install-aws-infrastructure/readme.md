@@ -133,7 +133,7 @@ folder  **part3-install-aws-infrastructure**
     ```
 
 1. <a name="1stTDD"></a> Add the **vpc** with the [1st TDD Iteration](./1st-tdd-iteration).
-1. <a name="2ndTDD"></a> Add the **vpc** with the [2nd TDD Iteration](./2nd-tdd-iteration).
+1. <a name="2ndTDD"></a> Add the **vpc subnet** with the [2nd TDD Iteration](./2nd-tdd-iteration).
 
 
 :construction: Under Construction.....
