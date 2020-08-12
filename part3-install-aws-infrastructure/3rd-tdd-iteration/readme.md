@@ -21,26 +21,26 @@ The purpose of this iteration is to add the AWS VPC Gateway to the AWS environme
     
       ```yaml
 
-    - name: Gather facts on the AWS Control Subnet
-      ec2_vpc_igw_info:
-          aws_access_key: "{{ aws_access_key }}"
-          aws_secret_key: "{{ aws_secret_key }}"
-          region: "{{ aws_region }}"
-          filters:
+       - name: Gather facts on the AWS Control Subnet
+         ec2_vpc_igw_info:
+           aws_access_key: "{{ aws_access_key }}"
+           aws_secret_key: "{{ aws_secret_key }}"
+           region: "{{ aws_region }}"
+           filters:
                 "tag:Name": "{{ aws_infrastructure_install_vpc.gatway }}"
-      register: gateway_info
+         register: gateway_info
 
 
-    - name: Print the vpc info
-      debug:
-        var: gateway_info
+       - name: Print the vpc info
+         debug:
+           var: gateway_info
 
-    - name: Fail if the gateway does not exist
-      fail:
-        msg:  "The gateway called '{{ aws_infrastructure_install_vpc.gateway  }}' does not exist."
-      when:
-        - gateway_info.internet_gateways is defined
-        - gateway_info.internet_gateways | length  == 0
+       - name: Fail if the gateway does not exist
+         fail:
+           msg:  "The gateway called '{{ aws_infrastructure_install_vpc.gateway  }}' does not exist."
+         when:
+           - gateway_info.internet_gateways is defined
+           - gateway_info.internet_gateways | length  == 0
 
  
       ``` 
@@ -60,17 +60,17 @@ The purpose of this iteration is to add the AWS VPC Gateway to the AWS environme
     1. Add the following task to the end of th **tasks/main.yml** file.
         
         ```yaml
-        - name: create ec2 vpc internet gateway
+          - name: create ec2 vpc internet gateway
           # create an internet gateway for the vpc
-          ec2_vpc_igw:
-            vpc_id: "{{ vpc_facts.id }}"
-            state: present
-            aws_access_key: "{{ aws_access_key }}"
-            aws_secret_key: "{{ aws_secret_key }}"
-            region: "{{ aws_region }}"
-            tags:
-              Name: "{{ aws_infrastructure_install_vpc.gateway }}"
-          register: igw
+            ec2_vpc_igw:
+              vpc_id: "{{ vpc_facts.id }}"
+              state: present
+              aws_access_key: "{{ aws_access_key }}"
+              aws_secret_key: "{{ aws_secret_key }}"
+              region: "{{ aws_region }}"
+              tags:
+                Name: "{{ aws_infrastructure_install_vpc.gateway }}"
+            register: igw
         ```
             
       1. Run `molecule converge`
