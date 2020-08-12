@@ -11,7 +11,7 @@
     region: "{{ aws_region }}"
     resource_tags:
       Name: "{{ aws_infrastructure_install_vpc.subnets.control.name  }}"
-  register: subnet_result
+  register: control_subnet_result
 
 - name: Create the ec2 vpc data subnet
   # create the subnet for the vpc with a cidr block
@@ -26,4 +26,4 @@
     region: "{{ aws_region }}"
     resource_tags:
       Name: "{{ aws_infrastructure_install_vpc.subnets.data.name  }}"
-  register: subnet_result
+  register: data_subnet_result
