@@ -123,7 +123,7 @@ The purpose of this iteration is to add the AWS VPC to the AWS environment.
       
 1. **REFACTOR** --> Does any of the code need **Refactoring**?
 
-    1. The **verify.yml** looks a little messy.  Let's extract the new **vpc**
+    1. The **verify.yml** looks a little messy.  Let's extract the new **vpc subnet**
         tasks into a file and reference the file from verify.yml.
     1. mkdir -p molecule/default/tasks
     1. cd molecule/default/tasks
