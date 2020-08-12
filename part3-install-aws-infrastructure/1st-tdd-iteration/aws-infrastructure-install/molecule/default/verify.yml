@@ -1,0 +1,14 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Include the module vars file.
+      include_vars:
+        file: ../../defaults/main.yml
+
+    - name:  Determine if vpc exists
+      include_tasks: tasks/check-for-vpc-existence.yml
+
+

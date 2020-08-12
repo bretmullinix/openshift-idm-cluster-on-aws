@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include aws-infrastructure-install"
+      include_role:
+        name: "aws-infrastructure-install"
