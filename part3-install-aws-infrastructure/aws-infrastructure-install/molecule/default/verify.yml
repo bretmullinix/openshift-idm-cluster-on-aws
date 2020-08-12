@@ -11,4 +11,6 @@
     - name:  Determine if vpc exists
       include_tasks: tasks/check-for-vpc-existence.yml
 
+    - name:  Determine if vpc exists
+      include_tasks: tasks/check-for-vpc-subnet-existence.yml
 

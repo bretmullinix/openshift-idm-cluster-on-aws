@@ -105,6 +105,35 @@ folder  **part3-install-aws-infrastructure**
 
 
     ```
+1. Add the following variables to the **default/main.yml**.
+
+    ```yaml
+        ---
+        # defaults file for aws-infrastructure-install
+        aws_infrastructure_install_vpc:
+          name: "openshift_dev_vpc"
+          label: "Openshift Development Cluster VPC"
+          gateway: "openshift_dev_vpc_gateway"
+          route_table: "openshift_dev_vpc_route_table"
+          security_group: "openshift_dev_vpc_security_group"
+          subnets:
+            control:
+              name: "aws_infrastructure_control_subnet"
+              cidr: "192.168.1.0/24"
+              mtu: 1500
+            data:
+              name: "aws_infrastructure_data_subnet"
+              cidr: "192.168.2.0/24"
+              mtu: 9200
+          cidr: "192.168.0.0/16"
+        
+        aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+        aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+        aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+    ```
+
 1. <a name="1stTDD"></a> Add the **vpc** with the [1st TDD Iteration](./1st-tdd-iteration).
+1. <a name="2ndTDD"></a> Add the **vpc** with the [2nd TDD Iteration](./2nd-tdd-iteration).
+
 
 :construction: Under Construction.....

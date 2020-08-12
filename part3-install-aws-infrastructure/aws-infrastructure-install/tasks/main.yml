@@ -4,7 +4,7 @@
 - name: Create a VPC with dedicated tenancy and a couple of tags
   ec2_vpc_net:
     name: "{{ aws_infrastructure_install_vpc.name }}"
-    cidr_block: 192.168.0.0/16
+    cidr_block: "{{ aws_infrastructure_install_vpc.cidr }}"
     dns_support: true
     dns_hostnames: true
     aws_access_key: "{{ aws_access_key }}"
@@ -14,3 +14,10 @@
       module: "{{ aws_infrastructure_install_vpc.label }}"
     tenancy: default
   register: ec2_vpc_net
+
+- name: Set the VPC Fact
+  set_fact:
+    vpc_facts: "{{ ec2_vpc_net.vpc }}"
+
+- name:  Add the subnets
+  include_tasks: create-vpc-subnets.yml

@@ -1,0 +1,29 @@
+- name: Create the ec2 vpc control subnet
+  # create the subnet for the vpc with a cidr block
+  ec2_vpc_subnet:
+    vpc_id: "{{ vpc_facts.id }}"
+    state: present
+    cidr: "{{ aws_infrastructure_install_vpc.subnets.control.cidr  }}"
+    # enable public ip
+    map_public: true
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    resource_tags:
+      Name: "{{ aws_infrastructure_install_vpc.subnets.control.name  }}"
+  register: subnet_result
+
+- name: Create the ec2 vpc data subnet
+  # create the subnet for the vpc with a cidr block
+  ec2_vpc_subnet:
+    vpc_id: "{{ vpc_facts.id }}"
+    state: present
+    cidr: "{{ aws_infrastructure_install_vpc.subnets.data.cidr  }}"
+    # enable public ip
+    map_public: true
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    resource_tags:
+      Name: "{{ aws_infrastructure_install_vpc.subnets.data.name  }}"
+  register: subnet_result
