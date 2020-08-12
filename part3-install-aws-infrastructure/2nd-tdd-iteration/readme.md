@@ -91,7 +91,7 @@ The purpose of this iteration is to add the AWS VPC to the AWS environment.
             region: "{{ aws_region }}"
             resource_tags:
               Name: "{{ aws_infrastructure_install_vpc.subnets.control.name  }}"
-          register: subnet_result
+          register: control_subnet_result
         
         - name: create ec2 vpc data subnet
           # Create the subnet for the vpc with a cidr block
@@ -106,7 +106,7 @@ The purpose of this iteration is to add the AWS VPC to the AWS environment.
             region: "{{ aws_region }}"
             resource_tags:
               Name: "{{ aws_infrastructure_install_vpc.subnets.data.name  }}"
-          register: subnet_result
+          register: data_subnet_result
         ```
             
       1. Run `molecule converge`
