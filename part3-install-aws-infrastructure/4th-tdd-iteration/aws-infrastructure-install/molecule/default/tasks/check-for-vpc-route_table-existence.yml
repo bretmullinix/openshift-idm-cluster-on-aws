@@ -1,0 +1,19 @@
+
+- name: Create the EC2 Route Table Information
+  ec2_vpc_route_table_info:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    filters:
+      "tag:Name": "{{ aws_infrastructure_install_vpc.route_table }}"
+  register: route_table_info
+
+- name: Print the EC2 Route Table information
+  debug:
+    var: route_table_info
+
+- name: Fail if the route table does not exist
+  fail:
+    msg:  "The route table called '{{ aws_infrastructure_install_vpc.route_table  }}' does not exist."
+  when:
+    - route_table_info.route_tables is not defined or route_table_info.route_tables | length  == 0
