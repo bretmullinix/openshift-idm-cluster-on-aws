@@ -93,7 +93,7 @@ The purpose of this iteration is to add the AWS VPC Route Table to the AWS envir
     1. Create the file called **check-for-vpc-route_table-existence.yml**.
     1. Remove the tasks starting with the task **Create the EC2 Route Table Information**
     and add them to the **check-for-vpc-route_table-existence.yml** file.
-    1. Add the following task to include the new task file in the **verify.yml* file.
+    1. Add the following task to include the new task file in the **verify.yml** file.
     
           ```yaml
             - name:  Determine if vpc exists

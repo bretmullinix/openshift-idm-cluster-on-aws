@@ -18,49 +18,48 @@ The purpose of this iteration is to add the AWS VPC Subnets to the AWS environme
     
     1. Add the following contents to the end of the **verify.yml** file:
     
-          ```yaml
-    
-           - name: Gather facts on the AWS Control Subnet
-             ec2_vpc_subnet_info:
-               aws_access_key: "{{ aws_access_key }}"
-               aws_secret_key: "{{ aws_secret_key }}"
-               region: "{{ aws_region }}"
-               filters:
-                    "tag:Name": "{{ aws_infrastructure_install_vpc.subnets.control.name }}"
-             register: vpc_info
-    
-    
-           - name: Print the vpc info
-             debug:
-               var: vpc_info
-    
-           - name: Fail if the control subnet does not exist
-             fail:
-               msg:  "The subnet called '{{ aws_infrastructure_install_vpc.subnets.control.name  }}' does not exist."
-             when:
-               - vpc_info.subnets is defined
-               - vpc_info.subnets | length  == 0
-    
-           - name: Gather facts on the AWS Data Subnet
-             ec2_vpc_subnet_info:
-               aws_access_key: "{{ aws_access_key }}"
-               aws_secret_key: "{{ aws_secret_key }}"
-               region: "{{ aws_region }}"
-               filters:
-                    "tag:Name": "{{ aws_infrastructure_install_vpc.subnets.data.name }}"
-             register: vpc_info
-    
-    
-           - name: Print the vpc info
-             debug:
-               var: vpc_info
-    
-           - name: Fail if the data subnet does not exist
-             fail:
-               msg:  "The subnet called '{{ aws_infrastructure_install_vpc.subnets.data.name  }}' does not exist."
-             when:
-               - vpc_info.subnets is defined
-               - vpc_info.subnets | length  == 0
+          ```yaml    
+            - name: Gather facts on the AWS Control Subnet
+              ec2_vpc_subnet_info:
+                  aws_access_key: "{{ aws_access_key }}"
+                  aws_secret_key: "{{ aws_secret_key }}"
+                  region: "{{ aws_region }}"
+                  filters:
+                        "tag:Name": "{{ aws_infrastructure_install_vpc.subnets.control.name }}"
+              register: vpc_control_subnet_info
+            
+            
+            - name: Print the vpc control subnet info
+              debug:
+                var: vpc_control_subnet_info
+            
+            - name: Fail if the control subnet does not exist
+              fail:
+                msg:  "The subnet called '{{ aws_infrastructure_install_vpc.subnets.control.name  }}' does not exist."
+              when:
+                - vpc_control_subnet_info.subnets is defined
+                - vpc_control_subnet_info.subnets | length  == 0
+            
+            - name: Gather facts on the AWS Data Subnet
+              ec2_vpc_subnet_info:
+                  aws_access_key: "{{ aws_access_key }}"
+                  aws_secret_key: "{{ aws_secret_key }}"
+                  region: "{{ aws_region }}"
+                  filters:
+                        "tag:Name": "{{ aws_infrastructure_install_vpc.subnets.data.name }}"
+              register: vpc_data_subnet_info
+            
+            
+            - name: Print the vpc data subnet info
+              debug:
+                var: vpc_data_subnet_info
+            
+            - name: Fail if the data subnet does not exist
+              fail:
+                msg:  "The subnet called '{{ aws_infrastructure_install_vpc.subnets.data.name  }}' does not exist."
+              when:
+                - vpc_data_subnet_info.subnets is not defined or vpc_data_subnet_info.subnets | length  == 0
+
           ``` 
          
       1. cd ../..
@@ -78,44 +77,43 @@ The purpose of this iteration is to add the AWS VPC Subnets to the AWS environme
     1. Add the following task to the end of th **tasks/main.yml** file.
         
         ```yaml
-         - name: create ec2 vpc control subnet
-         # Create the subnet for the vpc with a cidr block
-           ec2_vpc_subnet:
-             vpc_id: "{{ vpc_facts.id }}"
-             state: present
-             cidr: "{{ aws_infrastructure_install_vpc.subnets.control.cidr  }}"
-             # enable public ip
-             map_public: true
-             aws_access_key: "{{ aws_access_key }}"
-             aws_secret_key: "{{ aws_secret_key }}"
-             region: "{{ aws_region }}"
-             resource_tags:
-               Name: "{{ aws_infrastructure_install_vpc.subnets.control.name  }}"
-           register: control_subnet_result
+        - name: Create the ec2 vpc control subnet
+          # create the subnet for the vpc with a cidr block
+          ec2_vpc_subnet:
+            vpc_id: "{{ vpc_facts.id }}"
+            state: present
+            cidr: "{{ aws_infrastructure_install_vpc.subnets.control.cidr  }}"
+            # enable public ip
+            map_public: true
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            region: "{{ aws_region }}"
+            resource_tags:
+              Name: "{{ aws_infrastructure_install_vpc.subnets.control.name  }}"
+          register: control_subnet_result
         
-         - name: create ec2 vpc data subnet
-           # Create the subnet for the vpc with a cidr block
-           ec2_vpc_subnet:
-             vpc_id: "{{ vpc_facts.id }}"
-             state: present
-             cidr: "{{ aws_infrastructure_install_vpc.subnets.data.cidr  }}"
-             # enable public ip
-             map_public: true
-             aws_access_key: "{{ aws_access_key }}"
-             aws_secret_key: "{{ aws_secret_key }}"
-             region: "{{ aws_region }}"
-             resource_tags:
-               Name: "{{ aws_infrastructure_install_vpc.subnets.data.name  }}"
-           register: data_subnet_result
-         
-         - name: Set the Control VPC Subnet Fact
-           set_fact:
-             vpc_control_subnet: "{{ control_subnet_result['subnet'] }}"
-       
-         - name: Set the Data VPC Subnet Fact
-           set_fact:
-             vpc_data_subnet: "{{ data_subnet_result['subnet'] }}"
-       
+        - name: Create the ec2 vpc data subnet
+          # create the subnet for the vpc with a cidr block
+          ec2_vpc_subnet:
+            vpc_id: "{{ vpc_facts.id }}"
+            state: present
+            cidr: "{{ aws_infrastructure_install_vpc.subnets.data.cidr  }}"
+            # enable public ip
+            map_public: true
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            region: "{{ aws_region }}"
+            resource_tags:
+              Name: "{{ aws_infrastructure_install_vpc.subnets.data.name  }}"
+          register: data_subnet_result
+        
+        - name: Set the Control VPC Subnet Fact
+          set_fact:
+            vpc_control_subnet: "{{ control_subnet_result['subnet'] }}"
+        
+        - name: Set the Data VPC Subnet Fact
+          set_fact:
+            vpc_data_subnet: "{{ data_subnet_result['subnet'] }}"
         ```
             
       1. Run `molecule converge`
