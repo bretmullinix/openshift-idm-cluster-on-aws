@@ -1,0 +1,20 @@
+- name: Gather facts on the AWS VPC Gateway
+  ec2_vpc_igw_info:
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      region: "{{ aws_region }}"
+      filters:
+            "tag:Name": "{{ aws_infrastructure_install_vpc.gateway }}"
+  register: gateway_info
+
+
+- name: Print the vpc info
+  debug:
+    var: gateway_info
+
+- name: Fail if the gateway does not exist
+  fail:
+    msg:  "The gateway called '{{ aws_infrastructure_install_vpc.gateway  }}' does not exist."
+  when:
+    - gateway_info.internet_gateways is defined
+    - gateway_info.internet_gateways | length  == 0

@@ -4,7 +4,7 @@ Last updated: 08.12.2020
 
 ## Purpose
 
-The purpose of this iteration is to add the AWS VPC to the AWS environment.
+The purpose of this iteration is to add the AWS VPC Subnets to the AWS environment.
 
 ## Procedure
 
