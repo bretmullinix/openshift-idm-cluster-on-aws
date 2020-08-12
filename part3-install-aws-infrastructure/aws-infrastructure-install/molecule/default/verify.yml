@@ -17,3 +17,13 @@
     - name:  Determine if vpc exists
       include_tasks: tasks/check-for-vpc-gateway-existence.yml
 
+    # Gather information about any VPC route table with a tag key Name and value Example
+    - name: Create the EC2 Route Table Information
+      ec2_vpc_route_table_info:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{ aws_region }}"
+        filters:
+          "tag:Name": Example
+
+

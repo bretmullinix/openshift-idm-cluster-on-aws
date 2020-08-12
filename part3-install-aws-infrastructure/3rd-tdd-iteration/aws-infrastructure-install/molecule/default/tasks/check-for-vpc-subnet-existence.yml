@@ -5,19 +5,19 @@
       region: "{{ aws_region }}"
       filters:
             "tag:Name": "{{ aws_infrastructure_install_vpc.subnets.control.name }}"
-  register: vpc_info
+  register: vpc_control_subnet_info
 
 
-- name: Print the vpc info
+- name: Print the vpc control subnet info
   debug:
-    var: vpc_info
+    var: vpc_control_subnet_info
 
 - name: Fail if the control subnet does not exist
   fail:
     msg:  "The subnet called '{{ aws_infrastructure_install_vpc.subnets.control.name  }}' does not exist."
   when:
-    - vpc_info.subnets is defined
-    - vpc_info.subnets | length  == 0
+    - vpc_control_subnet_info.subnets is defined
+    - vpc_control_subnet_info.subnets | length  == 0
 
 - name: Gather facts on the AWS Data Subnet
   ec2_vpc_subnet_info:
@@ -26,16 +26,16 @@
       region: "{{ aws_region }}"
       filters:
             "tag:Name": "{{ aws_infrastructure_install_vpc.subnets.data.name }}"
-  register: vpc_info
+  register: vpc_data_subnet_info
 
 
-- name: Print the vpc info
+- name: Print the vpc data subnet info
   debug:
-    var: vpc_info
+    var: vpc_data_subnet_info
 
 - name: Fail if the data subnet does not exist
   fail:
     msg:  "The subnet called '{{ aws_infrastructure_install_vpc.subnets.data.name  }}' does not exist."
   when:
-    - vpc_info.subnets is defined
-    - vpc_info.subnets | length  == 0
+    - vpc_data_subnet_info.subnets is defined
+    - vpc_data_subnet_info.subnets | length  == 0

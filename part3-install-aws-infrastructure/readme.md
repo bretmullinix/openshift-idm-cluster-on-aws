@@ -135,6 +135,6 @@ folder  **part3-install-aws-infrastructure**
 1. <a name="1stTDD"></a> Add the **vpc** with the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Add the **vpc subnets** with the [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Add the **vpc gateway** with the [3rd TDD Iteration](./3rd-tdd-iteration).
-
+1. <a name="4thTDD"></a> Add the **vpc route table** with the [4th TDD Iteration](./4th-tdd-iteration).
 
 :construction: Under Construction.....
