@@ -1,4 +1,4 @@
-# 1st TDD Iteration --> Add the AWS VPN
+# 1st TDD Iteration --> Add the AWS VPC
 
 Last updated: 08.12.2020
 
