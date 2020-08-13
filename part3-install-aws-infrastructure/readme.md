@@ -138,4 +138,5 @@ folder  **part3-install-aws-infrastructure**
 1. <a name="4thTDD"></a> Add the **vpc route table** with the [4th TDD Iteration](./4th-tdd-iteration).
 1. <a name="5thTDD"></a> Add the **vpc security group** with the [5th TDD Iteration](./5th-tdd-iteration).
 
-:construction: Under Construction.....
+You have just completed the creation of the Ansible role. Continue with the tutorials
+[here](../readme.md).
