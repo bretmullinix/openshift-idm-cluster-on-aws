@@ -33,7 +33,7 @@ may **"follow"** the repo and see the repo develop.
 
 
 
-1. Develop Ansible scripts to create/delete AWS EC2 instances  [here](./part4-aws-ec2-instances)
+1. Develop Ansible scripts to create/delete AWS EC2 instances [here](./part4-aws-ec2-instances).
 
 1. Develop Ansible scripts to install the Quay [here](part5-install-quay).
 
