@@ -71,7 +71,7 @@ folder  **part3-install-aws-infrastructure**
         
         ![tree output idm role](../images/initial-aws-install-tree-output.png)
 
-1. cd idm-install/molecule/default
+1. cd aws-infrastructure-install/molecule/default
 
 1. rm molecule.yml
 

@@ -31,13 +31,15 @@ may **"follow"** the repo and see the repo develop.
 
 1. Develop Ansible scripts to install the AWS Infrastructure [here](./part3-install-aws-infrastructure).
 
-    The development of this tutorial is in progress, you can follow along to see it evolve.
 
-1. Develop Ansible scripts to install the Quay [here](./part4-install-quay).
+
+1. Develop Ansible scripts to create/delete AWS EC2 instances  [here](./part4-aws-ec2-instances)
+
+1. Develop Ansible scripts to install the Quay [here](part5-install-quay).
 
     The tutorial has not been implemented.  
 
 
-1. Develop Ansible scripts to install RedHat OpenShift [here](part5-install-openshift).
+1. Develop Ansible scripts to install RedHat OpenShift [here](part6-install-openshift).
 
     The tutorial has not been implemented.  

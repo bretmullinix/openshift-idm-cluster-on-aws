@@ -1,6 +1,6 @@
-# Installation of OpenShift Cluster on AWS
+# Installation of Quay on AWS
 
-Last updated: 08.11.2020
+Last updated: 08.13.2020
 
 ## Purpose
 
