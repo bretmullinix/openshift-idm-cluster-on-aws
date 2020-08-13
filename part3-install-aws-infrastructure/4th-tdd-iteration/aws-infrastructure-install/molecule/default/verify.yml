@@ -11,11 +11,11 @@
     - name:  Determine if vpc exists
       include_tasks: tasks/check-for-vpc-existence.yml
 
-    - name:  Determine if vpc exists
+    - name:  Determine if vpc subnets exist
       include_tasks: tasks/check-for-vpc-subnet-existence.yml
 
-    - name:  Determine if vpc exists
+    - name:  Determine if vpc gateway exists
       include_tasks: tasks/check-for-vpc-gateway-existence.yml
 
-    - name:  Determine if vpc exists
+    - name:  Determine if vpc route table exists
       include_tasks: tasks/check-for-vpc-route_table-existence.yml

@@ -1,0 +1,18 @@
+- name:  Determine if security group exists
+  ec2_group_info:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    filters:
+      "tag:Name": "{{ aws_infrastructure_install_vpc.security_group }}"
+  register: security_group_facts
+
+- name: Print out the security group facts
+  debug:
+    var: security_group_facts
+
+- name: Fail if the Security Group does not exist
+  fail:
+    msg:  "The security group called '{{ aws_infrastructure_install_vpc.security_group }}' does not exist."
+  when:
+    - security_group_facts.security_groups is not defined or security_group_facts.security_groups | length  == 0

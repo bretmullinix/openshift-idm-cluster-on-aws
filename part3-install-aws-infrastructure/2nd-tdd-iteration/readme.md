@@ -140,7 +140,7 @@ The purpose of this iteration is to add the AWS VPC Subnets to the AWS environme
     1. Add the following task to include the new task file in the **verify.yml* file.
     
           ```yaml
-            - name:  Determine if vpc exists
+            - name:  Determine if vpc subnets exist
               include_tasks: tasks/check-for-subnet-existence.yml
          ``` 
     
