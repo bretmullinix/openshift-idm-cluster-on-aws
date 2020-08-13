@@ -4,10 +4,21 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: instance
-    image: docker.io/pycontribs/centos:7
+  - name: aws-ec2-instance
+    image: part3-install-aws-infrastructure
     pre_build_image: true
 provisioner:
   name: ansible
+  log: true
 verifier:
   name: ansible
+  options:
+    v: 4
+scenario:
+  name: default
+  test_sequence:
+    - create
+    - prepare
+    - converge
+    - verify
+    - destroy
