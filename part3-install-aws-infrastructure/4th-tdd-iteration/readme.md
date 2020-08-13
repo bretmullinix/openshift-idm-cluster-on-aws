@@ -103,6 +103,6 @@ The purpose of this iteration is to add the AWS VPC Route Table to the AWS envir
     1. cd ../..
     1. Run `molecule test`.  The test should pass.
 
-We have tested and added the Amazon VPC Gateway and completed our 4th TDD iteration.
+We have tested and added the Amazon VPC Route Table and completed our 4th TDD iteration.
 
 [**<--Back to main instructions**](../readme.md#4thTDD)
