@@ -61,8 +61,6 @@ create your AWS Infrastructure.
             - converge
             - verify
             - destroy
-
-
     ```
 
 :construction: Under Construction.....
