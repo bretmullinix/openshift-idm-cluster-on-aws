@@ -23,10 +23,13 @@ create your AWS Infrastructure.
 
 1. mkdir **part4-aws-ec2-instances**
 
+1. cd part4-aws-ec2-instances
+
 1. Create the Ansible Molecule role called **aws-ec2-instance**
 
     1. Run `molecule init role --driver-name docker aws-ec2-instance`
     1. Run `tree aws-ec2-instance`
+    
 1. cd aws-ec2-instance/molecule/default
 
 1. rm molecule.yml
