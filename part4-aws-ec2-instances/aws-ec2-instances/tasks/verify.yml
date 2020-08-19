@@ -1,0 +1,11 @@
+- name: List all EC2 key pairs
+  ec2_key_info:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+  register: result
+
+- name: Debug result
+  debug:
+    var: result
+

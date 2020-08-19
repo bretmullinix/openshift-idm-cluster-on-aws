@@ -100,8 +100,7 @@ None.
     
         ```yaml
         ec2_instances:
-          ec2_instance:
-            name: my_instance
+          - name: my_instance
             ami: "ami-00594b9c138e6303d"
             instance_type: "t2.medium" 
             root_volume_size: 30
@@ -109,5 +108,7 @@ None.
             key_name: "my_keypair"       
             
         ```
+
+1. <a name="1stTDD"></a> Add the ec2 host keys using the [1st TDD Iteration](./1st-tdd-iteration).
    
 :construction: Under Construction.....

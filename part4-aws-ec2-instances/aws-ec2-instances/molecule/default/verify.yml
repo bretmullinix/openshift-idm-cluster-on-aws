@@ -1,9 +1,8 @@
 ---
-# This is an example playbook to execute Ansible tests.
-
 - name: Verify
   hosts: all
   tasks:
-  - name: Example assertion
-    assert:
-      that: true
+    - name: "Include aws-ec2-instance verify.yml"
+      include_role:
+        name: "aws-ec2-instances"
+        tasks_from: "verify"
