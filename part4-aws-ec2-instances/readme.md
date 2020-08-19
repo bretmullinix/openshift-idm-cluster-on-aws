@@ -1,6 +1,6 @@
 # Create or Destroy EC2 Instances on AWS
 
-Last updated: 08.13.2020
+Last updated: 08.19.2020
 
 ## Purpose
 
@@ -106,7 +106,7 @@ None.
             instance_type: "t2.medium" 
             root_volume_size: 30
             subnet_name: "aws_infrastructure_control_subnet"
-            key_name: "my_keypair"           
+            key_name: "my_keypair"       
             
         ```
    
