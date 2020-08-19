@@ -1,4 +1,4 @@
-# 2nd TDD Iteration --> Add AWS Public/Private Keys
+# 1st TDD Iteration --> Add AWS Public/Private Keys
 
 Last updated: 08.19.2020
 
@@ -167,4 +167,4 @@ to the aws-ec2-instances/files directory.
 
 :construction:
 
-[**<--Back to main instructions**](../readme.md#2ndTDD)
+[**<--Back to main instructions**](../readme.md#1stTDD)
