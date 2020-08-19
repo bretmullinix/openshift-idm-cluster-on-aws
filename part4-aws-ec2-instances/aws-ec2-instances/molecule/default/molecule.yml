@@ -4,8 +4,8 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: aws-ec2-instance
-    image: part3-install-aws-infrastructure
+  - name: aws-instances
+    image: part4-aws-ec2-instances
     pre_build_image: true
 provisioner:
   name: ansible
@@ -22,3 +22,4 @@ scenario:
     - converge
     - verify
     - destroy
+
