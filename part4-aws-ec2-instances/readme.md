@@ -78,24 +78,36 @@ None.
          ---
          aws_vpc:
            name: "openshift_dev_vpc"
-           label: "Openshift Development Cluster VPC"
-           gateway: "openshift_dev_vpc_gateway"
-           route_table: "openshift_dev_vpc_route_table"
            security_group: "openshift_dev_vpc_security_group"
-           subnets:
-             control:
-               name: "aws_infrastructure_control_subnet"
-               cidr: "192.168.1.0/24"
-               mtu: 1500
-             data:
-               name: "aws_infrastructure_data_subnet"
-               cidr: "192.168.2.0/24"
-               mtu: 9200
-           cidr: "192.168.0.0/16"
+    
          ec2_instances: "{{ default[] }}"
          aws_region: "{{ lookup('env', 'AWS_REGION') }}"
          aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
          aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
-     ```  
+     ```
+    
+    The variables need some explanation:
+    
+    1. aws_vpc.name = The name of your vpc to add the EC2 instances to.  The ansible
+    role checks to see if the AWS VPC "Tags" "Name" value matches this variable, or the
+    AWS VPC "name".
+    
+    1. aws_vpc.security_group = The name of the security group you want to add the
+    EC2 instances to.
+    
+    1. ec2_instances = The list of EC2 Instances that you plan to create.  The default
+    value is an empty list.  An example of one EC2 instance is below.
+    
+        ```yaml
+        ec2_instances:
+          ec2_instance:
+            name: my_instance
+            ami: "ami-00594b9c138e6303d"
+            instance_type: "t2.medium" 
+            root_volume_size: 30
+            subnet_name: "aws_infrastructure_control_subnet"
+            key_name: "my_keypair"           
+            
+        ```
    
 :construction: Under Construction.....
