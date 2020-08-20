@@ -1,0 +1,34 @@
+---
+- name: List all EC2 key pairs
+  ec2_key_info:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+  register: result
+
+- name: Create Keys Facts
+  set_fact:
+    the_keys: "{{ result.std_output.KeyPairs }}"
+  when: result is defined and result.std_output is defined and result.std_output.KeyPairs is defined
+
+- name: Initialize an empty list for the key names
+  set_fact:
+    the_key_names: "{{ [] }}"
+
+- name: Build a list of all the key names
+  set_fact:
+    the_key_names: "{{ the_key_names }} + [ '{{ item.KeyName }}' ]"
+  with_items: "{{ the_keys }}"
+  when: the_keys is defined
+
+- name: Create the files/private_keys directory
+  file:
+    path: "{{ role_path }}/files/private_keys"
+    state: directory
+    mode: '0755'
+  delegate_to: localhost
+
+- name: Create those keys that were not defined
+  include: "{{ role_path }}/tasks/main/create_key_pairs.yml current_key={{ item.key_name }}"
+  with_items: "{{ ec2_instances }}"
+  when: item.key_name not in the_key_names

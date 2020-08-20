@@ -1,0 +1,2 @@
+- name: Check if the AWS Keys are present.
+  include_tasks: "{{ role_path }}/tasks/verify/check-if-the-aws-keys-are-present.yml"

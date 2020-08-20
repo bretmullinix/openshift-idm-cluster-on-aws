@@ -1,0 +1,2 @@
+- name: Add AWS Keys
+  include_tasks: "{{ role_path }}/tasks/main/add-aws-keys.yml"
