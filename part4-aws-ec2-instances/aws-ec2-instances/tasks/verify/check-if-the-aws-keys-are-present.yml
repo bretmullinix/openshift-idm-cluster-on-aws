@@ -1,0 +1,62 @@
+- name: List all EC2 key pairs
+  ec2_key_info:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+  register: result
+
+- name: Create Keys Facts
+  set_fact:
+    the_keys: "{{ result.std_output.KeyPairs }}"
+  when: result is defined and result.std_output is defined and result.std_output.KeyPairs is defined
+
+- name: Initialize an empty list for the key names
+  set_fact:
+    the_key_names: "{{ [] }}"
+- name: Build a list of all the key names
+  set_fact:
+    the_key_names: "{{ the_key_names }} + [ '{{ item.KeyName }}' ]"
+  with_items: "{{ the_keys }}"
+  when: the_keys is defined
+
+- name: Fail if all keys don't exist
+  fail:
+    msg: "The Key '{{ item.key_name }}' does not exist in AWS."
+  with_items: "{{ ec2_instances }}"
+  when: item.key_name not in the_key_names
+
+- name: List the private keys that you have
+  find:
+    paths: "{{role_path}}/files/private_keys"
+  register: output_private_key_files
+  delegate_to: localhost
+
+- name: Initialize private_key_files to an empty list
+  set_fact:
+    private_key_files: "{{ [] }}"
+
+- name: Populate the private_key_files variable with the private key file names
+  set_fact:
+    private_key_files: "{{ private_key_files }} + [ '{{ item.path |  basename }}' ]"
+  with_items: "{{ output_private_key_files.files }}"
+  when: output_private_key_files.files is defined
+
+- name: Fail if we have no private key files
+  fail:
+    msg: >
+      We don't have any private key files.
+      Please create the files in the 'files/private_keys' directory by
+      placing each private key in its respective file (each file is named
+      as the AWS private key name).  If you are not using the key in AWS,
+      delete the key out of AWS and re-run the role.
+  when:  private_key_files | length  == 0
+
+- name: Fail if a key doesn't exist but should in the 'files/private_keys' directory
+  fail:
+    msg: >
+      The Key '{{ item.key_name }}' does not exist in the 'files/private_keys' directory of the role.
+      Please create the file '{{ item.key_name }}' in the 'files/private_keys' directory and,
+      place your private key in the file, or if you are not using the key in AWS,
+      delete the key out of AWS and re-run the role
+  with_items: "{{ ec2_instances }}"
+  when:  item.key_name not in private_key_files

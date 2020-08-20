@@ -237,6 +237,9 @@ to the aws-ec2-instances/files directory.
 1. **GREEN** --> Add the **AWS key pairs** to the ansible role.
 
     1. cd aws-ec2-instances/tasks
+    1. mkdir main
+    1. mkdir verify
+    1. cd main
     1. Create the file called **create_key_pairs.yml** and add the
     following content.
     
@@ -298,20 +301,54 @@ to the aws-ec2-instances/files directory.
           delegate_to: localhost
         
         - name: Create those keys that were not defined
-          include: "{{ role_path }}/tasks/create_key_pairs.yml current_key={{ item.key_name }}"
+          include: "{{ role_path }}/tasks/main/create_key_pairs.yml current_key={{ item.key_name }}"
           with_items: "{{ ec2_instances }}"
           when: item.key_name not in the_key_names
         ```
-    1. cd ../..
+    1. cd ../../..
     
     1. Run `molecule converge`.  The command runs the **tasks/main.yml**
-    and creates the **AWS public/private keys** and places the private keys
-    in the **aws-ec2-instances/files/private_keys** folder.
+       and creates the **AWS public/private keys** and places the private keys
+       in the **aws-ec2-instances/files/private_keys** folder.
     
     1. Run `molecule verify`. The test should pass.  The test represents
-    the **Green** in the **Red, Green, Refactor** iteration of TDD.
-    
+       the **Green** in the **Red, Green, Refactor** iteration of TDD.
+  
+1. **REFACTOR** --> Does any of the code need **Refactoring**?
 
-:construction:
+    1. The **aws-ec2-instances/tasks/verify.yml** looks a 
+       little messy with all the tasks checking for the
+       existence of IDM.  Let's move the tasks to a separate file.
+    
+        1. Create the file **aws-ec2-instances/tasks/verify/check-if-the-aws-keys-are-present.yml**  
+        1. Remove all the content from the **aws-ec2-instances/tasks/verify.yml**
+           and place the contents in the **check-if-the-aws-keys-are-present.yml**.
+        1. In the **aws-ec2-instances/tasks/verify.yml**, add the following content to the end:
+        
+            ```yaml
+               - name: Check if the AWS Keys are present.
+                 include_tasks: check-if-the-aws-key-are-present.yml
+           ```
+        1. Run `molecule test` to ensure the role works as intended.
+        
+    1. We have not completed our refactoring.  The **aws-ec2-instances/tasks/main.yml**
+       file looks messy as well. 
+        
+        1. Create the file **aws-ec2-instances/tasks/main/add-aws-keys.yml**  
+    
+            1. Remove all the content from the **aws-ec2-instances/tasks/main.yml**
+               and place the contents in the **add-aws-keys.yml**.
+                
+            1. In the **aws-ec2-instances/tasks/main.yml**, add the following content to the end:
+                
+                 ```yaml
+                  - name: Add AWS Keys
+                    include_tasks: "{{ role_path }}/tasks/main/add-aws-keys.yml"
+                 ```
+                
+            1. Run `molecule test` to ensure the role works as intended.
+        
+    1. We look at the role files and determine that no other refactoring is needed.
+       We have completed our refactoring.  
 
 [**<--Back to main instructions**](../readme.md#1stTDD)
