@@ -188,6 +188,43 @@ to the aws-ec2-instances/files directory.
         msg: "The Key '{{ item.key_name }}' does not exist in AWS."
       with_items: "{{ ec2_instances }}"
       when: item.key_name not in the_key_names
+    
+    - name: List the private keys that you have
+      find:
+        paths: "{{role_path}}/files/private_keys"
+      register: output_private_key_files
+      delegate_to: localhost
+    
+    - name: Initialize private_key_files to an empty list
+      set_fact:
+        private_key_files: "{{ [] }}"
+    
+    - name: Populate the private_key_files variable with the private key file names
+      set_fact:
+        private_key_files: "{{ private_key_files }} + [ '{{ item.path |  basename }}' ]"
+      with_items: "{{ output_private_key_files.files }}"
+      when: output_private_key_files.files is defined
+    
+    - name: Fail if we have no private key files
+      fail:
+        msg: >
+           We don't have any private key files.
+           Please create the files in the 'files/private_keys' directory by
+           placing each private key in its respective file (each file is named
+           as the AWS private key name).  If you are not using the key in AWS,
+           delete the key out of AWS and re-run the role.
+      when:  private_key_files | length  == 0
+    
+    - name: Fail if a key doesn't exist but should in the 'files/private_keys' directory
+      fail:
+        msg: >
+          The Key '{{ item.key_name }}' does not exist in the 'files/private_keys' directory of the role.
+          Please create the file '{{ item.key_name }}' in the 'files/private_keys' directory and,
+          place your private key in the file, or if you are not using the key in AWS,
+          delete the key out of AWS and re-run the role
+      with_items: "{{ ec2_instances }}"
+      when:  item.key_name not in private_key_files
+
     ```
 
 1. **RED** --> Test for the existence of the **AWS key pairs**.
@@ -199,6 +236,80 @@ to the aws-ec2-instances/files directory.
 
 1. **GREEN** --> Add the **AWS key pairs** to the ansible role.
 
+    1. cd aws-ec2-instances/tasks
+    1. Create the file called **create_key_pairs.yml** and add the
+    following content.
+    
+        ```yaml
+        - name: create a new ec2 key pair, returns generated private key
+          ec2_key:
+            name: "{{ current_key }}"
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            region: "{{ aws_region }}"
+            state: present
+          register: key_pair_details
+        
+        
+        - name: Set Key Pair Facts
+          set_fact:
+            aws_keypair: "{{ key_pair_details['key'] }}"
+        
+        
+        - name: Copy the private key to a file so we can ssh into it
+          copy:
+            content: "{{ aws_keypair['private_key'] }}"
+            dest: "{{role_path}}/files/private_keys/{{current_key}}"
+          delegate_to: localhost
+
+        ```
+     
+    1. Add the following tasks to the "main.yml" file.
+    
+        ```yaml
+        ---
+        - name: List all EC2 key pairs
+          ec2_key_info:
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            region: "{{ aws_region }}"
+          register: result
+        
+        - name: Create Keys Facts
+          set_fact:
+            the_keys: "{{ result.std_output.KeyPairs }}"
+          when: result is defined and result.std_output is defined and result.std_output.KeyPairs is defined
+        
+        - name: Initialize an empty list for the key names
+          set_fact:
+            the_key_names: "{{ [] }}"
+        
+        - name: Build a list of all the key names
+          set_fact:
+            the_key_names: "{{ the_key_names }} + [ '{{ item.KeyName }}' ]"
+          with_items: "{{ the_keys }}"
+          when: the_keys is defined
+        
+        - name: Create the files/private_keys directory
+          file:
+            path: "{{ role_path }}/files/private_keys"
+            state: directory
+            mode: '0755'
+          delegate_to: localhost
+        
+        - name: Create those keys that were not defined
+          include: "{{ role_path }}/tasks/create_key_pairs.yml current_key={{ item.key_name }}"
+          with_items: "{{ ec2_instances }}"
+          when: item.key_name not in the_key_names
+        ```
+    1. cd ../..
+    
+    1. Run `molecule converge`.  The command runs the **tasks/main.yml**
+    and installs **firewalld**.
+    
+    1. Run `molecule verify`. The test should pass.  The test represents
+    the **Green** in the **Red, Green, Refactor** iteration of TDD.
+    
 
 :construction:
 

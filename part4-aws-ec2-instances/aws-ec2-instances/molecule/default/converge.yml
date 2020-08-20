@@ -5,4 +5,3 @@
     - name: "Include aws-ec2-instance"
       include_role:
         name: "aws-ec2-instances"
-        tasks_from: "verify.yml"
