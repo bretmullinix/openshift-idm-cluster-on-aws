@@ -63,7 +63,7 @@ gathering of VPC facts to the main.yml
             vpc: "{{ vpc_info.vpcs[0] }}"
           when: vpc_info is defined and vpc_info.vpcs is defined and vpc_info.vpcs | length > 0
         ```
-    1. cd ../..
+    1. cd ..
     
     1. Run `molecule converge`.  The command runs the **tasks/main.yml**
        and populates the **AWS VPC facts** needed to create the ec2 instances.
