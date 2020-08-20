@@ -327,7 +327,7 @@ to the aws-ec2-instances/files directory.
         
             ```yaml
                - name: Check if the AWS Keys are present.
-                 include_tasks: check-if-the-aws-key-are-present.yml
+                 include_tasks: "{{ role_path }}/tasks/verify/check-if-the-aws-keys-are-present.yml"
            ```
         1. Run `molecule test` to ensure the role works as intended.
         
