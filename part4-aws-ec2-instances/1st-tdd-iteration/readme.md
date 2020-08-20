@@ -305,7 +305,8 @@ to the aws-ec2-instances/files directory.
     1. cd ../..
     
     1. Run `molecule converge`.  The command runs the **tasks/main.yml**
-    and installs **firewalld**.
+    and creates the **AWS public/private keys** and places the private keys
+    in the **aws-ec2-instances/files/private_keys** folder.
     
     1. Run `molecule verify`. The test should pass.  The test represents
     the **Green** in the **Red, Green, Refactor** iteration of TDD.
