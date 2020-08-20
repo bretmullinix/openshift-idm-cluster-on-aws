@@ -266,7 +266,7 @@ to the aws-ec2-instances/files directory.
           delegate_to: localhost
 
         ```
-     
+    1. cd .. 
     1. Add the following tasks to the "main.yml" file.
     
         ```yaml
@@ -305,7 +305,7 @@ to the aws-ec2-instances/files directory.
           with_items: "{{ ec2_instances }}"
           when: item.key_name not in the_key_names
         ```
-    1. cd ../../..
+    1. cd ../..
     
     1. Run `molecule converge`.  The command runs the **tasks/main.yml**
        and creates the **AWS public/private keys** and places the private keys
