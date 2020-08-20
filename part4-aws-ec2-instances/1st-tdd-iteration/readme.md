@@ -162,8 +162,43 @@ to the aws-ec2-instances/files directory.
 1. Create the file "verify.yml" and add the following contents:
 
     ```yaml
-
+    - name: List all EC2 key pairs
+      ec2_key_info:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{ aws_region }}"
+      register: result
+    
+    - name: Create Keys Facts
+      set_fact:
+        the_keys: "{{ result.std_output.KeyPairs }}"
+      when: result is defined and result.std_output is defined and result.std_output.KeyPairs is defined
+    
+    - name: Initialize an empty list for the key names
+      set_fact:
+        the_key_names: "{{ [] }}"
+    - name: Build a list of all the key names
+      set_fact:
+        the_key_names: "{{ the_key_names }} + [ '{{ item.KeyName }}' ]"
+      with_items: "{{ the_keys }}"
+      when: the_keys is defined
+    
+    - name: Fail if all keys don't exist
+      fail:
+        msg: "The Key '{{ item.key_name }}' does not exist in AWS."
+      with_items: "{{ ec2_instances }}"
+      when: item.key_name not in the_key_names
     ```
+
+1. **RED** --> Test for the existence of the **AWS key pairs**.
+
+    1. cd aws-ec2-instances
+    1. Run `molecule converge`
+    1. The test should fail.  The test represents
+       the **Red** in the **Red, Green, Refactor** iteration of TDD.
+
+1. **GREEN** --> Add the **AWS key pairs** to the ansible role.
+
 
 :construction:
 
