@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import sys
+import traceback
 
 from ansible.module_utils.basic import AnsibleModule
 import re
@@ -88,12 +90,17 @@ def run_module():
     aws_access_key = module.params["aws_access_key"]
     aws_secret_key = module.params["aws_secret_key"]
     region = module.params["region"]
-    client = boto3.client('ec2', aws_access_key_id=aws_access_key,
+
+    try:
+        client = boto3.client('ec2', aws_access_key_id=aws_access_key,
                           aws_secret_access_key=aws_secret_key,
                           region_name=region)
+        result['std_output'] = client.describe_key_pairs()
 
-    keypairs = client.describe_key_pairs()
-    result['std_output'] = keypairs
+    except Exception as ex:
+        failure_message = 'Could not retrieve the AWS keys.  There was an error in retrieving them from AWS'
+        result['std_output'] = traceback.format_exception(*sys.exc_info())
+        module.fail_json(msg=failure_message, **result)
 
     # in the event of a successful module execution, you will want to
     # simple AnsibleModule.exit_json(), passing the key/value results
