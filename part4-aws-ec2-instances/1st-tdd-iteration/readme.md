@@ -230,7 +230,7 @@ to the aws-ec2-instances/files directory.
 1. **RED** --> Test for the existence of the **AWS key pairs**.
 
     1. cd aws-ec2-instances
-    1. Run `molecule converge`
+    1. Run `molecule verify`
     1. The test should fail.  The test represents
        the **Red** in the **Red, Green, Refactor** iteration of TDD.
 

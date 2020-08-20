@@ -1,6 +1,6 @@
 # Create or Destroy EC2 Instances on AWS
 
-Last updated: 08.19.2020
+Last updated: 08.20.2020
 
 ## Purpose
 
@@ -110,5 +110,6 @@ None.
         ```
 
 1. <a name="1stTDD"></a> Add the ec2 host keys using the [1st TDD Iteration](./1st-tdd-iteration).
-   
+1. <a name="2ndTDD"></a> Get the AWS VPC facts using the [2nd TDD Iteration](./2nd-tdd-iteration).
+
 :construction: Under Construction.....

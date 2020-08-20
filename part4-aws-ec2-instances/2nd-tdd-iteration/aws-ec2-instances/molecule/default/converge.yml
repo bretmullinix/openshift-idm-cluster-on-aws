@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include aws-ec2-instance"
+      include_role:
+        name: "aws-ec2-instances"
