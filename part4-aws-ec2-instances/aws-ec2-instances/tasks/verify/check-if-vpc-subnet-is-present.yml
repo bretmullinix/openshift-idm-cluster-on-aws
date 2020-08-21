@@ -1,4 +1,4 @@
-- name: Gather facts on the AWS Control Subnet
+- name: Gather facts on the AWS Control subnet
   ec2_vpc_subnet_info:
     aws_access_key: "{{ aws_access_key }}"
     aws_secret_key: "{{ aws_secret_key }}"

@@ -21,7 +21,7 @@ create the EC2 instances.
           set_fact:
             aws_vpc: "{{ aws_vpc|default({}) | combine( { 'subnets':  { 'control': { 'name': 'fake_subnet_name' } } } ) }}"
         
-        - name: Gather facts on the AWS Control Subnet
+        - name: Gather facts on the AWS Control subnet
           ec2_vpc_subnet_info:
             aws_access_key: "{{ aws_access_key }}"
             aws_secret_key: "{{ aws_secret_key }}"
@@ -93,7 +93,7 @@ gathering of VPC facts to the main.yml
         1. Create the file **aws-ec2-instances/tasks/verify/check-if-vpc-subnet-is-present.yml**  
         
         1. Remove all the content starting from the 
-           **Gather facts on the AWS VPC subnet using the Tag 'Name'** task in the
+           **Gather facts on the AWS Control subnet** task in the
            **aws-ec2-instances/tasks/verify.yml**
            and place the contents in the **check-if-vpc-is-subnet-present.yml**.
         
