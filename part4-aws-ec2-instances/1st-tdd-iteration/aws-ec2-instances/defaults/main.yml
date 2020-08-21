@@ -22,12 +22,14 @@ ec2_instances:
     root_volume_size: 30
     subnet_name: "aws_infrastructure_control_subnet"
     key_name: "my_keypair"
+    action: "create"
   - name: your_instance
     ami: "ami-00594b9c138e6303d"
     instance_type: "t2.medium"
     root_volume_size: 25
     subnet_name: "aws_infrastructure_control_subnet"
     key_name: "your_keypair"
+    action: "destroy"
 aws_region: "{{ lookup('env', 'AWS_REGION') }}"
 aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
 aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"

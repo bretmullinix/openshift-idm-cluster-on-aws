@@ -19,12 +19,14 @@ to the aws-ec2-instances/files directory.
           root_volume_size: 30
           subnet_name: "aws_infrastructure_control_subnet"
           key_name: "my_keypair"
+          action: "create"
         - name: your_instance
           ami: "ami-00594b9c138e6303d"
           instance_type: "t2.medium" 
           root_volume_size: 25
           subnet_name: "aws_infrastructure_control_subnet"
           key_name: "your_keypair"
+          action: "destroy"
     ```
 1. cd aws-ec2-instances
 1. mkdir library

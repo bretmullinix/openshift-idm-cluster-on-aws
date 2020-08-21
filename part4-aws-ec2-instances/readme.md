@@ -105,10 +105,15 @@ None.
             instance_type: "t2.medium" 
             root_volume_size: 30
             subnet_name: "aws_infrastructure_control_subnet"
-            key_name: "my_keypair"       
+            key_name: "my_keypair"
+            action: "create"       
             
         ```
-
+        The ec2_instances variable is a list of ec2 instances that you want to
+        create or delete (destroy).  When you set the **action** attribute to
+        **create**, the ec2 instance will be created.  When you set the **action**
+        attribute to **delete**, the ec2 instance will be deleted.
+        
 1. <a name="1stTDD"></a> Add the ec2 host keys using the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Get the AWS VPC facts using the [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Get the AWS VPC subnet facts using the [3rd TDD Iteration](./3rd-tdd-iteration).
