@@ -56,7 +56,25 @@ gathering of VPC facts to the main.yml
     1. Add the following content to the end of the main.yml
     
         ```yaml
+        - name: Gather facts on the AWS Control subnet
+          ec2_vpc_subnet_info:
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            region: "{{ aws_region }}"
+            filters:
+              "tag:Name": "{{ aws_vpc.subnets.control.name }}"
+          register: vpc_control_subnet_info
         
+        - name: Fail if the control subnet does not exist
+          fail:
+            msg:  "The subnet called '{{ aws_vpc.subnets.control.name  }}' does not exist."
+          when:
+            - vpc_control_subnet_info.subnets is defined
+            - vpc_control_subnet_info.subnets | length  == 0
+        
+        - name: Get the subnet fact
+          set_fact:
+            vpc_control_subnet: "{{ vpc_control_subnet_info.subnets[0]  }}"
         ```
     1. cd ..
     
@@ -94,7 +112,7 @@ gathering of VPC facts to the main.yml
         1. Create the file **aws-ec2-instances/tasks/main/get_vpc_subnet_facts.yml**  
     
             1. Remove all the content starting from the
-               **Gather facts on the AWS VPC subnet using the Tag 'Name'** task
+               **Gather facts on the AWS Control subnet** task
                in the **aws-ec2-instances/tasks/main.yml** file
                and place the contents in the **get_vpc_subnet_facts.yml**.
                 

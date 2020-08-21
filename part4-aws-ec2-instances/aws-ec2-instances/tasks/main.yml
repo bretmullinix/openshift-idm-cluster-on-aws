@@ -3,3 +3,6 @@
 
 - name: Get the VPC information
   include_tasks: "{{ role_path }}/tasks/main/get_vpc_facts.yml"
+
+- name: Get the VPC subnet information
+  include_tasks: "{{ role_path }}/tasks/main/get_vpc_subnet_facts.yml"
