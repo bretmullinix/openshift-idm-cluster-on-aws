@@ -5,3 +5,4 @@ virtual_environments/
 virtual_environment/
 private_keys/
 my_keypair
+ec2_facts/
