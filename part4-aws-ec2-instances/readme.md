@@ -119,4 +119,357 @@ None.
 1. <a name="3rdTDD"></a> Get the AWS VPC subnet facts using the [3rd TDD Iteration](./3rd-tdd-iteration).
 1. <a name="4thTDD"></a> Create the AWS EC2 instances facts using the [4th TDD Iteration](./4th-tdd-iteration).
 
-:construction: Under Construction.....
+You have created your instances.  The output is two time stamped files in
+the **aws-ec2-instances/files/ec2_facts** folder.  Below are some example contents:
+
+Example:
+
+1. The inventory file contained the following.  Notice the output includes the ssh
+   command needed to log into the ec2 instances:
+   
+    ```text
+    name:  my_instance
+    public_ip:  34.200.250.109
+    private_ip:  192.168.1.53
+    key_pair:  my_keypair
+    ssh connection: ssh -i /home/bmullini/Documents/redhat_tools/git/repos/openshift-idm-cluster-on-aws/part4-aws-ec2-instances/aws-ec2-instances/files/private_keys/my_keypair centos@34.200.250.109
+    
+    
+    name:  your_instance
+    public_ip:  18.215.124.223
+    private_ip:  192.168.1.135
+    key_pair:  your_keypair
+    ssh connection: ssh -i /home/bmullini/Documents/redhat_tools/git/repos/openshift-idm-cluster-on-aws/part4-aws-ec2-instances/aws-ec2-instances/files/private_keys/your_keypair centos@18.215.124.223
+
+
+    ```
+
+1. The facts file contains all the output from creating the ec2 instances:
+
+  ```json
+  {
+    "results": [
+      {
+        "changed": true,
+        "instance_ids": [
+          "i-04d6dd6b0df376d0c"
+        ],
+        "instances": [
+          {
+            "id": "i-04d6dd6b0df376d0c",
+            "ami_launch_index": "0",
+            "private_ip": "192.168.1.53",
+            "private_dns_name": "ip-192-168-1-53.ec2.internal",
+            "public_ip": "34.200.250.109",
+            "dns_name": "ec2-34-200-250-109.compute-1.amazonaws.com",
+            "public_dns_name": "ec2-34-200-250-109.compute-1.amazonaws.com",
+            "state_code": 16,
+            "architecture": "x86_64",
+            "image_id": "ami-00594b9c138e6303d",
+            "key_name": "my_keypair",
+            "placement": "us-east-1a",
+            "region": "us-east-1",
+            "kernel": null,
+            "ramdisk": null,
+            "launch_time": "2020-08-21T19:20:28.000Z",
+            "instance_type": "t2.medium",
+            "root_device_type": "ebs",
+            "root_device_name": "/dev/sda1",
+            "state": "running",
+            "hypervisor": "xen",
+            "tags": {
+              "Name": "my_instance"
+            },
+            "groups": {
+              "sg-0624c8049df85e7d9": "openshift_dev_vpc_security_group"
+            },
+            "virtualization_type": "hvm",
+            "ebs_optimized": false,
+            "block_device_mapping": {
+              "/dev/sda1": {
+                "status": "attached",
+                "volume_id": "vol-0a792c1fc6ccf126b",
+                "delete_on_termination": true
+              }
+            },
+            "tenancy": "default"
+          }
+        ],
+        "tagged_instances": [
+          {
+            "id": "i-04d6dd6b0df376d0c",
+            "ami_launch_index": "0",
+            "private_ip": "192.168.1.53",
+            "private_dns_name": "ip-192-168-1-53.ec2.internal",
+            "public_ip": "34.200.250.109",
+            "dns_name": "ec2-34-200-250-109.compute-1.amazonaws.com",
+            "public_dns_name": "ec2-34-200-250-109.compute-1.amazonaws.com",
+            "state_code": 16,
+            "architecture": "x86_64",
+            "image_id": "ami-00594b9c138e6303d",
+            "key_name": "my_keypair",
+            "placement": "us-east-1a",
+            "region": "us-east-1",
+            "kernel": null,
+            "ramdisk": null,
+            "launch_time": "2020-08-21T19:20:28.000Z",
+            "instance_type": "t2.medium",
+            "root_device_type": "ebs",
+            "root_device_name": "/dev/sda1",
+            "state": "running",
+            "hypervisor": "xen",
+            "tags": {
+              "Name": "my_instance"
+            },
+            "groups": {
+              "sg-0624c8049df85e7d9": "openshift_dev_vpc_security_group"
+            },
+            "virtualization_type": "hvm",
+            "ebs_optimized": false,
+            "block_device_mapping": {
+              "/dev/sda1": {
+                "status": "attached",
+                "volume_id": "vol-0a792c1fc6ccf126b",
+                "delete_on_termination": true
+              }
+            },
+            "tenancy": "default"
+          }
+        ],
+        "invocation": {
+          "module_args": {
+            "key_name": "my_keypair",
+            "group": [
+              "openshift_dev_vpc_security_group"
+            ],
+            "instance_type": "t2.medium",
+            "image": "ami-00594b9c138e6303d",
+            "aws_access_key": "AKIA4WSAY74RIHA552EL",
+            "aws_secret_key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER",
+            "region": "us-east-1",
+            "wait": true,
+            "wait_timeout": 500,
+            "volumes": [
+              {
+                "device_name": "/dev/sda1",
+                "volume_type": "gp2",
+                "volume_size": "30",
+                "delete_on_termination": true
+              }
+            ],
+            "vpc_subnet_id": "subnet-0c9343e888d486fa8",
+            "assign_public_ip": true,
+            "count_tag": {
+              "Name": "my_instance"
+            },
+            "instance_tags": {
+              "Name": "my_instance"
+            },
+            "exact_count": 1,
+            "debug_botocore_endpoint_logs": false,
+            "validate_certs": true,
+            "spot_type": "one-time",
+            "count": 1,
+            "monitoring": false,
+            "spot_wait_timeout": 600,
+            "state": "present",
+            "instance_initiated_shutdown_behavior": "stop",
+            "ebs_optimized": false,
+            "tenancy": "default",
+            "ec2_url": null,
+            "security_token": null,
+            "profile": null,
+            "id": null,
+            "group_id": null,
+            "zone": null,
+            "spot_price": null,
+            "spot_launch_group": null,
+            "kernel": null,
+            "ramdisk": null,
+            "placement_group": null,
+            "user_data": null,
+            "private_ip": null,
+            "instance_profile_name": null,
+            "instance_ids": null,
+            "source_dest_check": null,
+            "termination_protection": null,
+            "network_interfaces": null
+          }
+        },
+        "failed": false,
+        "item": {
+          "name": "my_instance",
+          "ami": "ami-00594b9c138e6303d",
+          "instance_type": "t2.medium",
+          "root_volume_size": 30,
+          "subnet_name": "aws_infrastructure_control_subnet",
+          "key_name": "my_keypair",
+          "action": "create"
+        },
+        "ansible_loop_var": "item"
+      },
+      {
+        "changed": true,
+        "instance_ids": [
+          "i-045e1dd80235d651e"
+        ],
+        "instances": [
+          {
+            "id": "i-045e1dd80235d651e",
+            "ami_launch_index": "0",
+            "private_ip": "192.168.1.135",
+            "private_dns_name": "ip-192-168-1-135.ec2.internal",
+            "public_ip": "18.215.124.223",
+            "dns_name": "ec2-18-215-124-223.compute-1.amazonaws.com",
+            "public_dns_name": "ec2-18-215-124-223.compute-1.amazonaws.com",
+            "state_code": 16,
+            "architecture": "x86_64",
+            "image_id": "ami-00594b9c138e6303d",
+            "key_name": "your_keypair",
+            "placement": "us-east-1a",
+            "region": "us-east-1",
+            "kernel": null,
+            "ramdisk": null,
+            "launch_time": "2020-08-21T19:20:59.000Z",
+            "instance_type": "t2.medium",
+            "root_device_type": "ebs",
+            "root_device_name": "/dev/sda1",
+            "state": "running",
+            "hypervisor": "xen",
+            "tags": {
+              "Name": "your_instance"
+            },
+            "groups": {
+              "sg-0624c8049df85e7d9": "openshift_dev_vpc_security_group"
+            },
+            "virtualization_type": "hvm",
+            "ebs_optimized": false,
+            "block_device_mapping": {
+              "/dev/sda1": {
+                "status": "attached",
+                "volume_id": "vol-053ef0173c9b3b0f4",
+                "delete_on_termination": true
+              }
+            },
+            "tenancy": "default"
+          }
+        ],
+        "tagged_instances": [
+          {
+            "id": "i-045e1dd80235d651e",
+            "ami_launch_index": "0",
+            "private_ip": "192.168.1.135",
+            "private_dns_name": "ip-192-168-1-135.ec2.internal",
+            "public_ip": "18.215.124.223",
+            "dns_name": "ec2-18-215-124-223.compute-1.amazonaws.com",
+            "public_dns_name": "ec2-18-215-124-223.compute-1.amazonaws.com",
+            "state_code": 16,
+            "architecture": "x86_64",
+            "image_id": "ami-00594b9c138e6303d",
+            "key_name": "your_keypair",
+            "placement": "us-east-1a",
+            "region": "us-east-1",
+            "kernel": null,
+            "ramdisk": null,
+            "launch_time": "2020-08-21T19:20:59.000Z",
+            "instance_type": "t2.medium",
+            "root_device_type": "ebs",
+            "root_device_name": "/dev/sda1",
+            "state": "running",
+            "hypervisor": "xen",
+            "tags": {
+              "Name": "your_instance"
+            },
+            "groups": {
+              "sg-0624c8049df85e7d9": "openshift_dev_vpc_security_group"
+            },
+            "virtualization_type": "hvm",
+            "ebs_optimized": false,
+            "block_device_mapping": {
+              "/dev/sda1": {
+                "status": "attached",
+                "volume_id": "vol-053ef0173c9b3b0f4",
+                "delete_on_termination": true
+              }
+            },
+            "tenancy": "default"
+          }
+        ],
+        "invocation": {
+          "module_args": {
+            "key_name": "your_keypair",
+            "group": [
+              "openshift_dev_vpc_security_group"
+            ],
+            "instance_type": "t2.medium",
+            "image": "ami-00594b9c138e6303d",
+            "aws_access_key": "AKIA4WSAY74RIHA552EL",
+            "aws_secret_key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER",
+            "region": "us-east-1",
+            "wait": true,
+            "wait_timeout": 500,
+            "volumes": [
+              {
+                "device_name": "/dev/sda1",
+                "volume_type": "gp2",
+                "volume_size": "25",
+                "delete_on_termination": true
+              }
+            ],
+            "vpc_subnet_id": "subnet-0c9343e888d486fa8",
+            "assign_public_ip": true,
+            "count_tag": {
+              "Name": "your_instance"
+            },
+            "instance_tags": {
+              "Name": "your_instance"
+            },
+            "exact_count": 1,
+            "debug_botocore_endpoint_logs": false,
+            "validate_certs": true,
+            "spot_type": "one-time",
+            "count": 1,
+            "monitoring": false,
+            "spot_wait_timeout": 600,
+            "state": "present",
+            "instance_initiated_shutdown_behavior": "stop",
+            "ebs_optimized": false,
+            "tenancy": "default",
+            "ec2_url": null,
+            "security_token": null,
+            "profile": null,
+            "id": null,
+            "group_id": null,
+            "zone": null,
+            "spot_price": null,
+            "spot_launch_group": null,
+            "kernel": null,
+            "ramdisk": null,
+            "placement_group": null,
+            "user_data": null,
+            "private_ip": null,
+            "instance_profile_name": null,
+            "instance_ids": null,
+            "source_dest_check": null,
+            "termination_protection": null,
+            "network_interfaces": null
+          }
+        },
+        "failed": false,
+        "item": {
+          "name": "your_instance",
+          "ami": "ami-00594b9c138e6303d",
+          "instance_type": "t2.medium",
+          "root_volume_size": 25,
+          "subnet_name": "aws_infrastructure_control_subnet",
+          "key_name": "your_keypair",
+          "action": "create"
+        },
+        "ansible_loop_var": "item"
+      }
+    ],
+    "changed": true,
+    "msg": "All items completed"
+  }
+
+  ```
