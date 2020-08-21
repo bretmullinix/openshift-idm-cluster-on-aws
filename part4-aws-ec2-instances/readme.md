@@ -117,5 +117,6 @@ None.
 1. <a name="1stTDD"></a> Add the ec2 host keys using the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Get the AWS VPC facts using the [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Get the AWS VPC subnet facts using the [3rd TDD Iteration](./3rd-tdd-iteration).
+1. <a name="4thTDD"></a> Create the AWS EC2 instances facts using the [4th TDD Iteration](./4th-tdd-iteration).
 
 :construction: Under Construction.....
