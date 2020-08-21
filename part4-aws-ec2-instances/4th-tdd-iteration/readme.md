@@ -129,6 +129,11 @@ The purpose of this iteration is to create the EC2 instances.
           when: item.action == "create"
           register: ec2_facts
         
+        - name: Recursively remove ec2 facts directory
+          file:
+            path: "{{ role_path }}/files/ec2_facts"
+            state: absent
+       
         - name: Create a folder to hold the ec2 facts
           file:
             path: "{{ role_path }}/files/ec2_facts"
@@ -183,38 +188,38 @@ The purpose of this iteration is to create the EC2 instances.
        little messy with all the tasks verifying the existence of the vpc subnet.
        Let's move the tasks to a separate file.
     
-        1. Create the file **aws-ec2-instances/tasks/verify/check-if-vpc-subnet-is-present.yml**  
+        1. Create the file **aws-ec2-instances/tasks/verify/validate_ec2_instances.yml**  
         
         1. Remove all the content starting from the 
-           **Gather facts on the AWS Control subnet** task in the
+           **Fail if EC2 instance action is invalid** task in the
            **aws-ec2-instances/tasks/verify.yml**
-           and place the contents in the **check-if-vpc-is-subnet-present.yml**.
+           and place the contents in the **validate_ec2_instance.yml**.
         
         1. In the **aws-ec2-instances/tasks/verify.yml**, 
            add the following content to the end:
         
             ```yaml
-               - name: Check if the AWS VPC is present.
-                 include_tasks: "{{ role_path }}/tasks/verify/check-if-vpc-subnet-is-present.yml"
+               - name: Validate the EC2 Instances.
+                 include_tasks: "{{ role_path }}/tasks/verify/validate_ec2_instances.yml"
            ```
         1. Run `molecule test` to ensure the role works as intended.
         
     1. We have not completed our refactoring.  The **aws-ec2-instances/tasks/main.yml**
        file looks messy as well. 
         
-        1. Create the file **aws-ec2-instances/tasks/main/get_vpc_subnet_facts.yml**  
+        1. Create the file **aws-ec2-instances/tasks/main/create_ec2_instances.yml**  
     
             1. Remove all the content starting from the
-               **Gather facts on the AWS Control subnet** task
+               **Create EC2 Instance** task
                in the **aws-ec2-instances/tasks/main.yml** file
-               and place the contents in the **get_vpc_subnet_facts.yml**.
+               and place the contents in the **create_ec2_instances.yml**.
                 
             1. In the **aws-ec2-instances/tasks/main.yml**, 
                add the following content to the end:
                 
                  ```yaml
-                  - name: Get the VPC subnet information
-                    include_tasks: "{{ role_path }}/tasks/main/get_vpc_subnet_facts.yml"
+                  - name: Create the EC2 Instances and Output Results
+                    include_tasks: "{{ role_path }}/tasks/main/create_ec2_instances.yml"
                  ```
                 
             1. Run `molecule test` to ensure the role works as intended.
