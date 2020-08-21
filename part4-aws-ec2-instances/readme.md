@@ -119,8 +119,10 @@ None.
 1. <a name="3rdTDD"></a> Get the AWS VPC subnet facts using the [3rd TDD Iteration](./3rd-tdd-iteration).
 1. <a name="4thTDD"></a> Create the AWS EC2 instances facts using the [4th TDD Iteration](./4th-tdd-iteration).
 
-You have created your instances.  The output is two time stamped files in
-the **aws-ec2-instances/files/ec2_facts** folder.  Below are some example contents:
+We are still under construction because we have not implemented **'delete'**, 
+but if you followed through the **4th TDD iteration**,
+you have created your instances.  The output is two time stamped files in
+the **aws-ec2-instances/files/ec2_facts** folder.  Below is an example:
 
 Example:
 
