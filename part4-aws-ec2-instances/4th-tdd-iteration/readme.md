@@ -49,6 +49,7 @@ The purpose of this iteration is to create the EC2 instances.
             ec2_instances_still_available: "{{ ec2_instances_still_available + [current_ec2_instance] }}"
           when: ec2_info.instances and ec2_info.instances | length > 0
         ```
+    1. cd ..
     1. Add the following tasks to the end of the **verify.yml**
     
         ```yaml
@@ -81,7 +82,7 @@ The purpose of this iteration is to create the EC2 instances.
             msg: "The following EC2 instances did not get created: {{ ec2_instances_not_created | join(',') }}"
           when: ec2_instances_not_created | length > 0
         ```
-    
+
     1. Run `molecule verify`
     1. The test fails because we created an ec2 instance with a fake action called
       **fake_action**.  Remove the task called 
@@ -93,34 +94,80 @@ The purpose of this iteration is to create the EC2 instances.
     1. The test represents
        the **Red** in the **Red, Green, Refactor** iteration of TDD.
 
-1. **GREEN** --> Remove the fake vpc name from verify.yml and add the
-gathering of VPC facts to the main.yml
+1. **GREEN** --> Create the EC2 instances by adding the tasks to the
+   **main.yml**.
 
     1. cd aws-ec2-instances/tasks
-    1. Remove the task labeled **Force a failure by naming a non-existent VPC subnet**
-    from the **verify.yml** file.
     1. Add the following content to the end of the main.yml
     
         ```yaml
-        - name: Gather facts on the AWS Control subnet
-          ec2_vpc_subnet_info:
+        # Single instance with ssd gp2 root volume
+        - name: Create EC2 Instance
+          ec2:
+            key_name: "{{ item.key_name }}"
+            group: "{{ aws_vpc.security_group }}"
+            instance_type: "{{ item.instance_type }}"
+            image: "{{ item.ami }}"
             aws_access_key: "{{ aws_access_key }}"
             aws_secret_key: "{{ aws_secret_key }}"
             region: "{{ aws_region }}"
-            filters:
-              "tag:Name": "{{ aws_vpc.subnets.control.name }}"
-          register: vpc_control_subnet_info
+            wait: true
+            wait_timeout: 500
+            volumes:
+              - device_name: /dev/sda1
+                volume_type: gp2
+                volume_size: "{{ item.root_volume_size }}"
+                delete_on_termination: true
+            vpc_subnet_id: "{{ vpc_control_subnet.id }}"
+            assign_public_ip: true
+            count_tag:
+              Name: "{{ item.name }}"
+            instance_tags:
+              Name: "{{ item.name }}"
+            exact_count: 1
+          with_items: "{{ ec2_instances }}"
+          when: item.action == "create"
+          register: ec2_facts
         
-        - name: Fail if the control subnet does not exist
-          fail:
-            msg:  "The subnet called '{{ aws_vpc.subnets.control.name  }}' does not exist."
-          when:
-            - vpc_control_subnet_info.subnets is defined
-            - vpc_control_subnet_info.subnets | length  == 0
+        - name: Create a folder to hold the ec2 facts
+          file:
+            path: "{{ role_path }}/files/ec2_facts"
+            state: directory
+            mode: '0755'
+          delegate_to: localhost
         
-        - name: Get the subnet fact
+        - name: Initialize EC2 list of dictionaries
           set_fact:
-            vpc_control_subnet: "{{ vpc_control_subnet_info.subnets[0]  }}"
+            ec2_results: []
+        
+        
+        - name: Populate the EC2 list of dictionaries
+          set_fact:
+            ec2_results: "{{ ec2_results +
+                         ['name:  ' + item.tagged_instances[0].tags.Name  ]
+                         + [ 'public_ip:  ' + item.tagged_instances[0].public_ip  ]
+                         + [ 'private_ip:  ' + item.tagged_instances[0].private_ip  ]
+                         + [ 'key_pair:  ' + item.tagged_instances[0].key_name ]
+                         + [ 'ssh connection: ssh -i ' + role_path  + '/files/private_keys/'
+                         + item.tagged_instances[0].key_name
+                         + ' centos@' + item.tagged_instances[0].public_ip ]
+                         + ['\n']
+                         }}"
+          with_items: "{{ ec2_facts.results }}"
+          when: ec2_facts.results is defined and ec2_facts.results | length > 0
+        
+        - name: Output the EC2 Facts
+          copy:
+            content: "{{ ec2_facts }}"
+            dest: "{{ role_path}}/files/ec2_facts/{{ lookup('pipe','date +%m-%d-%Y-%H-%M-%S') }}_facts"
+          delegate_to: localhost
+        
+        - name: Output the EC2 Inventory Information
+          copy:
+            content: "{{ ec2_results | join('\n') }}"
+            dest: "{{ role_path}}/files/ec2_facts/{{ lookup('pipe','date +%m-%d-%Y-%H-%M-%S') }}_inventory"
+          delegate_to: localhost
+          when: ec2_results and ec2_results | length > 0
         ```
     1. cd ..
     

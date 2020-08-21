@@ -265,6 +265,7 @@ to the aws-ec2-instances/files directory.
           copy:
             content: "{{ aws_keypair['private_key'] }}"
             dest: "{{role_path}}/files/private_keys/{{current_key}}"
+            mode: 0600
           delegate_to: localhost
 
         ```
