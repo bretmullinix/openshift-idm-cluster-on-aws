@@ -1,0 +1,11 @@
+- name: Add AWS Keys
+  include_tasks: "{{ role_path }}/tasks/main/add-aws-keys.yml"
+
+- name: Get the VPC information
+  include_tasks: "{{ role_path }}/tasks/main/get_vpc_facts.yml"
+
+- name: Get the VPC subnet information
+  include_tasks: "{{ role_path }}/tasks/main/get_vpc_subnet_facts.yml"
+
+- name: Create the EC2 Instances and Output Results
+  include_tasks: "{{ role_path }}/tasks/main/create_ec2_instances.yml"

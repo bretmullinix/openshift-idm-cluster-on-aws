@@ -1,0 +1,21 @@
+- name: create a new ec2 key pair, returns generated private key
+  ec2_key:
+    name: "{{ current_key }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    state: present
+  register: key_pair_details
+
+
+- name: Set Key Pair Facts
+  set_fact:
+    aws_keypair: "{{ key_pair_details['key'] }}"
+
+
+- name: Copy the private key to a file so we can ssh into it
+  copy:
+    content: "{{ aws_keypair['private_key'] }}"
+    dest: "{{role_path}}/files/private_keys/{{current_key}}"
+    mode: 0600
+  delegate_to: localhost
