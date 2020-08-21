@@ -26,10 +26,10 @@ The purpose of this iteration is to create the EC2 instances.
           register: ec2_info
         
         
-        - name: Fail if EC2 instance is not created
-          fail:
-            msg: "The '{{ current_ec2_instance }}' EC2 instance has not been created."
-          when: ec2_info.instances is not defined or ec2_info.instances | length == 0
+        - name: Register failure count
+          set_fact:
+            ec2_instances_still_available: "{{ ec2_instances_still_available + [current_ec2_instance] }}"
+          when: ec2_info.instances and ec2_info.instances | length > 0
         ```
     1. Create the file **check-if-ec2-instance-is-deleted.yml**
     1. Add the following tasks to the **check-if-ec2-instance-is-deleted.yml** file.
