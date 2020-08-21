@@ -126,7 +126,7 @@ the **aws-ec2-instances/files/ec2_facts** folder.  Below is an example:
 
 Example:
 
-1. The inventory file contained the following.  Notice the output includes the ssh
+1. The inventory file contains the following.  Notice the output includes the ssh
    command needed to log into the ec2 instances:
    
     ```text
