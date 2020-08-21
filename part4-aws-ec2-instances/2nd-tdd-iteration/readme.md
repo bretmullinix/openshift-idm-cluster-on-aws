@@ -1,10 +1,10 @@
 # 2nd TDD Iteration --> Get the VPC Facts
 
-Last updated: 08.20.2020
+Last updated: 08.21.2020
 
 ## Purpose
 
-The purpose of this iteration is to get the VPC facts need to
+The purpose of this iteration is to get the VPC facts needed to
 create the EC2 instances.
 
 ## Procedure
