@@ -93,10 +93,12 @@ Python virtual environment and Ansible Molecule.
 1. Add the variable "idm_admin_password", and the paste the copy encrypted password
    as the value.
 1. Save the file.
+1. cd ..
 1. cd files
 1. mkdir private_keys
 1. cd private_keys
-1. Copy your aws private key to this folder and rename the file "my_keypair"
+1. Copy your aws private key for the idm client 
+   to this folder and rename the file "my_keypair"
 1. cd ../../molecule/default/
 1. cd vars
 1. Create the file **main.yml** and add the following contents:
