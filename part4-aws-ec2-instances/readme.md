@@ -120,15 +120,13 @@ None.
 1. <a name="4thTDD"></a> Create the AWS EC2 instances using the [4th TDD Iteration](./4th-tdd-iteration).
 1. <a name="5thTDD"></a> Delete the AWS EC2 instances using the [5th TDD Iteration](./5th-tdd-iteration).
 
-We are still under construction because we have not implemented **'delete'**, 
-but if you followed through the **4th TDD iteration**,
-you have created your instances.  The output is two time stamped files in
+The output is one to two time stamped files in
 the **aws-ec2-instances/files/ec2_facts** folder.  Below is an example:
 
 Example:
 
-1. The inventory file contains the following.  Notice the output includes the ssh
-   command needed to log into the ec2 instances:
+1. The inventory file will be created if EC2 instances exist.  
+   The file contains the following information:
    
     ```text
     name:  my_instance
@@ -146,8 +144,12 @@ Example:
 
 
     ```
+    The output includes the ssh
+    command needed to log into the ec2 instances.
 
-1. The facts file contains all the output from creating the ec2 instances:
+
+1. The facts file will be created regardless of the existence of EC2 instances.
+   The file contains all the AWS facts about the ec2 instances:
 
   ```json
   {
