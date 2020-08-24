@@ -13,6 +13,13 @@ of RedHat IDM (FreeIPA) Client.
 1. Open up a terminal window.
 
 1. mkdir **part5-register-idm-client**
+1. Copy the "requirements" file down for your virtual environment
+1. Open up a terminal
+1. Activate your virtual environment
+1. Install the required AWS software needed to interact with AWS:
+   
+    ```pip install -r requirements```
 
+         
 
 :under construction:
