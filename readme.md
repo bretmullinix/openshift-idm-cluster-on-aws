@@ -36,6 +36,8 @@ may **"follow"** the repo and see the repo develop.
 
 1. Develop Ansible scripts to register RedHat IDM client [here] (./part5-register-idm-client).
 
+   This tutorial is currently under construction.  You can follow along as it gets built.
+
 1. Develop Ansible scripts to install the Quay [here](part6-install-quay).
 
     The tutorial has not been implemented.  
