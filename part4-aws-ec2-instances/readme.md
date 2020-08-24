@@ -1,6 +1,6 @@
 # Create or Destroy EC2 Instances on AWS
 
-Last updated: 08.21.2020
+Last updated: 08.24.2020
 
 ## Purpose
 
