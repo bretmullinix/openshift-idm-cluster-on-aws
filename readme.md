@@ -34,7 +34,7 @@ may **"follow"** the repo and see the repo develop.
 
 1. Develop Ansible scripts to create/delete AWS EC2 instances [here](./part4-aws-ec2-instances).
 
-1. Develop Ansible scripts to register RedHat IDM client [here] (./part5-register-idm-client).
+1. Develop Ansible scripts to register RedHat IDM client [here](./part5-register-idm-client).
 
    This tutorial is currently under construction.  You can follow along as it gets built.
 
