@@ -56,7 +56,9 @@
                  + ['\n']
                  }}"
   with_items: "{{ ec2_facts.results }}"
-  when: ec2_facts.results is defined and ec2_facts.results | length > 0
+  when:
+    - ec2_facts.results is defined and ec2_facts.results | length > 0
+    - item.tagged_instances is defined and item.tagged_instances | length > 0
 
 - name: Output the EC2 Facts
   copy:

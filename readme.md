@@ -34,12 +34,12 @@ may **"follow"** the repo and see the repo develop.
 
 1. Develop Ansible scripts to create/delete AWS EC2 instances [here](./part4-aws-ec2-instances).
 
-   The tutorial is under construction.  You may follow along as the tutorial gets developed.
+1. Develop Ansible scripts to register RedHat IDM client [here] (./part5-register-idm-client).
 
-1. Develop Ansible scripts to install the Quay [here](part5-install-quay).
+1. Develop Ansible scripts to install the Quay [here](part6-install-quay).
 
     The tutorial has not been implemented.  
 
-1. Develop Ansible scripts to install RedHat OpenShift [here](part6-install-openshift).
+1. Develop Ansible scripts to install RedHat OpenShift [here](part7-install-openshift).
 
     The tutorial has not been implemented.  
