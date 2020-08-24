@@ -8,6 +8,39 @@ The purpose of this document is to teach the reader how to use
 Ansible and Ansible Molecule to come up with a working installation
 of RedHat IDM (FreeIPA) Client.
 
+## Prerequisites
+
+### Create your Python Virtual Environment
+
+Follow the instructions in [part1](../part1-setup-environment) to
+create your virtual environment.
+
+### Setup your AWS Environment
+
+1. Open up a terminal
+1. mkdir -p $HOME/.aws
+1. cd $HOME/.aws
+1. Make the file **.env**
+1. Edit your **.env** file.  Enter the following
+environment variables:
+
+      ```yaml
+       AWS_REGION="us-east-1 <this value should be different if you don't live close to the US east coast.>"
+       AWS_ACCESS_KEY_ID="<your aws access key id: should be in your credentials.csv file>"
+       AWS_SECRET_ACCESS_KEY="<your aws secret access key:  should be in your credentials.csv file>"
+      ```
+   
+1. cd
+1. Edit your **.bashrc** file.  Add the following line:  
+
+    `source $HOME/.aws/.env`
+
+1. Save your **.bashrc** file and close your terminal window.
+
+Now your AWS account credentials can be accessed by your
+Python virtual environment and Ansible Molecule.
+
+
 ## Procedure
 
 1. Open up a terminal window.
@@ -29,8 +62,21 @@ of RedHat IDM (FreeIPA) Client.
 1. Add the following variables to the **main.yml** file.
 
     ```yaml
-     idm_domain_name: example2020.com
-     idm_fqdn: "idm.{{ idm_domain_name }}"
+    idm_domain_name: example2020.com
+    idm_fqdn: "idm.{{ idm_domain_name }}"
+    aws_vpc_name: "aws_openshift_vpc"
+    aws_subnet_name: "aws_subnet"
+    aws_security_group: "aws_openshift_vpc_security_group"
+    aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+    aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+    aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+    aws_idm_client_instances:
+      - name: "idm-client"
+        user: "centos"
+        key_pair: "my_keypair"
+        aws_ami: "ami-00594b9c138e6303d"
+        root_volume_size: 30
+        port: 22
     ```
 1. cd ..
 1. Make the file "vault_secret".  This file will be used to 
@@ -39,8 +85,7 @@ of RedHat IDM (FreeIPA) Client.
 1. Run the following command to encrypt your **idm server password**.
 
       ``` 
-      ansible-vault encrypt_string "[your_idm_server_password here]" \
-         --vault-password-file ./vault_secret
+      ansible-vault encrypt_string "[your_idm_server_password here]" --vault-password-file ./vault_secret
       ```
 1. Copy the output from **!vault** to the last line before **Encryption successful**.
 1. cd defaults
@@ -51,7 +96,7 @@ of RedHat IDM (FreeIPA) Client.
 1. cd files
 1. mkdir private_keys
 1. cd private_keys
-1. Copy your aws private key to this folder and rename the file "my_aws_private_key"
+1. Copy your aws private key to this folder and rename the file "my_keypair"
 1. cd ../../molecule/default/
 1. cd vars
 1. Create the file **main.yml** and add the following contents:
