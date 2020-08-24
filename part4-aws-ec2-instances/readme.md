@@ -120,8 +120,8 @@ None.
 1. <a name="4thTDD"></a> Create the AWS EC2 instances using the [4th TDD Iteration](./4th-tdd-iteration).
 1. <a name="5thTDD"></a> Delete the AWS EC2 instances using the [5th TDD Iteration](./5th-tdd-iteration).
 
-The output is one to two time stamped files in
-the **aws-ec2-instances/files/ec2_facts** folder.  Below is an example:
+The output is one or two time stamped files in
+the **aws-ec2-instances/files/ec2_facts** folder. Below is an example:
 
 Example:
 
