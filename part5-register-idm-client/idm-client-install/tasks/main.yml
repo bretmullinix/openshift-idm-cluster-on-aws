@@ -1,5 +1,69 @@
 ---
-# tasks file for idm-client-install
 
-- name: Test for outside connectivity
-  ping:
+- name: Install NMCLI Required Libraries
+  yum:
+    name: "{{ yum_installs }}"
+    state: present
+    use_backend: dnf
+
+- name: Start Firewalld
+  service:
+    name: firewalld
+    state: started
+
+- name: Start nscd
+  service:
+    name: nscd
+    state: started
+
+- name: Install Python Requirements
+  pip:
+    name: "{{ pip_requirements }}"
+
+# tasks file for idm-client-install
+- name: Open Ports for IDM
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  with_items: "{{ open_idm_ports }}"
+
+
+
+- name: Update DNS to use IDM
+  command: "nmcli con mod 'System eth0' +ipv4.dns '10.10.0.76'"
+
+- name: Restart server
+  service:
+    name: NetworkManager
+    state: restarted
+
+- name: Print resolv.conf
+  command: "cat /etc/resolv.conf"
+
+- name: Install IDM Client Module
+  command: "dnf module install -y idm:DL1/client"
+
+- name: Insert/Update /etc/hosts with IDM server host name
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      10.10.0.76 {{ idm_fqdn }}
+
+
+- name: Print out /etc/hosts
+  command: "cat /etc/hosts"
+
+- name: Set your host name
+  hostname:
+    name: "{{idm_client_hostname + '.' + idm_domain_name }}"
+
+- name: Print the options
+  debug:
+    var: freeipa_client_install_options
+
+- name: Register IPA client
+  command: "{{ freeipa_client_install_base_command }} {{ freeipa_client_install_options | join(' ') }}"
+  args:
+    creates: /etc/ipa/default.conf
