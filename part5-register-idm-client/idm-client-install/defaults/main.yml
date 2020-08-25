@@ -2,19 +2,6 @@
 # defaults file for idm-client-install
 idm_domain_name: example2020.com
 idm_fqdn: "idm.{{ idm_domain_name }}"
-aws_vpc_name: "aws_openshift_vpc"
-aws_subnet_name: "aws_subnet"
-aws_security_group: "aws_openshift_vpc_security_group"
-aws_region: "{{ lookup('env', 'AWS_REGION') }}"
-aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
-aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
-aws_idm_client_instances:
-  - name: "idm-client"
-    user: "centos"
-    key_pair: "my_keypair"
-    aws_ami: "ami-00594b9c138e6303d"
-    root_volume_size: 30
-    port: 22
 idm_admin_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           37616332303435313431313964343732336166366363613864303662653137303266353233383266

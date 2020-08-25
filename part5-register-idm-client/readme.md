@@ -57,26 +57,34 @@ Python virtual environment and Ansible Molecule.
     ```shell script
        molecule init role -d delegated idm-client-install
     ```
-1. cd idm-client-install
+1. Replace your molecule **create.yml** to use an AWS EC2 Instance
+
+    1. rm idm-client-install/molecule/default/create.yml
+    1. cp molecule_artifacts/create.yml idm-client-install/molecule/default/create.yml
+
+1. Replace your molecule **delete.yml** to use an AWS EC2 Instance
+
+    1. rm idm-client-install/molecule/default/destroy.yml
+    1. cp molecule_artifacts/destroy.yml idm-client-install/molecule/default/destroy.yml
+
+1. Copy and modify the variables needed to use an EC2 instance for molecule
+
+   1. cp -r molecule_artifacts/vars idm-client-install/molecule/default/
+   1. cd idm-client-install/molecule/default/vars
+   1. In the **main.yml**, change the variable **ec2_instances** to what you
+      want for an EC2 instance.  Note:  The AMI can change depending on the region.
+   1. Copy the **ec2_instances[0].name**.
+   1. cd ..
+   1. In the **molecule.yml** under **platforms[0].name**, paste your
+      **ec2_instances[0].name**.
+
+1. cd ../..
 1. cd defaults
 1. Add the following variables to the **main.yml** file.
 
     ```yaml
     idm_domain_name: example2020.com
     idm_fqdn: "idm.{{ idm_domain_name }}"
-    aws_vpc_name: "aws_openshift_vpc"
-    aws_subnet_name: "aws_subnet"
-    aws_security_group: "aws_openshift_vpc_security_group"
-    aws_region: "{{ lookup('env', 'AWS_REGION') }}"
-    aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
-    aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
-    aws_idm_client_instances:
-      - name: "idm-client"
-        user: "centos"
-        key_pair: "my_keypair"
-        aws_ami: "ami-00594b9c138e6303d"
-        root_volume_size: 30
-        port: 22
     ```
 1. cd ..
 1. Make the file "vault_secret".  This file will be used to 
@@ -97,22 +105,10 @@ Python virtual environment and Ansible Molecule.
 1. cd files
 1. mkdir private_keys
 1. cd private_keys
-1. Copy your aws private key for the idm client 
+1. Copy your **aws private key** for the idm client 
    to this folder and rename the file "my_keypair"
 1. cd ../../molecule/default/
-1. cd vars
-1. Create the file **main.yml** and add the following contents:
 
-    ```yaml
-    
-    ```
-1. Delete the current **create.yml** file.
-1. Create the file **create.yml**.
-1. Add the following to the **create.yml** file
-
-    ```yaml
- 
-    ```
          
 
 :construction:

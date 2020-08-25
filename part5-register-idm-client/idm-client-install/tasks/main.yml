@@ -1,2 +1,5 @@
 ---
 # tasks file for idm-client-install
+
+- name: Test for outside connectivity
+  ping:
