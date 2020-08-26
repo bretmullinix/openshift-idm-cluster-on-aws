@@ -57,7 +57,7 @@ Python virtual environment and Ansible Molecule.
     ```shell script
        molecule init role -d delegated idm-client-install
     ```
-1. cd idm_client_install
+1. cd idm-client-install
 1. cd vars
 1. Edit the file **main.yml** and add the following variables:
 
