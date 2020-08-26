@@ -13,10 +13,7 @@ open_idm_ports:
   - "123/udp"
 pip_requirements:
   - "ansible==2.9.11"
-yum_installs:
-  - "python3"
-  - "firewalld"
-  - "nscd"
+
 # Primary DNS domain of the IPA deployment
 # Type: Str
 freeipa_client_domain: "{{ idm_domain_name }}"

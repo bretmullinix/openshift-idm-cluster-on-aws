@@ -57,7 +57,118 @@ Python virtual environment and Ansible Molecule.
     ```shell script
        molecule init role -d delegated idm-client-install
     ```
-1. cd idm-client-install/molecule/default
+1. cd idm_client_install
+1. cd vars
+1. Edit the file **main.yml** and add the following variables:
+
+    ```yaml
+    open_idm_ports:
+      - "80/tcp"
+      - "443/tcp"
+      - "389/tcp"
+      - "636/tcp"
+      - "88/tcp"
+      - "88/udp"
+      - "464/tcp"
+      - "464/udp"
+      - "53/tcp"
+      - "53/udp"
+      - "123/udp"
+    pip_requirements:
+      - "ansible==2.9.11"
+    
+    # Primary DNS domain of the IPA deployment
+    # Type: Str
+    freeipa_client_domain: "{{ idm_domain_name }}"
+    # The hostname of this machine (FQDN)
+    # Type: Str
+    freeipa_client_fqdn: "{{ idm_client_hostname + '.' + idm_domain_name }}"
+    # Password to join the IPA realm
+    # Type: Str
+    freeipa_client_password: "{{ idm_admin_password }}"
+    # Principal to use to join the IPA realm
+    # Type: Str
+    freeipa_client_principal: admin
+    # Kerberos realm name of the IPA deployment
+    # Type: Str
+    freeipa_client_realm: "{{ idm_domain_name | upper }}"
+    # FQDN of IPA server
+    # Type: Str
+    freeipa_client_server: "{{ idm_fqdn }}"
+    
+    # vars file for idm-client-install
+    freeipa_client_install_base_command: ipa-client-install --unattended
+    # The default FreeIPA client installation options
+    # Type: List
+    freeipa_client_install_options:
+      - "--domain={{ freeipa_client_domain }}"
+      - "--server={{ freeipa_client_server }}"
+      - "--realm={{ freeipa_client_realm }}"
+      - "--principal={{ freeipa_client_principal }}"
+      - "--password={{ freeipa_client_password }}"
+      - "--mkhomedir"
+      - "--hostname={{ freeipa_client_fqdn | default(ansible_fqdn) }}"
+    ```
+    
+    The variables deserve some explanation:
+    
+    1. **open_idm_ports** = The ports to open up for the IDM client
+       server.
+    1. **pip_requirements** = The python packages installed on the IDM client
+       server.
+    1. **freeipa_client_domain** = The domain name of the IPA server and client.
+    1. **freeipa_client_fqdn** = The FQDN of the IPA client server.
+    1. **freeipa_client_password** = The IPA server password.
+    1. **freeipa_client_principal** = The IPA server user name to login as.
+    1. **freeipa_client_realm** = The IPA realm for the IPA server.  This is
+       usually an upper case version of the domain name.
+    1. **freeipa_client_server** = The IPA server FQDN.
+    1. **freeipa_client_install_base_command** = The base command to run
+       in order to install the IPA client.
+    1. **freeipa_client_install_options** = The options to choose
+       when installing the IPA client.  You may change the options
+       to tailor the IPA client install.
+
+1. cd ..
+1. cd defaults
+1. Add the following variables to the **main.yml** file.
+
+    ```yaml
+      yum_installs:
+        - "python3"
+        - "firewalld"
+        - "nscd"
+    
+      idm_domain_name: example2020.com
+      idm_fqdn: "idm.{{ idm_domain_name }}"
+      idm_client_hostname: "idm-client"
+    ```
+    Note: The packages installed are those used for **Centos 8**.  If you
+    plan on using the ansible role on another version of linux, these
+    packages and the **yum** task may need to be changed.
+   
+1. cd ..
+1. Make the file "vault_secret".  This file will be used to 
+   store your vault password.
+1. Open up "vault_secret" and enter your password for ansible vault.
+1. Run the following command to encrypt your **idm server password**.
+
+      ``` 
+      ansible-vault encrypt_string "[your_idm_server_password here]" --vault-password-file ./vault_secret
+      ```
+1. Copy the output from **!vault** to the last line before **Encryption successful**.
+1. cd defaults
+1. Open up the main.yml file.
+1. Add the variable "idm_admin_password", and paste the copied encrypted password
+   as the value.
+1. Save the file.
+1. cd ..
+1. cd files
+1. mkdir private_keys
+1. cd private_keys
+1. Copy your **aws private key** for the IDM client EC2 instance
+   to this folder and rename the file "my_keypair"
+1. cd molecule/default
 1. Change the following in your **molecule.yml**.
 
     1. Change the **platform[0].name** to be the name of your
@@ -112,11 +223,10 @@ Python virtual environment and Ansible Molecule.
           
           1. You can perform QA on this section of the **molecule.yml** 
           by taking a look at the finished **molecule.yml** 
-          in the **molecule_artifacts** directory.
-    
+          in the **molecule_artifacts** directory.   
 1. mkdir vars
 1. cd vars
-1. Make the file **main.yml** and add the following variables:
+1. Edit the file **main.yml** and add the following variables:
 
    ```yaml
    aws_vpc_name: "aws_openshift_vpc"
@@ -433,55 +543,172 @@ Python virtual environment and Ansible Molecule.
    
     The task will create the EC2 instance that is used by molecule to
     run the tests.  
+ 
+     ```yaml
+      - name: Set public ip address for ec2 instance
+        set_fact:
+          aws_public_ip: "{{ ec2_facts.tagged_instances[0].public_ip }}"
+    ```
+   
+    The task will assign the variable **aws_public_ip** to the public
+    ip of the newly created EC2 instance.  
 
+     ```yaml
+    - name: Populate instance config dict
+      set_fact:
+        instance_conf_dict: {
+          'instance': "{{ item.name }}",
+          'address': "{{ aws_public_ip }}",
+          'user': "{{ item.user }}",
+          'port': "{{ item.port }}",
+          'identity_file': "{{ aws_molecule_private_key_file }}",
+          'become_method': "sudo",
+          'become_ask_pass': false,
 
+        }
+      with_items: "{{ ec2_instances }}"
+      register: instance_config_dict
+    ```
+   
+    The task will assign the variable **instance_conf_dict** to a dictionary
+    with the values of the ansible molecule instances.  Molecule monitors
+    the instances using these values.
 
-1. Replace your molecule **delete.yml** to use an AWS EC2 Instance
+     ```yaml
+    - name: Convert instance config dict to a list
+      set_fact:
+        instance_conf:
+          "{{ instance_config_dict.results
+          | map(attribute='ansible_facts.instance_conf_dict') | list }}"
+    ```
+   
+    The task will assign the variable **instance_conf** to a list
+    with the values of the variables above.  Molecule monitors
+    the instances using these values.
 
-    1. rm idm-client-install/molecule/default/destroy.yml
-    1. cp molecule_artifacts/destroy.yml idm-client-install/molecule/default/destroy.yml
+     ```yaml
+     - name: Dump instance config
+       copy:
+         content: "{{ instance_conf
+           | to_json | from_json | molecule_to_yaml | molecule_header }}"
+         dest: "{{ molecule_instance_config }}"
+    ```
+   
+    The task will save the variable **instance_conf** to a file.  
+    Molecule uses the these values to manage and use the ec2 instances.      
+      
+     ```yaml
+      - name: Wait for SSH
+        wait_for:
+          port: 22
+          host: "{{ aws_public_ip }}"
+          search_regex: SSH
+          delay: 10
+          timeout: 320
+    ```   
+    
+    The task will make sure molecule can ssh into the EC2 instance.      
+      
+     ```yaml
+       - name: Wait for boot process to finish
+         pause:
+           minutes: 2
+    ```
+   
+    The task will pause for 2 minutes to make sure the EC2 instance boots up.   
 
-1. Copy and modify the variables needed to use an EC2 instance for molecule
-
-   1. cp -r molecule_artifacts/vars idm-client-install/molecule/default/
-   1. cd idm-client-install/molecule/default/vars
-   1. In the **main.yml**, change the variable **ec2_instances** to what you
-      want for an EC2 instance.  Note:  The AMI can change depending on the region.
-   1. Copy the **ec2_instances[0].name**.
-   1. cd ..
-   1. In the **molecule.yml** under **platforms[0].name**, paste your
-      **ec2_instances[0].name**.
-
-1. cd ../..
-1. cd defaults
-1. Add the following variables to the **main.yml** file.
+1. Delete the file **destroy.yml**.
+1. Create a new **destroy.yml** file and add the following contents.
 
     ```yaml
-    idm_domain_name: example2020.com
-    idm_fqdn: "idm.{{ idm_domain_name }}"
+    ---
+    - name: Destroy
+      hosts: localhost
+      connection: local
+      gather_facts: false
+      no_log: "{{ molecule_no_log }}"
+      tasks:
+    
+        - name: Include the variables needed for creation
+          include_vars:
+            file: "vars/main.yml"
+    
+        - name: Populate instance config
+          set_fact:
+            instance_conf: {}
+    
+        - name: Dump instance config
+          copy:
+            content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
+            dest: "{{ molecule_instance_config }}"
+          when: server.changed | default(false) | bool
+    
+        - name: Gather EC2 Instance Facts
+          ec2_instance_facts:
+          register: ec2_info
+    
+        - name: terminate
+          ec2:
+            instance_ids: "{{ item.instance_id }}"
+            state: absent
+            wait: yes
+          with_items: "{{ ec2_info.instances }}"
+          when: item.state.name != 'terminated' and item.tags.Name == ec2_instances[0].name
     ```
-1. cd ..
-1. Make the file "vault_secret".  This file will be used to 
-   store your vault password.
-1. Open up "vault_secret" and enter your password for ansible vault.
-1. Run the following command to encrypt your **idm server password**.
-
-      ``` 
-      ansible-vault encrypt_string "[your_idm_server_password here]" --vault-password-file ./vault_secret
+ 
+    Let's explain the tasks below.
+      
+      ```yaml
+       - name: Include the variables needed for creation
+         include_vars:
+           file: "vars/main.yml"
       ```
-1. Copy the output from **!vault** to the last line before **Encryption successful**.
-1. cd defaults
-1. Open up the main.yml file.
-1. Add the variable "idm_admin_password", and the paste the copy encrypted password
-   as the value.
-1. Save the file.
-1. cd ..
-1. cd files
-1. mkdir private_keys
-1. cd private_keys
-1. Copy your **aws private key** for the idm client 
-   to this folder and rename the file "my_keypair"
-1. cd ../../molecule/default/
+      
+      The task includes the necessary variables to delete
+      the EC2 instances.
+      
+      ```yaml
+       - name: Populate instance config
+         set_fact:
+           instance_conf: {}
+      ```
+      
+      The task clears out the molecule **instance_conf** variable.  The
+      variable provides the EC2 instance information for molecule to use.
+      
+      ```yaml
+       - name: Dump instance config
+         copy:
+           content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
+           dest: "{{ molecule_instance_config }}"
+         when: server.changed | default(false) | bool
+      ```
+      
+      The task saves the molecule **instance_conf** variable to a file.  The
+      file is used by molecule to manage and run tests using the EC2 instances.
+      The variable saved is cleared out in the task above.  As a result,
+      the file does not contain any information in it about the EC2 instances.
+      
+      ```yaml
+        - name: Gather EC2 Instance Facts
+          ec2_instance_facts:
+          register: ec2_info
+      ```
+      
+      The task gets information from AWS about all the EC2 instances.
+
+      ```yaml
+       - name: terminate
+         ec2:
+           instance_ids: "{{ item.instance_id }}"
+           state: absent
+           wait: yes
+         with_items: "{{ ec2_info.instances }}"
+         when: item.state.name != 'terminated' and item.tags.Name == ec2_instances[0].name
+      ```
+      
+      The task deletes the EC2 instance used to run the molecule tests.
+        
 
          
 
