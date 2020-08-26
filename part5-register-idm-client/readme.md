@@ -588,7 +588,7 @@ Python virtual environment and Ansible Molecule.
     ```
    
     The following task will save the variable **instance_conf** to a file.  
-    Molecule uses the these values to manage and use the ec2 instances. 
+    Molecule uses these values to manage and use the ec2 instances. 
 
      ```yaml
      - name: Dump instance config
