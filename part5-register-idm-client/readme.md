@@ -136,10 +136,10 @@ Python virtual environment and Ansible Molecule.
 
     ```yaml
       yum_installs:
-        - "python3"
+        - "python36"
         - "firewalld"
         - "nscd"
-    
+      yum_backend: dnf
       idm_domain_name: example2020.com
       idm_fqdn: "idm.{{ idm_domain_name }}"
       idm_client_hostname: "idm-client"
@@ -170,6 +170,8 @@ Python virtual environment and Ansible Molecule.
 1. Copy your **aws private key** for the IDM client EC2 instance
    to this folder and rename the file "my_keypair"
 1. cd ../../molecule/default
+1. Edit the **converge.yml** and add `become: true` before the
+   **tasks:** keyword.
 1. Change the following in your **molecule.yml**.
 
     1. Change the **platform[0].name** to be the name of your
@@ -713,6 +715,6 @@ Python virtual environment and Ansible Molecule.
          with_items: "{{ ec2_info.instances }}"
          when: item.state.name != 'terminated' and item.tags.Name == ec2_instances[0].name
       ```
-
+1. <a name="1stTDD"></a> Install the required yum packages [1st TDD Iteration](./1st-tdd-iteration).
 
 :construction:

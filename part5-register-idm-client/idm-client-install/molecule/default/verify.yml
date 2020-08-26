@@ -3,7 +3,17 @@
 
 - name: Verify
   hosts: all
+  become: true
+  become_method: sudo
   tasks:
-  - name: Example assertion
-    assert:
-      that: true
+
+    - name: Include the module vars file.
+      include_vars:
+        file: ../../defaults/main.yml
+
+    - name: Include the module vars file.
+      include_vars:
+        file: ../../vars/main.yml
+
+    - name:  Determine if yum packages exist
+      include_tasks: tasks/check-if-yum-packages-are-installed.yml

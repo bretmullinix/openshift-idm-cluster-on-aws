@@ -1,10 +1,10 @@
 ---
 # defaults file for idm-client-install
 yum_installs:
-  - "python3"
+  - "python36"
   - "firewalld"
   - "nscd"
-
+yum_backend: dnf
 idm_domain_name: example2020.com
 idm_fqdn: "idm.{{ idm_domain_name }}"
 idm_client_hostname: "idm-client"

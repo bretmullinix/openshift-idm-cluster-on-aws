@@ -4,8 +4,15 @@ dependency:
 driver:
   name: delegated
 platforms:
-  - name: instance
+  - name: idm-client
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      remote_user: centos
+      vault_password_file: ${MOLECULE_PROJECT_DIRECTORY}/vault_secret
+    privileged_escalation:
+      become: true
+      become_ask_pass: false
 verifier:
   name: ansible
