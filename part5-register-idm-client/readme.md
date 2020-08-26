@@ -1,6 +1,6 @@
 # Installation of IDM Client
 
-Last updated: 08.24.2020
+Last updated: 08.26.2020
 
 ## Purpose
 
