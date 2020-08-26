@@ -55,8 +55,9 @@ Python virtual environment and Ansible Molecule.
 1. Create the **idm-client-install** ansible role using the following command:
 
     ```shell script
-       molecule init role -d delegated idm-client-install
+     molecule init role -d delegated idm-client-install
     ```
+    
 1. cd idm-client-install
 1. cd vars
 1. Edit the file **main.yml** and add the following variables:
@@ -168,7 +169,7 @@ Python virtual environment and Ansible Molecule.
 1. cd private_keys
 1. Copy your **aws private key** for the IDM client EC2 instance
    to this folder and rename the file "my_keypair"
-1. cd molecule/default
+1. cd ../../molecule/default
 1. Change the following in your **molecule.yml**.
 
     1. Change the **platform[0].name** to be the name of your
@@ -430,14 +431,18 @@ Python virtual environment and Ansible Molecule.
     
       Let's explain the tasks below.
     
+      The following task includes the necessary molecule variables to create
+      the AWS EC2 instance for the molecule tests.
+      
       ```yaml
       - name: Include the variables needed for creation
         include_vars:
           file: "vars/main.yml"
      ```
    
-     The task above includes the necessary molecule variables to create
-     the AWS EC2 instance for the molecule tests.
+     The following task creates the variable to hold the molecule ephemeral
+     directory path.  The **ephemeral** directory is the temp directory
+     which is used by **molecule** to configure and run tests. 
 
       ```yaml
        - name: Set molecule directory
@@ -446,9 +451,8 @@ Python virtual environment and Ansible Molecule.
               '{{ lookup(''env'', ''MOLECULE_EPHEMERAL_DIRECTORY'') }}'
      ```
    
-     The task above creates the variable to hold the molecule ephemeral
-     directory path.  The **ephemeral** directory is the temp directory
-     which is used by **molecule** to configure and run tests.
+     The following task creates the variable to hold the 
+     directory path to the private key for your EC2 instance.
 
       ```yaml
         - name: AWS Private Key file location
@@ -456,8 +460,8 @@ Python virtual environment and Ansible Molecule.
             aws_private_key_file: "../../files/private_keys/{{ ec2_instances[0].key_pair }}"
      ```
    
-     The task above creates the variable to hold the 
-     directory path to the private key for your EC2 instance.
+     The following task copies your EC2 private key to the molecule
+     **ephemeral** directory.
 
       ```yaml
        - name: Copy the private key to the molecule config directory
@@ -467,8 +471,7 @@ Python virtual environment and Ansible Molecule.
            mode: 0600
      ```
    
-     The task above copies your EC2 private key to the molecule
-     **ephemeral** directory.
+     The following task gets the AWS VPC facts for your VPC.
 
       ```yaml
           ec2_vpc_net_info:
@@ -480,7 +483,7 @@ Python virtual environment and Ansible Molecule.
           register: vpc_info    
      ```
    
-     The task gets the AWS VPC facts for your VPC.
+     The following task will fail the molecule testing if no AWS VPC is found.
 
       ```yaml
        - name: Fail if the VPC does not exist
@@ -490,7 +493,7 @@ Python virtual environment and Ansible Molecule.
            - vpc_info.vpcs is not defined or vpc_info.vpcs | length  == 0
      ```
    
-     The task will fail the molecule testing if no AWS VPC is found.
+     The following task will gather the facts for the AWS subnet.
 
      ```yaml
       - name: Gather facts on the AWS Control subnet
@@ -503,7 +506,7 @@ Python virtual environment and Ansible Molecule.
        register: vpc_control_subnet_info
     ```
    
-    The task will gather the facts for the AWS subnet.
+    The following task will fail the molecule testing if no AWS subnet is found. 
  
      ```yaml
      - name: Fail if we do not get a subnet for the EC2 instance
@@ -515,7 +518,8 @@ Python virtual environment and Ansible Molecule.
            vpc_control_subnet_info.subnets | length == 0
     ```
    
-    The task will fail the molecule testing if no AWS subnet is found.  
+    The following task will create the EC2 instance that is used by molecule to
+    run the tests.  
  
      ```yaml
       - name: Create EC2 Instance
@@ -541,8 +545,8 @@ Python virtual environment and Ansible Molecule.
         register: ec2_facts
     ```
    
-    The task will create the EC2 instance that is used by molecule to
-    run the tests.  
+    The following task will assign the variable **aws_public_ip** to the public
+    ip of the newly created EC2 instance.
  
      ```yaml
       - name: Set public ip address for ec2 instance
@@ -550,8 +554,9 @@ Python virtual environment and Ansible Molecule.
           aws_public_ip: "{{ ec2_facts.tagged_instances[0].public_ip }}"
     ```
    
-    The task will assign the variable **aws_public_ip** to the public
-    ip of the newly created EC2 instance.  
+    The following task will assign the variable **instance_conf_dict** 
+    to a dictionary with the values of the ansible molecule instances.
+    Molecule monitors the instances using these values.  
 
      ```yaml
     - name: Populate instance config dict
@@ -570,8 +575,8 @@ Python virtual environment and Ansible Molecule.
       register: instance_config_dict
     ```
    
-    The task will assign the variable **instance_conf_dict** to a dictionary
-    with the values of the ansible molecule instances.  Molecule monitors
+    The following task will assign the variable **instance_conf** to a list
+    with the values of the variables above.  Molecule monitors
     the instances using these values.
 
      ```yaml
@@ -582,9 +587,8 @@ Python virtual environment and Ansible Molecule.
           | map(attribute='ansible_facts.instance_conf_dict') | list }}"
     ```
    
-    The task will assign the variable **instance_conf** to a list
-    with the values of the variables above.  Molecule monitors
-    the instances using these values.
+    The following task will save the variable **instance_conf** to a file.  
+    Molecule uses the these values to manage and use the ec2 instances. 
 
      ```yaml
      - name: Dump instance config
@@ -594,8 +598,7 @@ Python virtual environment and Ansible Molecule.
          dest: "{{ molecule_instance_config }}"
     ```
    
-    The task will save the variable **instance_conf** to a file.  
-    Molecule uses the these values to manage and use the ec2 instances.      
+    The following task will make sure molecule can ssh into the EC2 instance.     
       
      ```yaml
       - name: Wait for SSH
@@ -607,15 +610,14 @@ Python virtual environment and Ansible Molecule.
           timeout: 320
     ```   
     
-    The task will make sure molecule can ssh into the EC2 instance.      
+    The following task will 
+    pause for 2 minutes to make sure the EC2 instance boots up.       
       
      ```yaml
        - name: Wait for boot process to finish
          pause:
            minutes: 2
     ```
-   
-    The task will pause for 2 minutes to make sure the EC2 instance boots up.   
 
 1. Delete the file **destroy.yml**.
 1. Create a new **destroy.yml** file and add the following contents.
@@ -658,14 +660,18 @@ Python virtual environment and Ansible Molecule.
  
     Let's explain the tasks below.
       
+      The following task will include
+      the necessary variables to delete
+      the EC2 instances.
+
       ```yaml
        - name: Include the variables needed for creation
          include_vars:
            file: "vars/main.yml"
       ```
       
-      The task includes the necessary variables to delete
-      the EC2 instances.
+      The following task will clear out the molecule **instance_conf** variable.  
+      The variable provides the EC2 instance information for molecule to use.
       
       ```yaml
        - name: Populate instance config
@@ -673,8 +679,11 @@ Python virtual environment and Ansible Molecule.
            instance_conf: {}
       ```
       
-      The task clears out the molecule **instance_conf** variable.  The
-      variable provides the EC2 instance information for molecule to use.
+      The following task will save the molecule **instance_conf** 
+      variable to a file.  The file is used by molecule to manage 
+      and run tests using the EC2 instances.
+      The variable saved is cleared out in the task above.  As a result,
+      the file does not contain any information in it about the EC2 instances.
       
       ```yaml
        - name: Dump instance config
@@ -684,10 +693,8 @@ Python virtual environment and Ansible Molecule.
          when: server.changed | default(false) | bool
       ```
       
-      The task saves the molecule **instance_conf** variable to a file.  The
-      file is used by molecule to manage and run tests using the EC2 instances.
-      The variable saved is cleared out in the task above.  As a result,
-      the file does not contain any information in it about the EC2 instances.
+      The following task will get information from AWS about all
+      the EC2 instances.
       
       ```yaml
         - name: Gather EC2 Instance Facts
@@ -695,7 +702,7 @@ Python virtual environment and Ansible Molecule.
           register: ec2_info
       ```
       
-      The task gets information from AWS about all the EC2 instances.
+      The following task will delete the EC2 instance used to run the molecule tests.
 
       ```yaml
        - name: terminate
@@ -706,10 +713,6 @@ Python virtual environment and Ansible Molecule.
          with_items: "{{ ec2_info.instances }}"
          when: item.state.name != 'terminated' and item.tags.Name == ec2_instances[0].name
       ```
-      
-      The task deletes the EC2 instance used to run the molecule tests.
-        
 
-         
 
 :construction:
