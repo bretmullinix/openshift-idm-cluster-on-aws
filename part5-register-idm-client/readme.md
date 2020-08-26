@@ -715,6 +715,6 @@ Python virtual environment and Ansible Molecule.
          with_items: "{{ ec2_info.instances }}"
          when: item.state.name != 'terminated' and item.tags.Name == ec2_instances[0].name
       ```
-1. <a name="1stTDD"></a> Install the required yum packages [1st TDD Iteration](./1st-tdd-iteration).
+1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
 
 :construction:
