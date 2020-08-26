@@ -372,7 +372,69 @@ Python virtual environment and Ansible Molecule.
    
      The task gets the AWS VPC facts for your VPC.
 
-      
+      ```yaml
+       - name: Fail if the VPC does not exist
+         fail:
+           msg:  "The VPC called '{{ aws_vpc_name }}' does not exist."
+         when:
+           - vpc_info.vpcs is not defined or vpc_info.vpcs | length  == 0
+     ```
+   
+     The task will fail the molecule testing if no AWS VPC is found.
+
+     ```yaml
+      - name: Gather facts on the AWS Control subnet
+        ec2_vpc_subnet_info:
+          aws_access_key: "{{ aws_access_key }}"
+          aws_secret_key: "{{ aws_secret_key }}"
+          region: "{{ aws_region }}"
+          filters:
+           "tag:Name": "{{ aws_subnet_name }}"
+       register: vpc_control_subnet_info
+    ```
+   
+    The task will gather the facts for the AWS subnet.
+ 
+     ```yaml
+     - name: Fail if we do not get a subnet for the EC2 instance
+       fail:
+         msg: "We could not obtain the {{ aws_subnet_name }} subnet"
+       when:
+         - vpc_control_subnet_info is undefined or
+           vpc_control_subnet_info.subnets is undefined or
+           vpc_control_subnet_info.subnets | length == 0
+    ```
+   
+    The task will fail the molecule testing if no AWS subnet is found.  
+ 
+     ```yaml
+      - name: Create EC2 Instance
+        ec2:
+          key_name: "{{ ec2_instances[0].key_pair }}"
+          group: "{{ aws_security_group }}"
+          instance_type: t2.medium
+          image: "{{ ec2_instances[0].aws_ami }}"
+          wait: true
+          wait_timeout: 500
+          volumes:
+            - device_name: /dev/sda1
+              volume_type: gp2
+              volume_size: "{{ ec2_instances[0].root_volume_size }}"
+              delete_on_termination: true
+          vpc_subnet_id: "{{ vpc_control_subnet_info.subnets[0].id }}"
+          assign_public_ip: true
+          count_tag:
+            Name: "{{ ec2_instances[0].name }}"
+          instance_tags:
+            Name: "{{ ec2_instances[0].name }}"
+          exact_count: 1
+        register: ec2_facts
+    ```
+   
+    The task will create the EC2 instance that is used by molecule to
+    run the tests.  
+
+
 
 1. Replace your molecule **delete.yml** to use an AWS EC2 Instance
 

@@ -1,0 +1,50 @@
+---
+open_idm_ports:
+  - "80/tcp"
+  - "443/tcp"
+  - "389/tcp"
+  - "636/tcp"
+  - "88/tcp"
+  - "88/udp"
+  - "464/tcp"
+  - "464/udp"
+  - "53/tcp"
+  - "53/udp"
+  - "123/udp"
+pip_requirements:
+  - "ansible==2.9.11"
+yum_installs:
+  - "python3"
+  - "firewalld"
+  - "nscd"
+# Primary DNS domain of the IPA deployment
+# Type: Str
+freeipa_client_domain: "{{ idm_domain_name }}"
+# The hostname of this machine (FQDN)
+# Type: Str
+freeipa_client_fqdn: "{{ idm_client_hostname + '.' + idm_domain_name }}"
+# Password to join the IPA realm
+# Type: Str
+freeipa_client_password: "{{ idm_admin_password }}"
+# Principal to use to join the IPA realm
+# Type: Str
+freeipa_client_principal: admin
+# Kerberos realm name of the IPA deployment
+# Type: Str
+freeipa_client_realm: "{{ idm_domain_name | upper }}"
+# FQDN of IPA server
+# Type: Str
+freeipa_client_server: "{{ idm_fqdn }}"
+
+# vars file for idm-client-install
+freeipa_client_install_base_command: ipa-client-install --unattended
+# The default FreeIPA client installation options
+# Type: List
+freeipa_client_install_options:
+  - "--domain={{ freeipa_client_domain }}"
+  - "--server={{ freeipa_client_server }}"
+  - "--realm={{ freeipa_client_realm }}"
+  - "--principal={{ freeipa_client_principal }}"
+  - "--password={{ freeipa_client_password }}"
+  - "--mkhomedir"
+  - "--hostname={{ freeipa_client_fqdn | default(ansible_fqdn) }}"

@@ -54,6 +54,10 @@
           "tag:Name": "{{ aws_subnet_name }}"
       register: vpc_control_subnet_info
 
+    - name: Print info
+      debug:
+        var: vpc_control_subnet_info
+
     - name: Fail if we do not get a subnet for the EC2 instance
       fail:
         msg: "We could not obtain the {{ aws_subnet_name }} subnet"
