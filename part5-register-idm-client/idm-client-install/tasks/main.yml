@@ -11,3 +11,11 @@
     name: firewalld
     state: started
     enabled: yes
+
+- name: Open Ports for IDM
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  with_items: "{{ open_idm_ports }}"

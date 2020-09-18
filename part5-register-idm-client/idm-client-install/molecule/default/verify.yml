@@ -24,3 +24,6 @@
 
     - name:  Determine if firewalld exists
       include_tasks: tasks/add-firewalld.yml
+
+    - name:  Determine if firewall ports are open
+      include_tasks: tasks/open-ports-with-firewalld.yml
