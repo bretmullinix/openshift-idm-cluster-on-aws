@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  tasks:
+    - name: "Include idm-client-install"
+      include_role:
+        name: "idm-client-install"
