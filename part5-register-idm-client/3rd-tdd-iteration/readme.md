@@ -60,7 +60,7 @@ The purpose of this iteration is to open IDM client ports on the target servers.
 1. **REFACTOR** --> Does any of the code need **Refactoring**?
 
     1. The **verify.yml** looks a little messy.  Let us extract the
-       tasks that check if the ports are open out into a file and reference 
+       tasks, that check if the ports are open, out into a file and reference 
        the file from verify.yml.
         
     1. cd molecule/default
