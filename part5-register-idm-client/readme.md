@@ -719,6 +719,8 @@ Python virtual environment and Ansible Molecule.
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Make sure **firewalld** is started in the [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Make sure IDM client ports are open in the [3rd TDD Iteration](./3rd-tdd-iteration).
+1. <a name="4thTDD"></a> Make sure the Primary DNS Server for the IDM client is
+   the IDM Server [4th TDD Iteration](./4th-tdd-iteration).
 
 
 :construction:

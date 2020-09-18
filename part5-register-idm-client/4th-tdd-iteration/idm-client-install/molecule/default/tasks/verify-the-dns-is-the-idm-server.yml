@@ -1,0 +1,19 @@
+- name: Get the DNS Servers
+  shell: nmcli device show 'eth0' | grep IP4.DNS
+  register: dns_servers
+
+- name: Fail if the IDM client does not list a server
+  fail:
+    msg: "The IDM client does not list a DNS server."
+  when:
+    - dns_servers.stdout_lines is not defined
+    - (dns_servers.stdout_lines | length)  > 0
+
+- name: Register 1st DNS Server
+  set_fact:
+    first_dns_server: "{{ dns_servers.stdout_lines[0] }}"
+
+- name: Fail if the IDM Server is not listed first
+  fail:
+    msg: "The IDM server was not listed as the first DNS server"
+  when: idm_server_ip_address not in first_dns_server
