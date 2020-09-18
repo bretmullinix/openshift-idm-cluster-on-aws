@@ -7,3 +7,4 @@ private_keys/
 my_keypair
 ec2_facts/
 vault_secret
+.idea/

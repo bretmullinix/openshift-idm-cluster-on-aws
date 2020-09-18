@@ -5,3 +5,9 @@
     name: "{{ yum_installs }}"
     state: present
     use_backend: "{{ yum_backend }}"
+
+- name:  Start and enable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes

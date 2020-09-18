@@ -1,6 +1,6 @@
 # Installation of IDM Client
 
-Last updated: 08.26.2020
+Last updated: 09.18.2020
 
 ## Purpose
 
@@ -716,5 +716,6 @@ Python virtual environment and Ansible Molecule.
          when: item.state.name != 'terminated' and item.tags.Name == ec2_instances[0].name
       ```
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
+1. <a name="2ndTDD"></a> Make sure **firewalld** is started in the [2nd TDD Iteration](./2nd-tdd-iteration).
 
 :construction:

@@ -16,10 +16,6 @@
     - yum_packages.results is defined
     - yum_packages.results | length > 0
 
-- name: Print the new variable
-  debug:
-    var: installed_packages
-
 - name: Fail if package is not installed
   fail:
     msg:  "The {{ item }} is not installed."
