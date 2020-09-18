@@ -74,7 +74,7 @@ The purpose of this iteration is to change the DNS server to the IDM Server on t
 1. **REFACTOR** --> Does any of the code need **Refactoring**?
 
     1. The **verify.yml** looks a little messy.  Let us extract the tasks
-       we added to another file and reference the fie.
+       we added to another file and reference the file.
         
     1. cd molecule/default
         
