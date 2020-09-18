@@ -4,6 +4,7 @@ yum_installs:
   - "python36"
   - "firewalld"
   - "nscd"
+  - "@idm:client"
 yum_backend: dnf
 idm_server_ip_address: 10.10.0.111
 idm_domain_name: example2020.com

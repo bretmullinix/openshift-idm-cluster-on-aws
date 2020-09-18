@@ -2,7 +2,7 @@
   command: "{{ item }}"
   with_items:
     - nmcli conn modify "System eth0" ipv4.ignore-auto-dns yes
-    - nmcli conn modify "System eth0" ipv4.dns  "{{ idm_server_ip_address }} 8.8.8.8"
+    - nmcli conn modify "System eth0" ipv4.dns  "{{ idm_server_ip_address }}"
 
 - name: Reboot the Server
   reboot:

@@ -22,3 +22,17 @@
 
 - name:  Change the Primary DNS Server for the IDM Client to be the IDM Server
   include_tasks: "{{ role_path }}/tasks/main/change-dns-server-to-idm-server.yml"
+
+- name: Set the host name
+  hostname:
+    name: "{{idm_client_hostname + '.' + idm_domain_name }}"
+
+- name: Insert the IPA Server Host Name into the /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    block: "{{ idm_server_ip_address + ' ' + idm_fqdn }}"
+
+- name: Run the FreeIPA client installer
+  command: "{{ freeipa_client_install_base_command }} {{ freeipa_client_install_options | join(' ') }}"
+  args:
+    creates: /etc/ipa/default.conf
