@@ -61,7 +61,7 @@ The purpose of this iteration is to change the DNS server to the IDM Server on t
              reboot_timeout: 3600
         ```   
            
-    The task will change the IDM client DNS primary server to the IDM server.
+        The task will change the IDM client DNS primary server to the IDM server.
         
     1. cd ../..
     
