@@ -1,0 +1,21 @@
+---
+
+- name: Install the Required Libraries
+  yum:
+    name: "{{ yum_installs }}"
+    state: present
+    use_backend: "{{ yum_backend }}"
+
+- name:  Start and enable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Open Ports for IDM
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  with_items: "{{ open_idm_ports }}"
