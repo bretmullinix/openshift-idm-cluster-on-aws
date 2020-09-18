@@ -140,6 +140,7 @@ Python virtual environment and Ansible Molecule.
         - "firewalld"
         - "nscd"
       yum_backend: dnf
+      idm_server_ip_address: 10.10.0.111
       idm_domain_name: example2020.com
       idm_fqdn: "idm.{{ idm_domain_name }}"
       idm_client_hostname: "idm-client"
