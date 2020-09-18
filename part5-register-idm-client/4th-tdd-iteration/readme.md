@@ -121,6 +121,8 @@ The purpose of this iteration is to change the DNS server to the IDM Server on t
     1. Remove the tasks starting from the task titled **Change the DNS to IDM Server**
        in the **tasks/main.yml** file to the end of the file.
        
+    1. Reference the task file in the **tasks/main.yml** as is shown below.
+       
         ```yaml
         - name:  Change the Primary DNS Server for the IDM Client to be the IDM Server
           include_tasks: "{{ role_path }}/tasks/main/change-dns-server-to-idm-server.yml"
