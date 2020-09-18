@@ -712,7 +712,7 @@ Python virtual environment and Ansible Molecule.
            instance_ids: "{{ item.instance_id }}"
            state: absent
            wait: yes
-         with_items: "{{ ec2_info.instances }}"
+         with_items: "{{ ec2_info.instances }}"____
          when: item.state.name != 'terminated' and item.tags.Name == ec2_instances[0].name
       ```
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).

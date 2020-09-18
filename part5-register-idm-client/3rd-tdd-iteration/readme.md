@@ -82,13 +82,13 @@ The purpose of this iteration is to open IDM client ports on the target servers.
     1. Add the following to the end of **verify.yml**.
         
         ```yaml
-          - name:  Determine if firewalld exists
+          - name:  Determine if firewall ports are open
             include_tasks: tasks/open-ports-with-firewalld.yml
        ```          
            
     1. cd ../..
     1. Run `molecule test`.  The test should pass.  Your refactoring is complete.
 
-We have added **firewalld** and completed our 2nd TDD iteration.
+We have opened the IDM client ports and completed our 3rd TDD iteration.
 
-[**<--Back to main instructions**](../readme.md#2ndTDD)
+[**<--Back to main instructions**](../readme.md#3rdTDD)
