@@ -18,6 +18,6 @@
 
 - name: Fail if package is not installed
   fail:
-    msg:  "The {{ item }} is not installed."
+    msg:  "The {{ item.name }} is not installed."
   with_items: "{{ yum_installs }}"
-  when: item not in installed_packages
+  when: item.install_name not in installed_packages

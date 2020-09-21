@@ -2,9 +2,10 @@
 
 - name: Install the Required Libraries
   yum:
-    name: "{{ yum_installs }}"
+    name: "{{ item.name }}"
     state: present
     use_backend: "{{ yum_backend }}"
+  with_items: "{{ yum_installs }}"
 
 - name:  Start and enable firewalld
   service:

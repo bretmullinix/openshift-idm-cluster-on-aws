@@ -1,6 +1,6 @@
 # Installation of IDM Client
 
-Last updated: 09.18.2020
+Last updated: 09.21.2020
 
 ## Purpose
 
@@ -722,8 +722,6 @@ Python virtual environment and Ansible Molecule.
 1. <a name="3rdTDD"></a> Make sure IDM client ports are open in the [3rd TDD Iteration](./3rd-tdd-iteration).
 1. <a name="4thTDD"></a> Make sure the Primary DNS Server for the IDM client is
    the IDM Server [4th TDD Iteration](./4th-tdd-iteration).
-
-TODO:  Working on 5thTDD----->
 1. <a name="5thTDD"></a>Configure the IDM client on the target server [5th TDD Iteration](./5th-tdd-iteration).
 
 :construction:

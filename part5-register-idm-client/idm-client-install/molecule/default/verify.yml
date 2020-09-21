@@ -30,3 +30,9 @@
 
     - name:  Determine if the IDM client is using the IDM Server as its Primary DNS Server
       include_tasks: tasks/verify-the-dns-is-the-idm-server.yml
+
+    - name: Determine if we have IDM Server Connectivity
+      include_tasks: tasks/verify-idm-server-connectivity.yml
+
+
+

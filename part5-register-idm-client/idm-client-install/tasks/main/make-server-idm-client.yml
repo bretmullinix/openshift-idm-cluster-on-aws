@@ -1,0 +1,28 @@
+- name: Set the host name
+  hostname:
+    name: "{{idm_client_hostname + '.' + idm_domain_name }}"
+
+- name: Insert the IPA Server Host Name into the /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    block: "{{ idm_server_ip_address + ' ' + idm_fqdn }}"
+
+- name: Test to see if we registered as an IDM client already
+  command: 'egrep  "^\s*kdc\s=\s{{idm_fqdn}}" /etc/krb5.conf'
+  ignore_errors: true
+  register: kdc_results
+
+- name: Run the FreeIPA client installer
+  command: "{{ freeipa_client_install_base_command }} {{ freeipa_client_install_options | join(' ') }}"
+  args:
+    creates: /etc/ipa/default.conf
+  when:
+    - kdc_results is defined
+    - kdc_results.stdout_lines is defined
+    - kdc_results.stdout_lines | length == 0
+
+- name: Make sure group wheel is not in the sudoers configuration
+  lineinfile:
+    path: /etc/hosts
+    state: absent
+    regexp: '^{{idm_server_ip_address}}'

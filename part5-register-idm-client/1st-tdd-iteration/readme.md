@@ -31,11 +31,11 @@ on the target servers.
           yum:
             list=installed
           register: yum_packages
-    
+        
         - name: Initialize variable to list packages that are installed
           set_fact:
             installed_packages: "{{ [] }}"
-    
+        
         - name: Populate installed packages
           set_fact:
             installed_packages: "{{ installed_packages + [item.name] }}"
@@ -44,16 +44,12 @@ on the target servers.
             - yum_packages is defined
             - yum_packages.results is defined
             - yum_packages.results | length > 0
-    
-        - name: Print the new variable
-          debug:
-            var: installed_packages
-    
+        
         - name: Fail if package is not installed
           fail:
-            msg:  "The {{ item }} is not installed."
+            msg:  "The {{ item.name }} is not installed."
           with_items: "{{ yum_installs }}"
-          when: item not in installed_packages
+          when: item.install_name not in installed_packages
         ```
                   
         The tasks above checks to see if the yum packages are in the list of
@@ -70,11 +66,12 @@ on the target servers.
     1. Add the following tasks to the end of the **tasks/main.yml** file.
         
     ```yaml
-    - name: Install the Required Packages
+    - name: Install the Required Libraries
       yum:
-        name: "{{ yum_installs }}"
+        name: "{{ item.name }}"
         state: present
         use_backend: "{{ yum_backend }}"
+      with_items: "{{ yum_installs }}"
     ```   
            
     The task will install the yum packages.

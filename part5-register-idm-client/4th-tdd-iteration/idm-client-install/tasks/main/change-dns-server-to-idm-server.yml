@@ -1,8 +1,8 @@
 - name: Change the DNS to IDM Server
   command: "{{ item }}"
   with_items:
-    - nmcli conn modify "System eth0" ipv4.ignore-auto-dns yes
-    - nmcli conn modify "System eth0" ipv4.dns  "{{ idm_server_ip_address }}"
+    - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.ignore-auto-dns yes'
+    - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.dns  "{{ idm_server_ip_address }}"'
 
 - name: Reboot the Server
   reboot:

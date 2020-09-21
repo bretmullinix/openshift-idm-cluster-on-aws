@@ -1,5 +1,5 @@
 - name: Get the DNS Servers
-  shell: nmcli device show 'eth0' | grep IP4.DNS
+  shell: "nmcli device show '{{ idm_network_interface_name }}' | grep IP4.DNS"
   register: dns_servers
 
 - name: Fail if the IDM client does not list a server

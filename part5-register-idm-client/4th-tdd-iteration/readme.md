@@ -15,7 +15,7 @@ The purpose of this iteration is to change the DNS server to the IDM Server on t
         
         ```yaml
         - name: Get the DNS Servers
-          shell: nmcli device show 'eth0' | grep IP4.DNS
+          shell: "nmcli device show '{{ idm_network_interface_name }}' | grep IP4.DNS"
           register: dns_servers
     
         - name: Fail if the IDM client does not list a server
@@ -53,8 +53,8 @@ The purpose of this iteration is to change the DNS server to the IDM Server on t
          - name: Change the DNS to IDM Server
            command: "{{ item }}"
            with_items:
-             - nmcli conn modify "System eth0" ipv4.ignore-auto-dns yes
-             - nmcli conn modify "System eth0" ipv4.dns  "{{ idm_server_ip_address }} 8.8.8.8"
+             - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.ignore-auto-dns yes'
+             - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.dns  "{{ idm_server_ip_address }} 8.8.8.8"'
         
          - name: Reboot the Server
            reboot:

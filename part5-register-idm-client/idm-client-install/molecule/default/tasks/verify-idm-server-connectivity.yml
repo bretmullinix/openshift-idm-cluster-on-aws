@@ -1,0 +1,30 @@
+- name: Determine if IDM DNS server is working
+  command: 'dig +short {{ idm_fqdn }} A'
+  register: dig_result
+
+- name: Fail if we can't resolve the IDM server
+  fail:
+    msg: "Can't resolve the IDM Server."
+  when:
+    - dig_result is not defined or
+      dig_result.stdout_lines is not defined or
+      dig_result.stdout_lines | length == 0 or
+      dig_result.stdout_lines[0] != idm_server_ip_address
+
+
+- name: Make sure we have registered IDM as Kerberos server.
+  command: 'egrep  "^\s*kdc\s=\s{{idm_fqdn}}" /etc/krb5.conf'
+  register: kdc_results
+
+- name: Print KDC Results
+  debug:
+    var: kdc_results
+
+- name: Fail if IDM is not a Kerberos Server
+  fail:
+    msg: "IDM is not a Kerberos Server.  Something went wrong in registering the server as an IDM client."
+  when:
+    - kdc_results is not defined or
+      kdc_results.stdout_lines is not defined or
+      kdc_results.stdout_lines | length == 0 or
+      idm_fqdn not in kdc_results.stdout_lines[0]
