@@ -135,16 +135,23 @@ Python virtual environment and Ansible Molecule.
 1. Add the following variables to the **main.yml** file.
 
     ```yaml
-      yum_installs:
-        - "python36"
-        - "firewalld"
-        - "nscd"
-        - "@idm:client"
-      yum_backend: dnf
-      idm_server_ip_address: 10.10.0.111
-      idm_domain_name: example2020.com
-      idm_fqdn: "idm.{{ idm_domain_name }}"
-      idm_client_hostname: "idm-client"
+     yum_installs:
+       - name: "python36"
+         install_name: "python36"
+       - name: "firewalld"
+         install_name: "firewalld"
+       - name: "nscd"
+         install_name: "nscd"
+       - name: "@idm:client"
+         install_name:  "ipa-client"
+       yum_backend: dnf
+       idm_server_ip_address: 10.10.0.111
+       idm_domain_name: example2020.com
+       idm_fqdn: "idm.{{ idm_domain_name }}"
+       idm_client_hostname: "idm-client"
+         
+       idm_network_interface_name: "eth0"
+       idm_nmcli_interface_name:  "System {{ idm_network_interface_name }}"
     ```
     Note: The packages installed are those used for **Centos 8**.  If you
     plan on using the ansible role on another version of linux, these
@@ -228,7 +235,26 @@ Python virtual environment and Ansible Molecule.
           
           1. You can perform QA on this section of the **molecule.yml** 
           by taking a look at the finished **molecule.yml** 
-          in the **molecule_artifacts** directory.   
+          in the **molecule_artifacts** directory.  
+    1. At the bottom of the **molecule.yml** file add the following test sequence:
+        
+        ```yaml
+        scenario:
+          test_sequence:
+            - dependency
+            - lint
+            - cleanup
+            - destroy
+            - syntax
+            - create
+            - prepare
+            - converge
+            - side_effect
+            - verify
+            - cleanup
+            - destroy
+        ```
+         
 1. mkdir vars
 1. cd vars
 1. Edit the file **main.yml** and add the following variables:
