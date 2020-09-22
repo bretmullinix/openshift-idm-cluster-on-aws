@@ -82,7 +82,7 @@ The purpose of this iteration is to configure the IDM client on the target serve
             - kdc_results.stdout_lines is defined
             - kdc_results.stdout_lines | length == 0
         
-        - name: Make sure group wheel is not in the sudoers configuration
+        - name: Make sure we remove the IDM server from the /etc/hosts
           lineinfile:
             path: /etc/hosts
             state: absent
