@@ -1,6 +1,6 @@
 # Installation of IDM Client
 
-Last updated: 09.21.2020
+Last updated: 09.22.2020
 
 ## Purpose
 
@@ -750,4 +750,5 @@ Python virtual environment and Ansible Molecule.
    the IDM Server [4th TDD Iteration](./4th-tdd-iteration).
 1. <a name="5thTDD"></a>Configure the IDM client on the target server [5th TDD Iteration](./5th-tdd-iteration).
 
-:construction:
+We have finished configuring the target server as an IDM client.  Please continue
+with the tutorials [here](../readme.md).
