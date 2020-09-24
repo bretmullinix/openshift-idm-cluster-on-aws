@@ -52,6 +52,14 @@ with the following section:
            vault_password_file: ${MOLECULE_PROJECT_DIRECTORY}/vault_secret
      ```
 
+1. Add the following variable section before the **tasks** section at the
+   top of the **converge.yml** file:
+
+    ```yaml
+    vars:
+      is_docker: true
+   ```
+
 1. **RED** --> Test to see if IDM is configured.
     
     1. Add the following code to the end of **verify.yml**.

@@ -1,6 +1,8 @@
 ---
 - name: Converge
   hosts: all
+  vars:
+    is_docker: true
   tasks:
     - name: "Include idm-install"
       include_role:
