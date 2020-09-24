@@ -118,6 +118,24 @@ create the **aws** scenario.
                 when: server.changed | default(false) | bool
           ```
 
+1. Your **converge.yml** should have the following content:
+
+    ```yaml
+    ---
+    - name: Converge
+      hosts: all
+      become: true
+      tasks:
+        - name: Include the variables needed for creation
+          include_vars:
+            file: "vars/main.yml"
+    
+        - name: "Include idm-install"
+          include_role:
+            name: "idm-install"
+
+    ```
+
 1. **RED** --> Test when no configuration has been added for AWS.
     
     1. cd molecule/aws
