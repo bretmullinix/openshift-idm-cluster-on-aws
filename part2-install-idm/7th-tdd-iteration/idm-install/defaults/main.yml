@@ -2,6 +2,8 @@
 # defaults file for idm-install
 idm_domain_name: example2020.com
 idm_fqdn: "idm.{{ idm_domain_name }}"
+idm_network_interface_name: "eth0"
+idm_nmcli_interface_name:  "System {{ idm_network_interface_name }}"
 idm_admin_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   31353234373536346363393533326463396332653333656166363537343133623531313531316564

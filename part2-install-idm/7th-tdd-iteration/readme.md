@@ -1,6 +1,6 @@
 # 7th TDD Iteration --> Configure RedHat IDM
 
-Last updated: 07.06.2020
+Last updated: 09.24.2020
 
 ## Purpose
 
@@ -27,6 +27,8 @@ The purpose of this iteration is to configure IDM on the target servers.
     ```yaml
       idm_domain_name: example.com
       idm_fqdn: "idm.{{ idm_domain_name }}"
+      idm_network_interface_name: "eth0"
+      idm_nmcli_interface_name:  "System {{ idm_network_interface_name }}"
    ```
 
 1. Whatever you set your **idm_fqdn** name to, make sure you update the 
