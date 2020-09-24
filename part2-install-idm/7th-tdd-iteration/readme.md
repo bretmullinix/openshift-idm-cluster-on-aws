@@ -94,7 +94,7 @@ with the following section:
        - name: Configure IDM.  Please wait this could take 15-30 minutes....
          shell:
            cmd: >
-              ipa-server-install  --mkhomedir --setup-dns --no-forwarders  -a '{{ idm_admin_password }}' -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}'  -n {{ idm_domain_name }} -U
+              ipa-server-install  --mkhomedir --setup-dns --no-forwarders --no-host-dns --allow-zone-overlap -a '{{ idm_admin_password }}' -r {{ idm_domain_name | upper }} -p '{{ idm_admin_password }}'  -n {{ idm_domain_name }} -U
        ```
 
          The task will configure the IDM server.
