@@ -118,7 +118,26 @@ create the **aws** scenario.
                 when: server.changed | default(false) | bool
           ```
 
-1. Your **converge.yml** should have the following content:
+1. Your **molecule.yml** file should end with the following test sequence:
+
+    ```yaml
+    scenario:
+      test_sequence:
+        - dependency
+        - lint
+        - cleanup
+        - destroy
+        - syntax
+        - create
+        - prepare
+        - converge
+        - side_effect
+        - verify
+        - cleanup
+        - destroy
+    ```
+
+1. Your **converge.yml** file should have the following content:
 
     ```yaml
     ---
