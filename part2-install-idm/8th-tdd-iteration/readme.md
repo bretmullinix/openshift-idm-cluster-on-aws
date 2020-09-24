@@ -133,7 +133,6 @@ create the **aws** scenario.
         - name: "Include idm-install"
           include_role:
             name: "idm-install"
-
     ```
 
 1. **RED** --> Test when no configuration has been added for AWS.
