@@ -37,6 +37,10 @@
     - idm:DL1/server
     - idm:DL1/dns
 
+- name:  Configure the Host Name and DNS if this is not Docker
+  include_tasks: "{{ role_path }}/tasks/main/configure-host-and-dns.yml"
+  when: is_docker is not defined or is_docker == false
+
 - name: Configure IDM.  Please wait this could take 15-30 minutes....
   shell:
     cmd: >

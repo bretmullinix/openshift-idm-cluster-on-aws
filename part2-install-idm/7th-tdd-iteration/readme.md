@@ -97,10 +97,41 @@ with the following section:
        the **Red** in the **Red, Green, Refactor** iteration of TDD.
 
 1. **GREEN** --> Add the task to configure IDM.
-     
+    
+    1. Create the folder **tasks/main**
+    1. cd **tasks/main**
+    1. Create the file **configure-host-and-dns.yml**
+    1. Add the following contents to the **configure-host-and-dns** file:
+    
+        ```yaml
+        - name: Set the hostname for IDM
+          hostname:
+            name: "{{ idm_fqdn }}"
+        
+        - name: Change the DNS to IDM Server
+          command: "{{ item }}"
+          with_items:
+            - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.ignore-auto-dns yes'
+            - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.dns  "127.0.0.1"'
+        
+        - name:  Check the output
+          debug:
+            var: connection_info
+        
+        - name: Restart Network Connection
+          service:
+            name: NetworkManager
+            state: restarted
+       ```
+    
+    1. cd ..
     1. Add the following task to the end of the **tasks/main.yml** file.
     
         ```yaml
+       - name:  Configure the Host Name and DNS if this is not Docker
+         include_tasks: "{{ role_path }}/tasks/main/configure-host-and-dns.yml"
+         when: is_docker is not defined or is_docker == false
+       
        - name: Configure IDM.  Please wait this could take 15-30 minutes....
          shell:
            cmd: >

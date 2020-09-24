@@ -1,0 +1,18 @@
+- name: Set the hostname for IDM
+  hostname:
+    name: "{{ idm_fqdn }}"
+
+- name: Change the DNS to IDM Server
+  command: "{{ item }}"
+  with_items:
+    - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.ignore-auto-dns yes'
+    - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.dns  "127.0.0.1"'
+
+- name:  Check the output
+  debug:
+    var: connection_info
+
+- name: Restart Network Connection
+  service:
+    name: NetworkManager
+    state: restarted
