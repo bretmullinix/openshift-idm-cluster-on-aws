@@ -56,9 +56,10 @@ The purpose of this iteration is to change the DNS server to the IDM Server on t
              - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.ignore-auto-dns yes'
              - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.dns  "{{ idm_server_ip_address }} 8.8.8.8"'
         
-         - name: Reboot the Server
-           reboot:
-             reboot_timeout: 3600
+         - name: Restart Network Connection
+           service:
+             name: NetworkManager
+             state: restarted
         ```   
            
         The task will change the IDM client DNS primary server to the IDM server.

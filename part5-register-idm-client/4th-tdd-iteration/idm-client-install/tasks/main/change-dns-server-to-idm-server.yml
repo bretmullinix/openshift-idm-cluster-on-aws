@@ -4,6 +4,7 @@
     - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.ignore-auto-dns yes'
     - 'nmcli conn modify "{{ idm_nmcli_interface_name }}" ipv4.dns  "{{ idm_server_ip_address }}"'
 
-- name: Reboot the Server
-  reboot:
-    reboot_timeout: 3600
+- name: Restart Network Connection
+  service:
+    name: NetworkManager
+    state: restarted
