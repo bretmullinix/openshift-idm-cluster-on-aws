@@ -41,6 +41,7 @@ Python virtual environment and Ansible Molecule.
 
 1. Open up a terminal window.
 1. mkdir **part6-install-nexus**
+1. cd **part6-install-nexus**
 1. Copy the "requirements" file down for your virtual environment
 1. Open up a terminal
 1. Activate your virtual environment
