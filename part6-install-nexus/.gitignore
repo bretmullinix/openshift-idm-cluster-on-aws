@@ -1,2 +1,6 @@
 .travis.yml
 .yamllint
+my_keypair
+private_keys/
+ec2_facts/
+vault_secret
