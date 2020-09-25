@@ -1,6 +1,6 @@
 # Create or Destroy EC2 Instances on AWS
 
-Last updated: 08.24.2020
+Last updated: 09.25.2020
 
 ## Purpose
 
@@ -10,7 +10,7 @@ EC2 instances.
 
 ## Prerequisites
 
-None.
+Docker
 
 ## Procedure
 
