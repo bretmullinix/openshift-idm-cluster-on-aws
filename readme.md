@@ -1,6 +1,6 @@
 # Installation of OpenShit Cluster and IDM on AWS
 
-Last updated: 08.11.2020
+Last updated: 09.25.2020
 
 ## Purpose
 
@@ -36,11 +36,9 @@ may **"follow"** the repo and see the repo develop.
 
 1. Develop Ansible scripts to register RedHat IDM client [here](./part5-register-idm-client).
 
-   This tutorial is currently under construction.  You can follow along as it gets built.
-
 1. Develop Ansible scripts to install the Nexus [here](part6-install-nexus).
 
-    The tutorial has not been implemented.  
+    This tutorial is currently under construction.  You can follow along as it gets built.
 
 1. Develop Ansible scripts to install RedHat OpenShift [here](part7-install-openshift).
 
