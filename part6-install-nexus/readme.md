@@ -289,6 +289,47 @@ Python virtual environment and Ansible Molecule.
     The description of the **create.yml** file can be found 
     [here](../part5-register-idm-client/readme.md#create_molecule).
 
+1. Delete the **destroy.yml** file.
 
+1. Create the **destroy.yml** file and add the following contents:
+
+    ```yaml
+    ---
+    - name: Destroy
+      hosts: localhost
+      connection: local
+      gather_facts: false
+      no_log: "{{ molecule_no_log }}"
+      tasks:
+    
+        - name: Include the variables needed for creation
+          include_vars:
+            file: "vars/main.yml"
+    
+        - name: Populate instance config
+          set_fact:
+            instance_conf: {}
+    
+        - name: Dump instance config
+          copy:
+            content: "{{ instance_conf | to_json | from_json | molecule_to_yaml | molecule_header }}"
+            dest: "{{ molecule_instance_config }}"
+          when: server.changed | default(false) | bool
+    
+        - name: Gather EC2 Instance Facts
+          ec2_instance_facts:
+          register: ec2_info
+    
+        - name: terminate
+          ec2:
+            instance_ids: "{{ item.instance_id }}"
+            state: absent
+            wait: yes
+          with_items: "{{ ec2_info.instances }}"
+          when: item.state.name != 'terminated' and item.tags.Name == ec2_instances[0].name
+    ```
+
+    The description of the **destroy.yml** file can be found 
+    [here](../part5-register-idm-client/readme.md#destroy_explanation).
 
 :construction: Under Construction.....

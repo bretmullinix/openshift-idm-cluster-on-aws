@@ -650,7 +650,7 @@ Python virtual environment and Ansible Molecule.
     ```
 
 1. Delete the file **destroy.yml**.
-1. Create a new **destroy.yml** file and add the following contents.
+1. <a name="destroy_explanation"></a> Create a new **destroy.yml** file and add the following contents.
 
     ```yaml
     ---
