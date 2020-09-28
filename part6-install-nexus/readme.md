@@ -55,6 +55,19 @@ Python virtual environment and Ansible Molecule.
      molecule init role -d delegated nexus-instance
     ```
 1. cd nexus-instance
+1. mkdir files
+1. mkdir private_keys
+1. cd files/private_keys
+1. Create a file with the same name as your AWS private key having no
+   extension.
+1. Add your AWS private key contents to the file.
+1. chmod 600 [your aws private key file]
+    
+    Note: make sure you don't check this file in to git.  If you make the
+    repository public, you would expose your private key.  I always add a
+    .gitignore file that contains **private_keys/**.  This tells git to ignore
+    the folder.
+    
 1. cd defaults
 1. Add the following variables to the **main.yml** file
 
@@ -108,7 +121,174 @@ Python virtual environment and Ansible Molecule.
         - destroy
     ```
 
-    The explanation of the **molecule.yml** file can be found [here](../part5-register-idm-client/readme.md#molecule_explanation)
+    The explanation of the **molecule.yml** file can be found 
+    [here](../part5-register-idm-client/readme.md#molecule_explanation).
+
+1. mkdir vars
+
+1. cd vars
+
+1. Create the file **main.yml** and add the following content:
+
+    ```yaml
+    aws_vpc_name: "aws_openshift_vpc"
+    aws_subnet_name: "aws_subnet"
+    aws_security_group: "aws_openshift_vpc_security_group"
+    aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+    aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+    aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+    ec2_instances:
+      - name: "nexus-client"
+        user: "centos"
+        key_pair: "my_keypair"
+        aws_ami: "ami-00594b9c138e6303d"
+        root_volume_size: 30
+        port: 22
+    ```
+    
+    The explanation of the variables can be found 
+    [here](../part5-register-idm-client/readme.md#vars_main_explanation).
+
+1. Delete the **create.yml** file.
+
+1. Add the following content to the **create.yml** file.
+
+    ```yaml
+    ---
+    - name: Create
+      hosts: localhost
+      connection: local
+      gather_facts: true
+      tasks:
+    
+        - name: Include the variables needed for creation
+          include_vars:
+            file: "vars/main.yml"
+    
+        - name: Set molecule directory
+          set_fact:
+            molecule_ephemeral_directory:
+              '{{ lookup(''env'', ''MOLECULE_EPHEMERAL_DIRECTORY'') }}'
+    
+        - name: AWS Private Key file location
+          set_fact:
+            aws_private_key_file: "../../files/private_keys/{{ ec2_instances[0].key_pair }}"
+    
+        - name: Set the molecule directory private key
+          set_fact:
+            aws_molecule_private_key_file:
+              "{{ molecule_ephemeral_directory }}/private_key"
+    
+        - name: Copy the private key to the molecule config directory
+          copy:
+            src: "{{ aws_private_key_file }}"
+            dest: "{{ aws_molecule_private_key_file }}"
+            mode: 0600
+    
+        - name: Get VPC Facts
+          ec2_vpc_net_info:
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            region: "{{ aws_region }}"
+            filters:
+              "tag:Name": "{{ aws_vpc_name }}"
+          register: vpc_info
+    
+        - name: Fail if the VPC does not exist
+          fail:
+            msg:  "The VPC called '{{ aws_vpc_name }}' does not exist."
+          when:
+            - vpc_info.vpcs is not defined or vpc_info.vpcs | length  == 0
+    
+        - name: Gather facts on the AWS Control subnet
+          ec2_vpc_subnet_info:
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            region: "{{ aws_region }}"
+            filters:
+              "tag:Name": "{{ aws_subnet_name }}"
+          register: vpc_control_subnet_info
+    
+        - name: Fail if we do not get a subnet for the EC2 instance
+          fail:
+            msg: "We could not obtain the {{ aws_subnet_name }} subnet"
+          when:
+            - vpc_control_subnet_info is undefined or
+              vpc_control_subnet_info.subnets is undefined or
+              vpc_control_subnet_info.subnets | length == 0
+    
+        # Single instance with ssd gp2 root volume
+        - name: Create EC2 Instance
+          ec2:
+            key_name: "{{ ec2_instances[0].key_pair }}"
+            group: "{{ aws_security_group }}"
+            instance_type: t2.medium
+            image: "{{ ec2_instances[0].aws_ami }}"
+            wait: true
+            wait_timeout: 500
+            volumes:
+              - device_name: /dev/sda1
+                volume_type: gp2
+                volume_size: "{{ ec2_instances[0].root_volume_size }}"
+                delete_on_termination: true
+            vpc_subnet_id: "{{ vpc_control_subnet_info.subnets[0].id }}"
+            assign_public_ip: true
+            count_tag:
+              Name: "{{ ec2_instances[0].name }}"
+            instance_tags:
+              Name: "{{ ec2_instances[0].name }}"
+            exact_count: 1
+          register: ec2_facts
+    
+    
+        - name: Set public ip address for ec2 instance
+          set_fact:
+            aws_public_ip: "{{ ec2_facts.tagged_instances[0].public_ip }}"
+    
+        - name: Populate instance config dict
+          set_fact:
+            instance_conf_dict: {
+              'instance': "{{ item.name }}",
+              'address': "{{ aws_public_ip }}",
+              'user': "{{ item.user }}",
+              'port': "{{ item.port }}",
+              'identity_file': "{{ aws_molecule_private_key_file }}",
+              'become_method': "sudo",
+              'become_ask_pass': false,
+    
+            }
+          with_items: "{{ ec2_instances }}"
+          register: instance_config_dict
+    
+        - name: Convert instance config dict to a list
+          set_fact:
+            instance_conf:
+              "{{ instance_config_dict.results
+              | map(attribute='ansible_facts.instance_conf_dict') | list }}"
+    
+        - name: Dump instance config
+          copy:
+            content: "{{ instance_conf
+              | to_json | from_json | molecule_to_yaml | molecule_header }}"
+            dest: "{{ molecule_instance_config }}"
+    
+    
+        - name: Wait for SSH
+          wait_for:
+            port: 22
+            host: "{{ aws_public_ip }}"
+            search_regex: SSH
+            delay: 10
+            timeout: 320
+    
+        - name: Wait for boot process to finish
+          pause:
+            minutes: 2
+    ```
+    
+    The description of the **create.yml** file can be found 
+    [here](../part5-register-idm-client/readme.md#[here](../part5-register-idm-client/readme.md#create_molecule).
+
 
 
 :construction: Under Construction.....

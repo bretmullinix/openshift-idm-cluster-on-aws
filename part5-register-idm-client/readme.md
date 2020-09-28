@@ -257,7 +257,7 @@ Python virtual environment and Ansible Molecule.
          
 1. mkdir vars
 1. cd vars
-1. Edit the file **main.yml** and add the following variables:
+1. <a name="vars_main_explanation"></a> Edit the file **main.yml** and add the following variables:
 
    ```yaml
    aws_vpc_name: "aws_openshift_vpc"
@@ -323,7 +323,7 @@ Python virtual environment and Ansible Molecule.
 
 1. cd ..
 1. Delete the file **create.yml**.
-1. Create a new **create.yml** file and add the following contents.
+1. <a name="create_molecule"></a> Create a new **create.yml** file and add the following contents.
 
     ```yaml
     ---
