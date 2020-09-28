@@ -181,7 +181,7 @@ Python virtual environment and Ansible Molecule.
 1. cd ../../molecule/default
 1. Edit the **converge.yml** and add `become: true` before the
    **tasks:** keyword.
-1. Change the following in your **molecule.yml**.
+1. <a name="molecule_explanation"></a> Change the following in your **molecule.yml**.
 
     1. Change the **platform[0].name** to be the name of your
        ec2 instance.  We are going to call our EC2 instance

@@ -67,75 +67,48 @@ Python virtual environment and Ansible Molecule.
 1. Edit the **converge.yml** and add `become: true` before the
       **tasks:** keyword.
 
-1. Change the following in your **molecule.yml**.
+1. Remove the **molecule.yml** file.
+1. Create a new **molecule.yml** file and add the following content:
 
-    1. Change the **platform[0].name** to be the name of your
-       ec2 instance.  We are going to call our EC2 instance
-       **nexus-server**.  Notice that **platform** is a list and
-       allows you to work with more than one EC2 instance.
-    
-    1. Add the following section in replace of your **provisioner**
-       section:
-       
-        ```yaml
-        provisioner:
-          name: ansible
-          config_options:
-            defaults:
-              remote_user: centos
-            privileged_escalation:
-              become: true
-              become_ask_pass: false     
-        ```
-        Let's explain this section a little more.
-        
-          1. **name** = The name of the provisioner.  This is the
-          default value as there is only one provisioner.
-          
-          1. **config_options** = The section that allows us to update
-          the **ansible.cfg** that molecule generates in the **molecule
-          ephemeral** directory.  The **ephemeral** directory is created
-          every time you run **molecule create** and gets destroyed when
-          you call **molecule destroy**.  Molecule takes its configuration
-          from this directory when it runs.
-          
-          1. **defaults** = This represents the **defaults** section of the
-          **ansible.cfg**.  You can set typical variables in the **ansible.cfg**
-          here.
-          
-          1. **remote_user** = The user that ansible uses to login via ssh.
-          
-          1. **privileged_escalation** = The section that corresponds to 
-          the section in the **ansible.cfg**.
-          
-          1. **become** = States that any playbook run with molecule
-          can escalate to **root** privileges if a task needs the permissions.
-          
-          1. **become_ask_pass** = Tells ansible not to prompt for the
-          password when running a task which requires the escalated
-          privileges.
-          
-          1. You can perform QA on this section of the **molecule.yml** 
-          by taking a look at the finished **molecule.yml** 
-          in the **molecule_artifacts** directory.  
-          
-    1. At the bottom of the **molecule.yml** file add the following test sequence:
-        
-        ```yaml
-        scenario:
-          test_sequence:
-            - dependency
-            - lint
-            - cleanup
-            - destroy
-            - syntax
-            - create
-            - prepare
-            - converge
-            - side_effect
-            - verify
-            - cleanup
-            - destroy
-        ```      
+    ```yaml
+    ---
+    dependency:
+      name: galaxy
+    driver:
+      name: delegated
+      ssh_connection_options:
+        - '-o ControlPath=~/.ansible/cp/%r@%h-%p'
+    platforms:
+      - name: nexus-server
+    provisioner:
+      name: ansible
+      log: true
+      config_options:
+        defaults:
+          remote_user: centos
+          vault_password_file: ${MOLECULE_PROJECT_DIRECTORY}/vault_secret
+        privileged_escalation:
+          become: true
+          become_ask_pass: false
+    verifier:
+      name: ansible
+    scenario:
+      test_sequence:
+        - dependency
+        - lint
+        - cleanup
+        - destroy
+        - syntax
+        - create
+        - prepare
+        - converge
+        - side_effect
+        - verify
+        - cleanup
+        - destroy
+    ```
+
+    The explanation of the **molecule.yml** file can be found ![here](../part5-register-idm-client/readme.md#molecule_explanation)
+
 
 :construction: Under Construction.....
