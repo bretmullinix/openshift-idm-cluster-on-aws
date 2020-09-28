@@ -108,7 +108,7 @@ Python virtual environment and Ansible Molecule.
         - destroy
     ```
 
-    The explanation of the **molecule.yml** file can be found ![here](../part5-register-idm-client/readme.md#molecule_explanation)
+    The explanation of the **molecule.yml** file can be found [here](../part5-register-idm-client/readme.md#molecule_explanation)
 
 
 :construction: Under Construction.....
