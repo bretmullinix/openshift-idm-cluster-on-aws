@@ -287,7 +287,7 @@ Python virtual environment and Ansible Molecule.
     ```
     
     The description of the **create.yml** file can be found 
-    [here](../part5-register-idm-client/readme.md#[here](../part5-register-idm-client/readme.md#create_molecule).
+    [here](../part5-register-idm-client/readme.md#create_molecule).
 
 
 
