@@ -138,7 +138,7 @@ Python virtual environment and Ansible Molecule.
     aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
     aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
     ec2_instances:
-      - name: "nexus-client"
+      - name: "nexus-server"
         user: "centos"
         key_pair: "my_keypair"
         aws_ami: "ami-00594b9c138e6303d"
