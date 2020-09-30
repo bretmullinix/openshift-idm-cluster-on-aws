@@ -78,6 +78,7 @@ Python virtual environment and Ansible Molecule.
     the folder.
     
 1. cd ../..
+1. cd default
 1. Add the following variables to the **default/main.yml** file
  
     ```yaml
@@ -98,6 +99,20 @@ Python virtual environment and Ansible Molecule.
 
     The explanation of the **default/main.yml** file can be found 
     [here](../part5-register-idm-client/readme.md#default_main_explanation).
+
+1. cd vars
+1. Edit the file **main.yml** and add the following variables:
+
+    ```yaml
+    open_nexus_ports:
+      - "80/tcp"
+      - "443/tcp"
+    ```
+    
+    The variables deserve some explanation:
+    
+    1. **open_nexus_ports** = The ports to open up for the nexus
+       server.
 
 1. cd ..
 1. Make the file "vault_secret".  This file will be used to 
