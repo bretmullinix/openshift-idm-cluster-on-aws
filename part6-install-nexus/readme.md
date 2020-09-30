@@ -12,7 +12,8 @@ Nexus.
 
 AWS Account and permissions to create/delete AWS EC2 instances
 
-## Procedure
+### Setup your AWS Environment
+
 1. Open up a terminal
 1. mkdir -p $HOME/.aws
 1. cd $HOME/.aws
