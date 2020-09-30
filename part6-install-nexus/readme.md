@@ -72,14 +72,14 @@ Python virtual environment and Ansible Molecule.
 1. Add your AWS private key contents to the file.
 1. chmod 600 [your aws private key file]
     
-    Note: make sure you don't check this file in to git.  If you make the
-    repository public, you would expose your private key.  I always add a
-    .gitignore file that contains **private_keys/**.  This tells git to ignore
+    Note: Please make sure you don't check this file in to git.  If you make the
+    repository is public, you would expose your private key.  I always add a
+    **.gitignore** file that contains **private_keys/**.  This tells git to ignore
     the folder.
     
 1. cd ../..
 1. Add the following variables to the **default/main.yml** file
-
+ 
     ```yaml
      yum_installs:
        - name: "java-1.8.0-openjdk-devel"
@@ -96,7 +96,7 @@ Python virtual environment and Ansible Molecule.
        3762
     ```
 
-    The explanation of the **molecule.yml** file can be found 
+    The explanation of the **default/main mol** file can be found 
     [here](../part5-register-idm-client/readme.md#default_main_explanation).
 
 1. cd ..
