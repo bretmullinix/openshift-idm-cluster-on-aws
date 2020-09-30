@@ -24,12 +24,5 @@
     - name: Determine if firewalld exists
       include_tasks: tasks/add-firewalld.yml
 
-    - name: Register variable for open ports
-      command: firewall-cmd --list-ports
-      register: open_ports
-
-    - name: Fail if an Nexus Port is Closed
-      fail:
-        msg: "The port '{{ item }}' is not open."
-      with_items: "{{ open_nexus_ports }}"
-      when: "'{{ item }}' not in open_ports.stdout"
+    - name:  Determine if firewall ports are open
+      include_tasks: tasks/open-ports-with-firewalld.yml

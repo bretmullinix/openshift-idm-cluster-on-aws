@@ -16,3 +16,11 @@
     name: firewalld
     state: started
     enabled: yes
+
+- name: Open Ports for Nexus
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  with_items: "{{ open_nexus_ports }}"

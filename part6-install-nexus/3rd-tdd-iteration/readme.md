@@ -7,7 +7,7 @@ Last updated: 09.30.2020
 The purpose of this iteration is to open Nexus client ports on the target servers.
 
 ## Procedure
-1. cd idm-install/molecule/default
+1. cd nexus-instance/molecule/default
 
 1. **RED** --> Test to see if the Nexus ports are open using **firewalld**.
     
@@ -25,13 +25,13 @@ The purpose of this iteration is to open Nexus client ports on the target server
           when: "'{{ item }}' not in open_ports.stdout"
         ```
            
-        The tasks above checks to see if IDM client ports are open
+        The tasks above checks to see if Nexus server ports are open
         in **firewalld**.
     1. cd ../..
     1. Run `molecule verify`.  The test should fail.  The test represents
        the **Red** in the **Red, Green, Refactor** iteration of TDD.
 
-1. **GREEN** --> Add the tasks to open the IDM client ports to the ansible role.
+1. **GREEN** --> Add the tasks to open the Nexus server ports to the ansible role.
      
     1. cd molecule/default
         
@@ -47,7 +47,7 @@ The purpose of this iteration is to open Nexus client ports on the target server
       with_items: "{{ open_nexus_ports }}"
     ```   
            
-    The task will open the IDM client ports using **firewalld**.
+    The task will open the Nexus server ports using **firewalld**.
         
     1. cd ../..
     
@@ -89,6 +89,6 @@ The purpose of this iteration is to open Nexus client ports on the target server
     1. cd ../..
     1. Run `molecule test`.  The test should pass.  Your refactoring is complete.
 
-We have opened the IDM client ports and completed our 3rd TDD iteration.
+We have opened the Nexus server ports and completed our 3rd TDD iteration.
 
 [**<--Back to main instructions**](../readme.md#3rdTDD)
