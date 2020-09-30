@@ -8,6 +8,14 @@ The purpose of this iteration is to add **firewalld** to the target servers.
 
 ## Procedure
 1. cd idm-install/molecule/default
+1. Add the following task to the **verify.yml** file.
+
+    ```yaml
+        - name: collect facts about system services
+          service_facts:
+          register: services_state
+    ```
+    We will need to collect service facts to determine if firewalld is installed, running, and enabled.
 
 1. **RED** --> Test for the existence of **firewalld**.
     
@@ -19,10 +27,6 @@ The purpose of this iteration is to add **firewalld** to the target servers.
             firewalld_service: "{{ item.value }}"
           loop: "{{ lookup('dict', services_state.ansible_facts.services) }}"
           when: item.key == 'firewalld.service'
-    
-        - name: Print firewalld variable
-          debug:
-            var: firewalld_service
     
         - name: Fail if firewalld is not installed
           fail:

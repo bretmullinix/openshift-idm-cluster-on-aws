@@ -9,3 +9,10 @@
 
     - name: Determine if yum packages exist
       include_tasks: tasks/check-if-yum-packages-are-installed.yml
+
+    - name: collect facts about system services
+      service_facts:
+      register: services_state
+
+    - name: Determine if firewalld exists
+      include_tasks: tasks/add-firewalld.yml
