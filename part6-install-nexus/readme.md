@@ -391,4 +391,6 @@ Python virtual environment and Ansible Molecule.
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Install **firewalld** to protect and open only necessary ports [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Make sure Nexus server ports are open in the [3rd TDD Iteration](./3rd-tdd-iteration).
+
+
 :construction: Under Construction.....
