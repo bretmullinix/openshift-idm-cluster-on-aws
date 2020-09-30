@@ -12,6 +12,12 @@ Nexus.
 
 AWS Account and permissions to create/delete AWS EC2 instances
 
+### Setup your Python Virtual Environment
+
+You will need a Python virtual environment to work in.  Please
+set up your environment by following the instructions
+[here](../part1-setup-environment/readme.md)
+
 ### Setup your AWS Environment
 
 1. Open up a terminal
@@ -45,7 +51,9 @@ Python virtual environment and Ansible Molecule.
 1. cd **part6-install-nexus**
 1. Copy the "requirements" file down for your virtual environment
 1. Open up a terminal
-1. Activate your virtual environment
+1. Activate your virtual environment (after you open any new terminal).  
+   This is very important and could lead 
+   to a corruption of your system if you don't.
 1. Install the required AWS software needed to interact with AWS:
    
     ```pip install -r requirements```
