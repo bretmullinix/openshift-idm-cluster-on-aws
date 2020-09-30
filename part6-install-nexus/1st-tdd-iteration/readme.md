@@ -22,34 +22,34 @@ on the target servers.
     1. Replace the contents of the **verify.yml** with the code below.
         
         ```yaml
-       - name: Verify
-         hosts: all
-         become: true
-         become_method: sudo
-         tasks:
-            - name: yum_command
-              yum:
-                list=installed
-              register: yum_packages
-            
-            - name: Initialize variable to list packages that are installed
-              set_fact:
-                installed_packages: "{{ [] }}"
-            
-            - name: Populate installed packages
-              set_fact:
-                installed_packages: "{{ installed_packages + [item.name] }}"
-              with_items: "{{ yum_packages.results }}"
-              when:
-                - yum_packages is defined
-                - yum_packages.results is defined
-                - yum_packages.results | length > 0
-            
-            - name: Fail if package is not installed
-              fail:
-                msg:  "The {{ item.name }} is not installed."
-              with_items: "{{ yum_installs }}"
-              when: item.install_name not in installed_packages
+           - name: Verify
+             hosts: all
+             become: true
+             become_method: sudo
+             tasks:
+                - name: yum_command
+                  yum:
+                    list=installed
+                  register: yum_packages
+                
+                - name: Initialize variable to list packages that are installed
+                  set_fact:
+                    installed_packages: "{{ [] }}"
+                
+                - name: Populate installed packages
+                  set_fact:
+                    installed_packages: "{{ installed_packages + [item.name] }}"
+                  with_items: "{{ yum_packages.results }}"
+                  when:
+                    - yum_packages is defined
+                    - yum_packages.results is defined
+                    - yum_packages.results | length > 0
+                
+                - name: Fail if package is not installed
+                  fail:
+                    msg:  "The {{ item.name }} is not installed."
+                  with_items: "{{ yum_installs }}"
+                  when: item.install_name not in installed_packages
         ```
                   
         The tasks above checks to see if the yum packages are in the list of
