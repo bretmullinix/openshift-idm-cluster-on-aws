@@ -68,13 +68,43 @@ Python virtual environment and Ansible Molecule.
     .gitignore file that contains **private_keys/**.  This tells git to ignore
     the folder.
     
-1. cd defaults
-1. Add the following variables to the **main.yml** file
+1. cd ../..
+1. Add the following variables to the **default/main.yml** file
 
     ```yaml
-    host_name: nexus-server
-    fqdn: "{{host_name}}".example.com
+     yum_installs:
+       - name: "java-1.8.0-openjdk-devel"
+         install_name: "java"
+     yum_backend: dnf
+     idm_network_interface_name: "eth0"
+     idm_nmcli_interface_name:  "System {{ idm_network_interface_name }}"
+     idm_admin_password: !vault |
+       $ANSIBLE_VAULT;1.1;AES256
+       37616332303435313431313964343732336166366363613864303662653137303266353233383266
+       3032303064653162386634376464633264643332336263310a373330363466353036346438396331
+       65396363353063653166653237623535323738323232323934666434313934373137633234663230
+       6636323861323233650a313863393938643064323461626165646233386235326363356535346238
+       3762
     ```
+
+    The explanation of the **molecule.yml** file can be found 
+    [here](../part5-register-idm-client/readme.md#default_main_explanation).
+
+1. cd ..
+1. Make the file "vault_secret".  This file will be used to 
+   store your vault password.
+1. Open up "vault_secret" and enter your password for ansible vault.
+1. Run the following command to encrypt your **idm server password**.
+
+      ``` 
+      ansible-vault encrypt_string "[your_idm_server_password here]" --vault-password-file ./vault_secret
+      ```
+1. Copy the output from **!vault** to the last line before **Encryption successful**.
+1. cd defaults
+1. Open up the main.yml file.
+1. Add the variable "idm_admin_password", and paste the copied encrypted password
+   as the value.
+1. Save the file.
 
 1. cd ../molecule/default
 1. Edit the **converge.yml** and add `become: true` before the
@@ -331,5 +361,7 @@ Python virtual environment and Ansible Molecule.
 
     The description of the **destroy.yml** file can be found 
     [here](../part5-register-idm-client/readme.md#destroy_explanation).
+
+1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
 
 :construction: Under Construction.....

@@ -132,7 +132,7 @@ Python virtual environment and Ansible Molecule.
 
 1. cd ..
 1. cd defaults
-1. Add the following variables to the **main.yml** file.
+1. <a name="default_main_explanation"> Add the following variables to the **main.yml** file.
 
     ```yaml
      yum_installs:
