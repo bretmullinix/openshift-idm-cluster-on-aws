@@ -1,6 +1,6 @@
 # Installation of Nexus on AWS
 
-Last updated: 09.25.2020
+Last updated: 09.30.2020
 
 ## Purpose
 
