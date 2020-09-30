@@ -5,6 +5,10 @@ yum_installs:
 yum_backend: dnf
 idm_network_interface_name: "eth0"
 idm_nmcli_interface_name:  "System {{ idm_network_interface_name }}"
+idm_server_ip_address: 10.10.0.111
+idm_domain_name: example.com
+idm_fqdn: "idm.{{ idm_domain_name }}"
+idm_client_hostname: "nexus-server"
 idm_admin_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   37616332303435313431313964343732336166366363613864303662653137303266353233383266

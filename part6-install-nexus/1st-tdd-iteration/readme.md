@@ -24,6 +24,10 @@ on the target servers.
                   include_vars:
                     file: ../../defaults/main.yml
        
+                - name: Include the module vars file.
+                  include_vars:
+                    file: ../../vars/main.yml
+       
                 - name: yum_command
                   yum:
                     list=installed

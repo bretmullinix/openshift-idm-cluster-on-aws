@@ -84,15 +84,35 @@ Python virtual environment and Ansible Molecule.
     ```yaml
      yum_installs:
        - name: "java-1.8.0-openjdk-devel"
-         install_name: "java"
+         install_name: "java-1.8.0-openjdk"
      yum_backend: dnf
      idm_network_interface_name: "eth0"
      idm_nmcli_interface_name:  "System {{ idm_network_interface_name }}"
+     idm_server_ip_address: 10.10.0.111
+     idm_domain_name: example.com
+     idm_fqdn: "idm.{{ idm_domain_name }}"
+     idm_client_hostname: "nexus-server"
      idm_admin_password: !vault |
        $ANSIBLE_VAULT;1.1;AES256
        37616332303435313431313964343732336166366363613864303662653137303266353233383266
        3032303064653162386634376464633264643332336263310a373330363466353036346438396331
-       65396363353063653166653237623535323738323232323934666434313934373137633234663230
+       6539636335306365316yum_installs:
+           - name: "java-1.8.0-openjdk-devel"
+             install_name: "java-1.8.0-openjdk"
+         yum_backend: dnf
+         idm_network_interface_name: "eth0"
+         idm_nmcli_interface_name:  "System {{ idm_network_interface_name }}"
+         idm_server_ip_address: 10.10.0.111
+         idm_domain_name: example.com
+         idm_fqdn: "idm.{{ idm_domain_name }}"
+         idm_client_hostname: "nexus-server"
+         idm_admin_password: !vault |
+           $ANSIBLE_VAULT;1.1;AES256
+           37616332303435313431313964343732336166366363613864303662653137303266353233383266
+           3032303064653162386634376464633264643332336263310a373330363466353036346438396331
+           65396363353063653166653237623535323738323232323934666434313934373137633234663230
+           6636323861323233650a313863393938643064323461626165646233386235326363356535346238
+           37626653237623535323738323232323934666434313934373137633234663230
        6636323861323233650a313863393938643064323461626165646233386235326363356535346238
        3762
     ```
@@ -109,7 +129,7 @@ Python virtual environment and Ansible Molecule.
       - "443/tcp"
     ```
     
-    The variables deserve some explanation:
+    The variable deserves some explanation:
     
     1. **open_nexus_ports** = The ports to open up for the nexus
        server.

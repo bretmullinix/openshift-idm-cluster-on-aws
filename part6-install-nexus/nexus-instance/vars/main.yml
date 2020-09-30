@@ -1,2 +1,4 @@
 ---
-# vars file for nexus-instance
+open_nexus_ports:
+  - "80/tcp"
+  - "443/tcp"
