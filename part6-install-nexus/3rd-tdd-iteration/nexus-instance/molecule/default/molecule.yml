@@ -1,0 +1,35 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: delegated
+  ssh_connection_options:
+    - '-o ControlPath=~/.ansible/cp/%r@%h-%p'
+platforms:
+  - name: nexus-server
+provisioner:
+  name: ansible
+  log: true
+  config_options:
+    defaults:
+      remote_user: centos
+      vault_password_file: ${MOLECULE_PROJECT_DIRECTORY}/vault_secret
+    privileged_escalation:
+      become: true
+      become_ask_pass: false
+verifier:
+  name: ansible
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

@@ -1,0 +1,18 @@
+- name: Get Firewalld Service
+  set_fact:
+    firewalld_service: "{{ item.value }}"
+  loop: "{{ lookup('dict', services_state.ansible_facts.services) }}"
+  when: item.key == 'firewalld.service'
+
+- name: Fail if firewalld is not installed
+  fail:
+    msg: "The firewalld service is not installed"
+  when: firewalld_service is not defined
+
+- name: Fail if firewalld is not started and enabled
+  fail:
+    msg: "Your firewalld service has a '{{ firewalld_service.state }}' state
+                and '{{ firewalld_service.status }}' status.  Your firewall must
+                be started and enabled."
+  when:
+    - firewalld_service.state != 'running' or firewalld_service.status != 'enabled'

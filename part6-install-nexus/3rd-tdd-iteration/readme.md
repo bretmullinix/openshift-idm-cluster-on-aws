@@ -1,10 +1,10 @@
-# 3rd TDD Iteration -->  Open Nexus Client Ports
+# 3rd TDD Iteration -->  Open Nexus Server Ports
 
 Last updated: 09.30.2020
 
 ## Purpose
 
-The purpose of this iteration is to open Nexus client ports on the target servers.
+The purpose of this iteration is to open the Nexus server ports on the target server.
 
 ## Procedure
 1. cd nexus-instance/molecule/default
