@@ -96,7 +96,7 @@ Python virtual environment and Ansible Molecule.
        3762
     ```
 
-    The explanation of the **default/main mol** file can be found 
+    The explanation of the **default/main.yml** file can be found 
     [here](../part5-register-idm-client/readme.md#default_main_explanation).
 
 1. cd ..
