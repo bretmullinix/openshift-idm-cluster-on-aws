@@ -6,6 +6,13 @@
   become: true
   become_method: sudo
   tasks:
+    - name: Include the module vars file.
+      include_vars:
+        file: ../../defaults/main.yml
+
+    - name: Include the module vars file.
+      include_vars:
+        file: ../../vars/main.yml
 
     - name: Determine if yum packages exist
       include_tasks: tasks/check-if-yum-packages-are-installed.yml
@@ -16,3 +23,13 @@
 
     - name: Determine if firewalld exists
       include_tasks: tasks/add-firewalld.yml
+
+    - name: Register variable for open ports
+      command: firewall-cmd --list-ports
+      register: open_ports
+
+    - name: Fail if an Nexus Port is Closed
+      fail:
+        msg: "The port '{{ item }}' is not open."
+      with_items: "{{ open_nexus_ports }}"
+      when: "'{{ item }}' not in open_ports.stdout"

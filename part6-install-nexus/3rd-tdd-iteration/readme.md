@@ -1,15 +1,15 @@
-# 3rd TDD Iteration -->  Open IDM Client Ports
+# 3rd TDD Iteration -->  Open Nexus Client Ports
 
-Last updated: 09.18.2020
+Last updated: 09.30.2020
 
 ## Purpose
 
-The purpose of this iteration is to open IDM client ports on the target servers.
+The purpose of this iteration is to open Nexus client ports on the target servers.
 
 ## Procedure
 1. cd idm-install/molecule/default
 
-1. **RED** --> Test to see if the IDM ports are open using **firewalld**.
+1. **RED** --> Test to see if the Nexus ports are open using **firewalld**.
     
     1. Add the following code to the end of **verify.yml**.
         
@@ -18,10 +18,10 @@ The purpose of this iteration is to open IDM client ports on the target servers.
           command:  firewall-cmd --list-ports
           register: open_ports
     
-        - name: Fail if an IDM Port is Closed
+        - name: Fail if an Nexus Port is Closed
           fail:
             msg: "The port '{{ item }}' is not open."
-          with_items: "{{ open_idm_ports }}"
+          with_items: "{{ open_nexus_ports }}"
           when: "'{{ item }}' not in open_ports.stdout"
         ```
            
@@ -38,13 +38,13 @@ The purpose of this iteration is to open IDM client ports on the target servers.
     1. Add the following tasks to the end of the **tasks/main.yml** file.
         
     ```yaml
-    - name: Open Ports for IDM
+    - name: Open Ports for Nexus
       firewalld:
         port: "{{ item }}"
         permanent: true
         immediate: true
         state: enabled
-      with_items: "{{ open_idm_ports }}"
+      with_items: "{{ open_nexus_ports }}"
     ```   
            
     The task will open the IDM client ports using **firewalld**.
@@ -52,7 +52,7 @@ The purpose of this iteration is to open IDM client ports on the target servers.
     1. cd ../..
     
     1. Run `molecule converge`.  The command runs the **tasks/main.yml**
-    and the IDM client ports are open using **firewalld**.
+    and the Nexus server ports are open using **firewalld**.
     
     1. Run `molecule verify`. The test should pass.  The test represents
     the **Green** in the **Red, Green, Refactor** iteration of TDD.
