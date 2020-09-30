@@ -1,0 +1,11 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  become: true
+  become_method: sudo
+  tasks:
+
+    - name: Determine if yum packages exist
+      include_tasks: tasks/check-if-yum-packages-are-installed.yml

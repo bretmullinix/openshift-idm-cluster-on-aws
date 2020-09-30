@@ -372,5 +372,6 @@ Python virtual environment and Ansible Molecule.
     [here](../part5-register-idm-client/readme.md#destroy_explanation).
 
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
+1. <a name="2ndTDD"></a> Install **firewalld** to protect and open only necessary ports [2nd TDD Iteration](./2nd-tdd-iteration).
 
 :construction: Under Construction.....

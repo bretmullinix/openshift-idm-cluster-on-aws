@@ -1,0 +1,7 @@
+---
+- name: Install the Required Libraries
+  yum:
+    name: "{{ item.name }}"
+    state: present
+    use_backend: "{{ yum_backend }}"
+  with_items: "{{ yum_installs }}"

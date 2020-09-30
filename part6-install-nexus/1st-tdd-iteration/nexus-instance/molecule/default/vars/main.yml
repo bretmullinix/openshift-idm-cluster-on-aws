@@ -1,0 +1,13 @@
+aws_vpc_name: "aws_openshift_vpc"
+aws_subnet_name: "aws_subnet"
+aws_security_group: "aws_openshift_vpc_security_group"
+aws_region: "{{ lookup('env', 'AWS_REGION') }}"
+aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+ec2_instances:
+  - name: "nexus-server"
+    user: "centos"
+    key_pair: "my_keypair"
+    aws_ami: "ami-00594b9c138e6303d"
+    root_volume_size: 30
+    port: 22
