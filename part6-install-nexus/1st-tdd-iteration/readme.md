@@ -27,6 +27,10 @@ on the target servers.
              become: true
              become_method: sudo
              tasks:
+                - name: Include the module vars file.
+                  include_vars:
+                    file: ../../defaults/main.yml
+       
                 - name: yum_command
                   yum:
                     list=installed
@@ -131,7 +135,8 @@ on the target servers.
         
     1. cd ..
         
-    1. Remove the tasks above from the **verify.yml**.
+    1. Remove the tasks starting from the task named **yum_command** to the
+       end of the **verify.yml** file.
         
     1. Add the following to the end of **verify.yml**.
         
