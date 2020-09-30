@@ -9,13 +9,6 @@ on the target servers.
 
 ## Procedure
 1. cd idm-install/molecule/default
-1. Edit **verify.yml** and add the following tasks.
-
-    ```yaml
-    - name: Include the module vars file.
-      include_vars:
-        file: ../../defaults/main.yml
-    ```
 
 1. **RED** --> Test for the existence of the yum packages
     
