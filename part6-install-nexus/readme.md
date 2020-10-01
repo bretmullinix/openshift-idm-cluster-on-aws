@@ -391,6 +391,27 @@ Python virtual environment and Ansible Molecule.
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Install **firewalld** to protect and open only necessary ports [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Make sure the Nexus server ports are open in the [3rd TDD Iteration](./3rd-tdd-iteration).
+1. cd nexus-instance/molecule/default
+1. Create a file called **required_dependent_roles.yml**.
+1. Add the following content to the file:
+
+    ```yaml 
+      # We need to register as an IDM client
+      - name: idm_client_role
+        src: https://github.com/bretmullinix/idm-client-ansible-role.git
+        version: master
+      ``` 
+
+1. Edit the **molecule.yml** file by adding the replacing the **dependency.yml** section with the following content.
+
+    ```yaml
+    dependency:
+      name: galaxy
+      requirements_file: required_dependent_roles.yml
+      options:
+          ignore-certs: True
+          ignore-errors: True
+    ```
 
 
 :construction: Under Construction.....
