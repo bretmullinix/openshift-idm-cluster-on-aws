@@ -391,6 +391,11 @@ Python virtual environment and Ansible Molecule.
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Install **firewalld** to protect and open only necessary ports [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Make sure the Nexus server ports are open in the [3rd TDD Iteration](./3rd-tdd-iteration).
+1. Add the following variable to the **vars/main.yml** file: 
+
+    `nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"
+
+1. Copy the **nexus_instance/files/nexus_software** folder and contents to the **files** directory.
 1. <a name="4thTDD"></a> Install the Nexus server software in the [4th TDD Iteration](./4th-tdd-iteration).
 
 :construction: Under Construction.....
