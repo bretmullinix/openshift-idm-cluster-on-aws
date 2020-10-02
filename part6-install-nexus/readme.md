@@ -1,6 +1,6 @@
 # Installation of Nexus on AWS
 
-Last updated: 10.01.2020
+Last updated: 10.02.2020
 
 ## Purpose
 
@@ -85,18 +85,10 @@ Python virtual environment and Ansible Molecule.
      yum_installs:
        - name: "java-1.8.0-openjdk-devel"
          install_name: "java-1.8.0-openjdk"
+       - name: "tar"
+         install_name: "tar"
      yum_backend: dnf
-     idm_network_interface_name: "eth0"
-     idm_nmcli_interface_name:  "System {{ idm_network_interface_name }}"
-     idm_server_ip_address: 10.10.0.111
-     idm_domain_name: example.com
-     idm_fqdn: "idm.{{ idm_domain_name }}"
-     idm_client_hostname: "nexus-server"
-     idm_admin_password: !vault |
-       $ANSIBLE_VAULT;1.1;AES256
-       37616332303435313431313964343732336166366363613864303662653137303266353233383266
-       3032303064653162386634376464633264643332336263310a373330363466353036346438396331
-       6539636335306365316
+     hostname: nexus-server
     ```
 
     The explanation of the **default/main.yml** file can be found 
@@ -107,8 +99,7 @@ Python virtual environment and Ansible Molecule.
 
     ```yaml
     open_nexus_ports:
-      - "80/tcp"
-      - "443/tcp"
+      - "8081/tcp"
     ```
     
     The variable deserves some explanation:
@@ -116,25 +107,8 @@ Python virtual environment and Ansible Molecule.
     1. **open_nexus_ports** = The ports to open up for the nexus
        server.
 
-1. cd ..
-1. Make the file "vault_secret".  This file will be used to 
-   store your vault password.
-1. Open up "vault_secret" and enter your password for ansible vault.
-1. Run the following command to encrypt your **idm server password**.
-
-      ``` 
-      ansible-vault encrypt_string "[your_idm_server_password here]" --vault-password-file ./vault_secret
-      ```
-1. Copy the output from **!vault** to the last line before **Encryption successful**.
-1. cd defaults
-1. Open up the main.yml file.
-1. Add the variable "idm_admin_password", and paste the copied encrypted password
-   as the value.
-1. Save the file.
-
-1. cd ../molecule/default
-1. Edit the **converge.yml** and add `become: true` before the
-      **tasks:** keyword.
+1. cd molecule/default
+1. Edit the **converge.yml** and add `become: true` before the **tasks:** keyword.
 
 1. Remove the **molecule.yml** file.
 1. Create a new **molecule.yml** file and add the following content:
@@ -155,7 +129,6 @@ Python virtual environment and Ansible Molecule.
       config_options:
         defaults:
           remote_user: centos
-          vault_password_file: ${MOLECULE_PROJECT_DIRECTORY}/vault_secret
         privileged_escalation:
           become: true
           become_ask_pass: false
@@ -391,16 +364,6 @@ Python virtual environment and Ansible Molecule.
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Install **firewalld** to protect and open only necessary ports [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Make sure the Nexus server ports are open in the [3rd TDD Iteration](./3rd-tdd-iteration).
-1. In the **default/main.yml**, replace the **yum_installs*** variable with the following:
-
-    ```yaml
-      yum_installs:
-        - name: "java-1.8.0-openjdk-devel"
-          install_name: "java-1.8.0-openjdk"
-        - name: "tar"
-          install_name: "tar"
-    ```
-
 1. Add the following variable to the **vars/main.yml** file: 
 
     `nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"`

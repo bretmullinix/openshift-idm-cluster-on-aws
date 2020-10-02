@@ -1,4 +1,3 @@
 ---
 open_nexus_ports:
-  - "80/tcp"
-  - "443/tcp"
+  - "8081/tcp"

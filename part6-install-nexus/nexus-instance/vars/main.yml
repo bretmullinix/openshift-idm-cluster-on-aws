@@ -1,5 +1,4 @@
 ---
 open_nexus_ports:
-  - "80/tcp"
-  - "443/tcp"
+  - "8081/tcp"
 nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"
