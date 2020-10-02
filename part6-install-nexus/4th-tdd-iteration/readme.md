@@ -138,7 +138,7 @@ The purpose of this iteration is to install the Nexus software on the target ser
              enabled: yes
         ```   
            
-    The task installs the Nexus software on the target server.
+        The task installs the Nexus software on the target server.
         
     1. cd ../..
     
