@@ -168,7 +168,7 @@ The purpose of this iteration is to install the Nexus software on the target ser
         
     1. cd ..
         
-    1. Remove the tasks that check for the open ports in the **verify.yml**.
+    1. In the **verify.yml**, remove the task titled **Get Nexus Service** and all preceding tasks.
         
     1. Add the following to the end of **verify.yml**.
         
