@@ -11,9 +11,9 @@ The purpose of this iteration is to add **firewalld** to the target servers.
 1. Add the following task to the **verify.yml** file.
 
     ```yaml
-        - name: collect facts about system services
-          service_facts:
-          register: services_state
+    - name: collect facts about system services
+      service_facts:
+      register: services_state
     ```
     We will need to collect service facts to determine if firewalld is installed, running, and enabled.
 
