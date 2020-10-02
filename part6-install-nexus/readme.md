@@ -72,8 +72,8 @@ Python virtual environment and Ansible Molecule.
 1. Add your AWS private key contents to the file.
 1. chmod 600 [your aws private key file]
     
-    Note: Please make sure you don't check this file in to git.  If you make the
-    repository is public, you would expose your private key.  I always add a
+    **Note**: Please make sure you don't check this file into git.  If you make the
+    repository public, you would expose your private key.  I always add a
     **.gitignore** file that contains **private_keys/**.  This tells git to ignore
     the folder.
     
