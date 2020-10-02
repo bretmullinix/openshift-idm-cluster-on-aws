@@ -37,107 +37,106 @@ The purpose of this iteration is to install the Nexus software on the target ser
         
     1. Add the following tasks to the end of the **tasks/main.yml** file.
         
-    ```yaml
-     - name: Add Nexus User
-       user:
-         name: nexus
-         comment: Nexus Service Account User
-         home: /opt/nexus
-    
-     - name: Give Nexus User Ownership on /opt/nexus Directory
-       file:
-         path: /opt/nexus
-         owner: nexus
-         group: nexus
-         state: directory
-         mode: '0755'
-    
-     - name: Make sure the Nexus tar file does not exist
-       file:
-         path: "{{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz"
-         state: absent
-       delegate_to: 127.0.0.1
-       run_once: true
-    
-     - name: Combine the Nexus software into tar file.  Was split to be put into git.
-       shell: 'cat {{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz.parta* > {{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz'
-       delegate_to: 127.0.0.1
-       run_once: true
-    
-     - name: Get sha1sum of file
-       stat:
-         path: "{{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz"
-         checksum_algorithm: sha1
-         get_checksum: yes
-       register: sha
-       delegate_to: 127.0.0.1
-       run_once: true
-    
-    
-     - name: Fail if the original Nexus software checksum is different from the original file.
-       fail:
-         msg:  "The Nexus software tar file does not have the same sha1 checksum as the original."
-       delegate_to: 127.0.0.1
-       run_once: true
-       when: nexus_software_sha1_checksum != sha.stat.checksum
-    
-     - name: Copy the nexus software to the target server
-       copy:
-         src: "{{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz"
-         dest: "/opt/nexus/nexus-3.28.0-01-unix.tar.gz"
-         owner: nexus
-         group: nexus
-         mode: 755
-    
-     - name: Get the remote server sha1sum of the file
-       stat:
-         path: "/opt/nexus/nexus-3.28.0-01-unix.tar.gz"
-         checksum_algorithm: sha1
-         get_checksum: yes
-       register: sha
-    
-     - name: Fail if the original Nexus software checksum is different from the remote file.
-       fail:
-         msg:  "The Nexus software tar file on the target server does not have the same sha1 checksum as the original."
-       when: nexus_software_sha1_checksum != sha.stat.checksum
-    
-     - name: Extract the nexus tar file into /opt/nexus
-       unarchive:
-         src: "/opt/nexus/nexus-3.28.0-01-unix.tar.gz"
-         dest: "/opt/nexus"
-         owner: nexus
-         mode: 755
-         remote_src: yes
-    
-     - name: Change permissions on the nexus software folder to 0755 recursively
-       file:
-         path: "/opt/nexus"
-         mode: 0755
-         owner: nexus
-         group: nexus
-         recurse: True
-    
-     - name: Run nexus software as the nexus user
-       blockinfile:
-         path: /opt/nexus/nexus-3.28.0-01/bin/nexus.rc
-         block: |
-           run_as_user="nexus"
-    
-     - name: Create symbolic link to create the Nexus Service
-       file:
-         src: "/opt/nexus/nexus-3.28.0-01/bin/nexus"
-         dest: "/etc/init.d/nexus"
-         state: link
-    
-     - name: Add Nexus As A Service
-       command: 'chkconfig --add /etc/init.d/nexus'
-    
-     - name: Start and Enable Nexus
-       service:
-         name: nexus
-         state: started
-         enabled: yes
-    ```   
+        ```yaml
+         - name: Add Nexus User
+           user:
+             name: nexus
+             comment: Nexus Service Account User
+             home: /opt/nexus
+        
+         - name: Give Nexus User Ownership on /opt/nexus Directory
+           file:
+             path: /opt/nexus
+             owner: nexus
+             group: nexus
+             state: directory
+             mode: '0755'
+        
+         - name: Make sure the Nexus tar file does not exist
+           file:
+             path: "{{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz"
+             state: absent
+           delegate_to: 127.0.0.1
+           run_once: true
+        
+         - name: Combine the Nexus software into tar file.  Was split to be put into git.
+           shell: 'cat {{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz.parta* > {{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz'
+           delegate_to: 127.0.0.1
+           run_once: true
+        
+         - name: Get sha1sum of file
+           stat:
+             path: "{{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz"
+             checksum_algorithm: sha1
+             get_checksum: yes
+           register: sha
+           delegate_to: 127.0.0.1
+           run_once: true        
+        
+         - name: Fail if the original Nexus software checksum is different from the original file.
+           fail:
+             msg:  "The Nexus software tar file does not have the same sha1 checksum as the original."
+           delegate_to: 127.0.0.1
+           run_once: true
+           when: nexus_software_sha1_checksum != sha.stat.checksum
+        
+         - name: Copy the nexus software to the target server
+           copy:
+             src: "{{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz"
+             dest: "/opt/nexus/nexus-3.28.0-01-unix.tar.gz"
+             owner: nexus
+             group: nexus
+             mode: 755
+        
+         - name: Get the remote server sha1sum of the file
+           stat:
+             path: "/opt/nexus/nexus-3.28.0-01-unix.tar.gz"
+             checksum_algorithm: sha1
+             get_checksum: yes
+           register: sha
+        
+         - name: Fail if the original Nexus software checksum is different from the remote file.
+           fail:
+             msg:  "The Nexus software tar file on the target server does not have the same sha1 checksum as the original."
+           when: nexus_software_sha1_checksum != sha.stat.checksum
+        
+         - name: Extract the nexus tar file into /opt/nexus
+           unarchive:
+             src: "/opt/nexus/nexus-3.28.0-01-unix.tar.gz"
+             dest: "/opt/nexus"
+             owner: nexus
+             mode: 755
+             remote_src: yes
+        
+         - name: Change permissions on the nexus software folder to 0755 recursively
+           file:
+             path: "/opt/nexus"
+             mode: 0755
+             owner: nexus
+             group: nexus
+             recurse: True
+        
+         - name: Run nexus software as the nexus user
+           blockinfile:
+             path: /opt/nexus/nexus-3.28.0-01/bin/nexus.rc
+             block: |
+               run_as_user="nexus"
+        
+         - name: Create symbolic link to create the Nexus Service
+           file:
+             src: "/opt/nexus/nexus-3.28.0-01/bin/nexus"
+             dest: "/etc/init.d/nexus"
+             state: link
+        
+         - name: Add Nexus As A Service
+           command: 'chkconfig --add /etc/init.d/nexus'
+        
+         - name: Start and Enable Nexus
+           service:
+             name: nexus
+             state: started
+             enabled: yes
+        ```   
            
     The task installs the Nexus software on the target server.
         
