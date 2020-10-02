@@ -25,6 +25,20 @@
     state: enabled
   with_items: "{{ open_nexus_ports }}"
 
+- name: Add Nexus User
+  user:
+    name: nexus
+    comment: Nexus Service Account User
+    home: /opt/nexus
+
+- name: Give Nexus User Ownership on /opt/nexus Directory
+  file:
+    path: /opt/nexus
+    owner: nexus
+    group: nexus
+    state: directory
+    mode: '0755'
+
 - name: Make sure the Nexus tar file does not exist
   file:
     path: "{{ role_path }}/files/nexus_software/nexus-3.28.0-01-unix.tar.gz"
