@@ -2,6 +2,8 @@
 yum_installs:
   - name: "java-1.8.0-openjdk-devel"
     install_name: "java-1.8.0-openjdk"
+  - name: "tar"
+    install_name: "tar"
 yum_backend: dnf
 idm_network_interface_name: "eth0"
 idm_nmcli_interface_name:  "System {{ idm_network_interface_name }}"

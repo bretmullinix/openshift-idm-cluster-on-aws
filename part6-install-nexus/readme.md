@@ -391,6 +391,16 @@ Python virtual environment and Ansible Molecule.
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Install **firewalld** to protect and open only necessary ports [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Make sure the Nexus server ports are open in the [3rd TDD Iteration](./3rd-tdd-iteration).
+1. In the **default/main.yml**, replace the **yum_installs*** variable with the following:
+
+    ```yaml
+      yum_installs:
+        - name: "java-1.8.0-openjdk-devel"
+          install_name: "java-1.8.0-openjdk"
+        - name: "tar"
+          install_name: "tar"
+    ```
+
 1. Add the following variable to the **vars/main.yml** file: 
 
     `nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"`
