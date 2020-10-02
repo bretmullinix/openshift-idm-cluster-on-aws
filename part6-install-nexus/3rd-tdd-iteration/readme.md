@@ -38,14 +38,14 @@ The purpose of this iteration is to open the Nexus server ports on the target se
     1. Add the following tasks to the end of the **tasks/main.yml** file.
         
         ```yaml
-          - name: Open Ports for Nexus
-            firewalld:
-              port: "{{ item }}"
-              permanent: true
-              immediate: true
-              state: enabled
-            with_items: "{{ open_nexus_ports }}"
-       ```   
+        - name: Open Ports for Nexus
+          firewalld:
+            port: "{{ item }}"
+            permanent: true
+            immediate: true
+            state: enabled
+          with_items: "{{ open_nexus_ports }}"
+        ```   
            
     The task will open the Nexus server ports using **firewalld**.
         
