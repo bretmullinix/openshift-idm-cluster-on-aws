@@ -371,4 +371,5 @@ Python virtual environment and Ansible Molecule.
 1. Copy the **nexus_instance/files/nexus_software** folder and contents to the **files** directory.
 1. <a name="4thTDD"></a> Install the Nexus server software in the [4th TDD Iteration](./4th-tdd-iteration).
 
-:construction: Under Construction.....
+We have finished configuring the target server as a Nexus server.  Please continue
+with the tutorials [here](../readme.md).
