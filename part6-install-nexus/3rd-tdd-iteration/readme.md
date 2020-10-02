@@ -1,6 +1,6 @@
 # 3rd TDD Iteration -->  Open Nexus Server Ports
 
-Last updated: 09.30.2020
+Last updated: 10.02.2020
 
 ## Purpose
 
@@ -37,15 +37,15 @@ The purpose of this iteration is to open the Nexus server ports on the target se
         
     1. Add the following tasks to the end of the **tasks/main.yml** file.
         
-    ```yaml
-    - name: Open Ports for Nexus
-      firewalld:
-        port: "{{ item }}"
-        permanent: true
-        immediate: true
-        state: enabled
-      with_items: "{{ open_nexus_ports }}"
-    ```   
+        ```yaml
+          - name: Open Ports for Nexus
+            firewalld:
+              port: "{{ item }}"
+              permanent: true
+              immediate: true
+              state: enabled
+            with_items: "{{ open_nexus_ports }}"
+       ```   
            
     The task will open the Nexus server ports using **firewalld**.
         
@@ -82,8 +82,8 @@ The purpose of this iteration is to open the Nexus server ports on the target se
     1. Add the following to the end of **verify.yml**.
         
         ```yaml
-          - name:  Determine if firewall ports are open
-            include_tasks: tasks/open-ports-with-firewalld.yml
+        - name:  Determine if firewall ports are open
+          include_tasks: tasks/open-ports-with-firewalld.yml
        ```          
            
     1. cd ../..
