@@ -93,7 +93,7 @@ You must have docker installed on another computer to use as a client.
     
 1. In the **Name** field, enter **private-docker-registry**
 
-1. Under the **HTTP** section, check the checkbox and enter in the port **8083**.  Make sure this
+1. Under the **HTTP** section, check the checkbox and enter the port **8083**.  Make sure this
    port is open through your firewalls.
 
 1. Under the **Enable Docker V1 API** section, select the **Allow clients to use the V1 API to
