@@ -2,3 +2,5 @@
 # vars file for nexus-instance
 open_nexus_ports:
   - "8081/tcp"
+  - "8082/tcp"
+  - "8083/tcp"

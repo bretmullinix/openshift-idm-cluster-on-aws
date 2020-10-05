@@ -38,5 +38,5 @@
 
 - name: Install Nexus Software
   include_tasks: "{{role_path}}/tasks/main/install_nexus.yml"
-  # when: nexus_service is not defined
+  when: nexus_service is not defined
 

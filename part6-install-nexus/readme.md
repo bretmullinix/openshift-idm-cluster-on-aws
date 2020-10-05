@@ -100,6 +100,8 @@ Python virtual environment and Ansible Molecule.
     ```yaml
     open_nexus_ports:
       - "8081/tcp"
+      - "8082/tcp"
+      - "8083/tcp"
     ```
     
     The variable deserves some explanation:
