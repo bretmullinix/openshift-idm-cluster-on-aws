@@ -21,7 +21,7 @@ You must have docker installed on another computer to use as a client.
 
     ![default-sonatype-nexus-home-screen](../images/installed_nexus_repo_picture.png)
     
-1. Login to the console by clicking on the **SignIn** button on the top right of the screen.
+1. Login to the console by clicking on the **Sign In** button on the top right of the screen.
 
 1. You should get a login dialog similar to the following if you are logging in for the first time.
 
