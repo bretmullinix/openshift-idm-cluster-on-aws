@@ -412,9 +412,9 @@ Python virtual environment and Ansible Molecule.
        This splits the file in 10M chunks.  This was done so the software could be added to **git**.  Otherwise,
        the file would be too large to upload to git by default.
     
-    1. Replace the **nexus_software** to the **nexus_instance/files/** directory with this one.
+    1. Replace the **nexus_software** folder in the **nexus_instance/files/** directory with this one.
     
-    1. Make sure your the following variables in **vars/main.yml** are populated according to your new file
+    1. Make sure your the following variables in **vars/main.yml** are populated according to your new tar file
        and sha1 hash:
     
          ```yaml
@@ -430,7 +430,6 @@ target server in AWS and using the port **8081**.  Here is a screen shot of what
 address will be different.
 
 ![installed-sonatype-nexus](../images/installed_nexus_repo_picture.png)
-    
     
 
 We have finished the nexus tutorial.  Please continue with the tutorials [here](../readme.md).
