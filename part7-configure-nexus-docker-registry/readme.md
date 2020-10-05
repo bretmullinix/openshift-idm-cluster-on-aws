@@ -101,8 +101,23 @@ You must have docker installed on another computer to use as a client.
 
 1. Under the **Blob Store** section, select the **private_docker_images** blob store.
 
-1. Click the **Create Repository** button.
+1. Click the **Create Repository** button.  The summary of repositories page appears.
 
+1. Select the **Create Repository** button.
+
+1. Select the **docker (proxy)** repository type.  The following page appears.
+
+  ![nexus-create-docker-proxy-repo-empty-page](../images/nexus-create-docker-proxy-repository-empty-page.png)
+  
+1. In the **Name** field, enter **docker-hub-registry-1**
+
+1. Under **Remote Storage**, enter the URL `https://registry-1.docker.io/`
+
+1. Select the option **Use Docker Hub**
+
+1. Select **docker_hub** for the blob store.
+
+1. Select the **Create Repository** button.
 
 
 
