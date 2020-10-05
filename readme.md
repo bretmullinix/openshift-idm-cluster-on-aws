@@ -1,6 +1,6 @@
 # Installation of OpenShit Cluster and IDM on AWS
 
-Last updated: 09.25.2020
+Last updated: 10.05.2020
 
 ## Purpose
 
@@ -38,6 +38,10 @@ may **"follow"** the repo and see the repo develop.
 
 1. Develop Ansible scripts to install the Nexus [here](part6-install-nexus).
 
-1. Develop Ansible scripts to install RedHat OpenShift [here](part7-install-openshift).
+1. Configure the Nexus Server to host a Docker Registry [here](./part7-configure-nexus-docker-registry)
+
+    Currently, the tutorial is being built.  Please follow along as it is built over the next couple of days.
+
+1. Develop Ansible scripts to install RedHat OpenShift [here](./part8-install-openshift).
 
     The tutorial has not been implemented.  
