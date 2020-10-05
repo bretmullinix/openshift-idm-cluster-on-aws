@@ -79,6 +79,32 @@ You must have docker installed on another computer to use as a client.
 
     ![nexus-blob-stores-created](../images/nexus-created-blob-stores.png)
     
+1. In the left menu select the **Repositories** menu option.  A page similar to the following should appear.
+
+    ![nexus-initial-repository-screen](../images/nexus-initial-repository-page.png)
+
+1. Select the **Create Repository** button.  The following page appears.
+
+    ![nexus-list-of-repository-types](../images/nexus-list-of-repository-types.png)
+    
+1. Select the **docker (hosted)** repository type.  The following page appears.
+
+    ![nexus-create-docker-hosted-repo-empty-page](../images/nexus-create-docker-hosted-empty-page.png)
+    
+1. In the **Name** field, enter **private-docker-registry**
+
+1. Under the **HTTP** section, check the checkbox and enter in the port **8083**.  Make sure this
+   port is open through your firewalls.
+
+1. Under the **Enable Docker V1 API** section, select the **Allow clients to use the V1 API to
+   interact with this repository** check box.
+
+1. Under the **Blob Store** section, select the **private_docker_images** blob store.
+
+1. Click the **Create Repository** button.
+
+
+
 
 Please continue to follow along as this tutorial gets created over the next couple of days.
 
