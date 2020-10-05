@@ -55,4 +55,31 @@ You must have docker installed on another computer to use as a client.
  
 1. Click the **Finish** button.
 
+1. Click on the **Spoke** icon to bring up the Nexus Server and Administration page as is shown below.
+
+    ![nexus-admin-console](../images/nexus-admin-console.png)
+    
+1. Select the **Blob Stores** menu item on the left of the screen.  A **Blob Store** is a location where
+   you plan to store data.
+   
+    ![nexus-blob-stores](../nexus-blob-stores.png)
+   
+1. Select the **Create blob store** button.
+
+    ![nexus-create-blob-store-page](../images/nexus-create-blob-store.png)
+    
+1. Name your first blob store **private_docker_images**.  The file path should be filled in for you.  If you
+   have another path, change it here.
+
+    ![nexus-create-private-docker-images-blob-store](../images/nexus-create-private-docker-image-blob-store.png)
+    
+1. Click the **Create blob store** button.
+
+1. Create another blob store called **docker_hub**.  Below you will see the Nexus blob stores after creation.
+
+    ![nexus-blob-stores-created](../images/nexus-created-blob-stores.png)
+    
+
+Please continue to follow along as this tutorial gets created over the next couple of days.
+
 :construction: Under Construction.....
