@@ -135,12 +135,13 @@ the **private_docker_images** repositories like the page below.
 
 1. Click the **Create Repository** button.
 
-1. In the **Name** field, call 
-
 1. Select the **docker-group-repo** repository type.  You should see a page similar to below.
 
     ![nexus-create-group-docker-repo-empty-page](../images/nexus-create-docker-group-repo-page.png)
     
+
+1. In the **Name** field, enter the value **docker-group-repo**
+
 1. Under the HTTP section, check the box and enter port **8082**.
 
 1. Under **Blob store** section, select the **docker_group_store**
