@@ -62,7 +62,7 @@ You must have docker installed on another computer to use as a client.
 1. Select the **Blob Stores** menu item on the left of the screen.  A **Blob Store** is a location where
    you plan to store data.
    
-    ![nexus-blob-stores](../nexus-blob-stores.png)
+    ![nexus-blob-stores](../images/nexus-blob-stores.png)
    
 1. Select the **Create blob store** button.
 
