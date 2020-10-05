@@ -1,6 +1,6 @@
 # Installation of Nexus on AWS
 
-Last updated: 10.02.2020
+Last updated: 10.05.2020
 
 ## Purpose
 
@@ -364,11 +364,65 @@ Python virtual environment and Ansible Molecule.
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Install **firewalld** to protect and open only necessary ports [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Make sure the Nexus server ports are open in the [3rd TDD Iteration](./3rd-tdd-iteration).
-1. Add the following variable to the **vars/main.yml** file: 
+1. Add the following variables to the **vars/main.yml** file: 
 
-    `nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"`
+    ```yaml
+    nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"
+    nexus_file_name: "nexus-3.28.0-01"
+    nexus_file:  "{{ nexus_file_name }}-unix.tar.gz"
+    ```
+    
+    Let's explain these variables.
+    
+    1. **nexus_software_sha1_checksum** -> The sha1 hash for the downloaded nexus software file.
+    
+    1. **nexus_file_name** --> The prefix of the downloaded nexus software file.  The prefix ends in
+       the nexus version.
+       
+    1. **nexus_file** --> The full name of the downloaded nexus software file.
+    
+1. Copy down the the **nexus_instance/files/nexus_software** folder and contents from this git repo
+   to the **files** directory.
 
-1. Copy the **nexus_instance/files/nexus_software** folder and contents to the **files** directory.
+    **NOTE:**  The nexus files in the **nexus_software** folder were created by doing the following:
+    
+    1. Go to the Sonatype Nexus site [here](https://www.sonatype.com/nexus/repository-oss/download).  You must
+       sign up before you can download.
+       
+    1. Download the Unix version of the file.  In my case the file is called **nexus-3.28.0-01-unix.tar.gz**
+    
+        1. Above, the **nexus_file_name** variable value is **nexus-3.28.0-01**.  This is the prefix of the file
+           I downloaded.  This is used on the target machine after the file is unarchived.  Currently, 
+           the **nexus_file_name** is the folder that contains the **bin** directory for starting the server.  
+           **NOTE:**  This can change in the future so if you plan on changing the Nexus software, please unarchive 
+           the file to ensure this is the convention.  Otherwise, this Ansible role will fail.
+    
+    1. Open up a terminal
+    
+    1. Navigate to the directory you downloaded your file.
+    
+    1. Run 'sha1 [your downloaded file]'.  Copy this hash and replace the **nexus_software_sha1_checksum**
+       value with this hash.  The hash compares the original hash to the resulting tar file after re-combining the
+       parts, and when the file is copied by Ansible to the target server, the hash is used to ensure no corruption 
+       with the file. 
+    
+    1. mkdir nexus_software
+    
+    1. Run "split --bytes=10M [your downloaded file] nexus_software/[your downloaded file].part".
+       This splits the file in 10M chunks.  This was done so the software could be added to **git**.  Otherwise,
+       the file would be too large to upload to git by default.
+    
+    1. Replace the **nexus_software** to the **nexus_instance/files/** directory with this one.
+    
+    1. Make sure your the following variables in **vars/main.yml** are populated according to your new file
+       and sha1 hash:
+    
+         ```yaml
+            nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"
+            nexus_file_name: "nexus-3.28.0-01"
+            nexus_file:  "{{ nexus_file_name }}-unix.tar.gz"
+         ```    
+
 1. <a name="4thTDD"></a> Install the Nexus server software in the [4th TDD Iteration](./4th-tdd-iteration).
 
 We have finished configuring the target server as a Nexus server.  Please continue
