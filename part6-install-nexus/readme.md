@@ -425,5 +425,12 @@ Python virtual environment and Ansible Molecule.
 
 1. <a name="4thTDD"></a> Install the Nexus server software in the [4th TDD Iteration](./4th-tdd-iteration).
 
-We have finished configuring the target server as a Nexus server.  Please continue
-with the tutorials [here](../readme.md).
+After the 4th TDD, we can login to our Sonatype Nexus Server by using our public IP address for the
+target server in AWS and using the port **8081**.  Here is a screen shot of what you should expect.  Your IP
+address will be different.
+
+![installed-sonatype-nexus](../images/installed_nexus_repo_picture.png)
+    
+    
+
+We have finished the nexus tutorial.  Please continue with the tutorials [here](../readme.md).
