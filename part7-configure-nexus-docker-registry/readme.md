@@ -107,7 +107,7 @@ You must have docker installed on another computer to use as a client.
 
 1. Select the **docker (proxy)** repository type.  The following page appears.
 
-  ![nexus-create-docker-proxy-repo-empty-page](../images/nexus-create-docker-proxy-repository-empty-page.png)
+    ![nexus-create-docker-proxy-repo-empty-page](../images/nexus-create-docker-proxy-repository-empty-page.png)
   
 1. In the **Name** field, enter **docker-hub-registry-1**
 
@@ -117,10 +117,111 @@ You must have docker installed on another computer to use as a client.
 
 1. Select **docker_hub** for the blob store.
 
-1. Select the **Create Repository** button.
+1. Select the **Create Repository** button.  You should see the **docker-hub-registry-1** and 
+the **private_docker_images** repositories like the page below.
 
+    ![nexus-docker-hub-and-private-docker-registries-listed](
+    ../images/nexus-list-of-docker-hub-and-private-registries.png)
+    
+1. Click the **Blob Stores** menu item on the left menu.
+
+1. Select the button **Create blob store**.
+
+1. Enter **docker_group_store** for the name.
+
+1. Select the **Create blob store** button.
+
+1. Select the **Repositories** menu item on the left menu.
+
+1. Click the **Create Repository** button.
+
+1. In the **Name** field, call 
+
+1. Select the **docker-group-repo** repository type.  You should see a page similar to below.
+
+    ![nexus-create-group-docker-repo-empty-page](../images/nexus-create-docker-group-repo-page.png)
+    
+1. Under the HTTP section, check the box and enter port **8082**.
+
+1. Under **Blob store** section, select the **docker_group_store**
+
+1. Under **Member Repositories**, select **docker-hub-registry-1** and move it to the **Members** list.
+
+1. Under **Member Repositories**, select **private-docker-registry** and move it to the **Members** list.
+
+    You should see a form filled out like below:
+    
+    ![nexus-create-group-docker-repo-empty-page](../images/nexus-create-docker-group-repo-filled-out.png)
+    
+1. Click on the **Create Repository** button.
+
+### Configure Your Docker
+
+#### For Debian Linux
+
+**NOTE:**  Replace the IP addresses in the instructions with your Nexus Server IP or Domain Name
+
+1.  sudo systemctl stop docker
+1.  sudo cp /etc/docker/daemon.json /etc/docker/daemon_backup
+1.  In your **/etc/docker/daemon.json** file, enter the following contents replacing the IP address
+    with your IP address or DNS name of your Sonatype Nexus repository.
+
+ 
+    ```json
+    {
+      "insecure-registries": [
+        "http://3.236.165.103:8082",
+        "http://3.236.165.103:8083"
+      ],
+      "disable-legacy-registry": true
+    }
+    ``` 
+
+#### For Fedora or RHEL
+
+**NOTE:**  Replace the IP addresses in the instructions with your Nexus Server IP or Domain Name
+
+1. sudo systemctl stop docker
+1. sudo cp /etc/sysconfig/docker /etc/sysconfig/docker_backup
+1. In your **/etc/sysconfig/docker** file, enter the following lines at the
+   end of your **OPTIONS** string:
+   
+   ```shell script
+    --insecure-registry http://3.236.165.103:8082 --insecure-registry http://3.236.165.103:8082 \
+   ```
+
+### Login to your registries
+
+**NOTE:**  Replace the IP addresses in the instructions with your Nexus Server IP or Domain Name
+
+1. sudo systemctl start docker
+1. docker login -u admin -p "your password" 3.236.165.103:8082
+1. docker login -u admin -p "your password" 3.236.165.103:8083
+
+    ![nexus-docker-login-success](../images/nexus-client-login-success.png)
+
+### Perform Docker Commands Against the Registries
+
+1. docker pull 3.236.165.103:8082/httpd:2.4-alpine
+
+    ![nexus-docker-pull-alpine-docker-hub](../images/nexus-docker-pull-docker-group-alpine-image.png)
+    
+1. Login to your Sonatype Nexus Server
+
+1. Click the **Cube** icon on the menu above.  The icon represents the **Browsing** page.
+
+1. On the left of the **Browsing page**, select the **Browse** menu item.
+
+1. Select the **docker-group-repo** list item.
+
+1. Expand the **library** node.  You should see your **httpd:2.4-alpine** image cached as is shown the image
+   below.
+   
+   ![nexus-docker-group-alpine-image-cached](../images/nexus-repo-showing-alpine-image-cached.png)
 
 
 Please continue to follow along as this tutorial gets created over the next couple of days.
+
+
 
 :construction: Under Construction.....
