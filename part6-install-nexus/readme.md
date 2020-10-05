@@ -374,7 +374,7 @@ Python virtual environment and Ansible Molecule.
     
     Let's explain these variables.
     
-    1. **nexus_software_sha1_checksum** -> The sha1 hash for the downloaded nexus software file.
+    1. **nexus_software_sha1_checksum** --> The sha1 hash for the downloaded nexus software file.
     
     1. **nexus_file_name** --> The prefix of the downloaded nexus software file.  The prefix ends in
        the nexus version.
