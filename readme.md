@@ -38,9 +38,9 @@ may **"follow"** the repo and see the repo develop.
 
 1. Develop Ansible scripts to install the Nexus [here](part6-install-nexus).
 
-1. Configure the Nexus Server to host a Docker Registry [here](./part7-configure-nexus-docker-registry)
+1. Configure the Nexus Server to host a Docker Registry [here](./part7-configure-nexus-docker-registry).
 
-    Currently, the tutorial is being built.  Please follow along as it is built over the next couple of days.
+    Currently, the tutorial is under construction.  Please follow along as it is built over the next couple of days.
 
 1. Develop Ansible scripts to install RedHat OpenShift [here](./part8-install-openshift).
 
