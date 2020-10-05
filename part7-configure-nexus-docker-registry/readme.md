@@ -75,7 +75,7 @@ You must have docker installed on another computer to use as a client.
     
 1. Click the **Create blob store** button.
 
-1. Create another blob store called **docker_hub**.  Below you will see the Nexus blob stores after creation.
+1. Create another blob store called **docker_hub**.  Below you will see the nexus blob stores after creation.
 
     ![nexus-blob-stores-created](../images/nexus-created-blob-stores.png)
     
