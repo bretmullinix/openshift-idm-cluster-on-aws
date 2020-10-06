@@ -260,7 +260,7 @@ the **private_docker_images** repositories like the page below.
 
     ![nexus-private-repo-tree-showing-my_postgres-image](../images/nexus-private-repo-shows-my_postgres-version-1.0.png)
 
-1. Run the command 'docker pull 3.236.165.103:8083/my_postgres:8083  
+1. Run the command `docker pull 3.236.165.103:8083/my_postgres:8083`  
 
     You should see your image pulled from nexus private repo.
 
