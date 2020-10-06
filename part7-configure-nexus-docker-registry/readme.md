@@ -203,6 +203,8 @@ the **private_docker_images** repositories like the page below.
 
 ### Perform Docker Commands Against the Registries
 
+**NOTE:**  Replace the IP addresses in the instructions with your Nexus Server IP or Domain Name
+
 1. docker pull 3.236.165.103:8082/httpd:2.4-alpine
 
     ![nexus-docker-pull-alpine-docker-hub](../images/nexus-docker-pull-docker-group-alpine-image.png)
@@ -221,8 +223,45 @@ the **private_docker_images** repositories like the page below.
    ![nexus-docker-group-alpine-image-cached](../images/nexus-repo-showing-alpine-image-cached.png)
 
 
-Please continue to follow along as this tutorial gets created over the next couple of days.
+1. Pull down the **Dockerfile** from the git repo in the folder **part7-configure-nexus-docker-registry**
+
+1. Open up a terminal
+
+1. Go to the directory where you downloaded the **Dockerfile**
+
+1. Build a new image using the following command:  
+
+    `docker build --tag my_postgres:1.0 .`
+    
+     The docker commands builds an image using the Dockerfile in the current directory indicated by
+     the period at the end.  The image name is **my_postgres** with a version of **1.0**.
+
+    ![local-docker-image-being-built](../images/nexus-my-postgres-version-1-local.png)
 
 
+1. Run the command `docker images | grep my_postgres`
 
-:construction: Under Construction.....
+    ![local-docker-image](../images/nexus-local-my-postgres-docker-search.png)
+
+1. Upload the docker image **my_postgres** to our private nexus repository on port **8083**.
+
+    1. Run `docker tag my_postgres:1.0 3.236.165.103:8083/my_postgres:1.0`
+    1. Run ` docker push 3.236.165.103:8083/my_postgres:1.0`
+
+1. Open up your browser to the nexus server and login.
+
+1. Once logged on, click the **Browse** menu item in the left menu.
+
+1. Select the **private-docker-registry** in the list of repos on the right.
+
+1. A tree should appear.  Notice how **my_postgres** is in the repository as a node in the tree
+
+1. If you expand the **my_postgres** node, and the **tags** node, you can see the version **1.0** 
+
+    ![nexus-private-repo-tree-showing-my_postgres-image](../images/nexus-private-repo-shows-my_postgres-version-1.0.png)
+
+1. Run the command 'docker pull 3.236.165.103:8083/my_postgres:8083  
+
+    You should see your image pulled from nexus private repo.
+
+We have finished the nexus docker configuration tutorial.  Please continue with the tutorials [here](../readme.md).
