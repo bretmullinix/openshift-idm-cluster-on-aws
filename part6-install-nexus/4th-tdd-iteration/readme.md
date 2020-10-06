@@ -246,6 +246,7 @@ The purpose of this iteration is to install the Nexus software on the target ser
         ```yaml
           - name:  Install Nexus Software
             include_tasks: "{{role_path}}/tasks/main/install_nexus.yml"
+            when: nexus_service is not defined
        ```     
     1. Run `molecule test`.  The test should pass.  Your refactoring is complete.
 
