@@ -262,6 +262,6 @@ the **private_docker_images** repositories like the page below.
 
 1. Run the command `docker pull 3.236.165.103:8083/my_postgres:8083`  
 
-    You should see your image pulled from nexus private repo.
+    You should see your image pulled from the nexus private repo.
 
 We have finished the nexus docker configuration tutorial.  Please continue with the tutorials [here](../readme.md).
