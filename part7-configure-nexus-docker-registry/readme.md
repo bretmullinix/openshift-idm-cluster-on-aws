@@ -188,7 +188,7 @@ the **private_docker_images** repositories like the page below.
    end of your **OPTIONS** string:
    
    ```shell script
-    --insecure-registry http://3.236.165.103:8082 --insecure-registry http://3.236.165.103:8082 \
+    --insecure-registry http://3.236.165.103:8082 --insecure-registry http://3.236.165.103:8083 \
    ```
 
 ### Login to your registries
