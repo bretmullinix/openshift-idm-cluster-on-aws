@@ -119,6 +119,7 @@ Docker
 1. <a name="3rdTDD"></a> Get the AWS VPC subnet facts using the [3rd TDD Iteration](./3rd-tdd-iteration).
 1. <a name="4thTDD"></a> Create the AWS EC2 instances using the [4th TDD Iteration](./4th-tdd-iteration).
 1. <a name="5thTDD"></a> Delete the AWS EC2 instances using the [5th TDD Iteration](./5th-tdd-iteration).
+1. <a name="6thTDD"></a> Start the AWS EC2 instances using the [6th TDD Iteration](./6th-tdd-iteration).
 
 The output is one or two time stamped files in
 the **aws-ec2-instances/files/ec2_facts** folder. Below is an example:
