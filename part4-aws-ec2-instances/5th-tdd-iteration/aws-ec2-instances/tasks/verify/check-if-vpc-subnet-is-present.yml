@@ -1,0 +1,21 @@
+- name: Gather facts on the AWS Control subnet
+  ec2_vpc_subnet_info:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    filters:
+      "tag:Name": "{{ aws_vpc.subnets.control.name }}"
+  register: vpc_control_subnet_info
+
+
+- name: Print the vpc control subnet info
+  debug:
+    var: vpc_control_subnet_info
+
+- name: Fail if the control subnet does not exist
+  fail:
+    msg:  "The subnet called '{{ aws_vpc.subnets.control.name  }}' does not exist."
+  when:
+    - vpc_control_subnet_info.subnets is defined
+    - vpc_control_subnet_info.subnets | length  == 0
+

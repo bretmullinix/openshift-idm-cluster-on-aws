@@ -1,0 +1,35 @@
+- name: Fail if EC2 instance action is invalid
+  fail:
+    msg: "The '{{ item.name }}' EC2 instance action '{{ item.action }}' is not valid.
+              You must choose either the action 'create' or 'delete'."
+  with_items: " {{ ec2_instances }}"
+  when: item.action != "create" and item.action != "delete"
+
+
+- name: Initialize list of EC2 instances that have not been created
+  set_fact:
+    ec2_instances_not_created: "{{ [] }}"
+
+- name: Check to see if AWS EC2 instance is created
+  include: "{{ role_path }}/tasks/verify/check-if-ec2-instance-is-created.yml current_ec2_instance={{ item.name }}"
+  with_items: "{{ ec2_instances }}"
+  when: item.action == 'create'
+
+- name: Fail if any AWS EC2 instances are not created
+  fail:
+    msg: "The following EC2 instances did not get created: {{ ec2_instances_not_created | join(',') }}"
+  when: ec2_instances_not_created | length > 0
+
+- name: Initialize list of EC2 instances that have not been deleted
+  set_fact:
+    ec2_instances_still_available: "{{ [] }}"
+
+- name: Check to see if AWS EC2 instance is deleted
+  include: "{{ role_path }}/tasks/verify/check-if-ec2-instance-is-deleted.yml current_ec2_instance={{ item.name }}"
+  with_items: "{{ ec2_instances }}"
+  when: item.action == 'delete'
+
+- name: Fail if any AWS EC2 instances are not deleted
+  fail:
+    msg: "The following EC2 instances did not get deleted: {{ ec2_instances_still_available | join(',') }}"
+  when: ec2_instances_still_available | length > 0

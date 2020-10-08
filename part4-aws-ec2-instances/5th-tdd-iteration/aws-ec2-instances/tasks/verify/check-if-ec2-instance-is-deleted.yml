@@ -1,0 +1,20 @@
+- name: Get EC2 instance information
+  ec2_instance_info:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    filters:
+      "tag:Name": "{{ current_ec2_instance }}"
+  register: ec2_info
+
+- name: Print it
+  debug:
+    var: ec2_info
+
+- name: Register failure count
+  set_fact:
+    ec2_instances_still_available: "{{ ec2_instances_still_available + [current_ec2_instance] }}"
+  when:
+    - ec2_info.instances and ec2_info.instances | length > 0
+    - ec2_info.instances[0].state is defined
+    - ec2_info.instances[0].state["name"] != 'terminated'
