@@ -98,7 +98,7 @@ The purpose of this iteration is to start the EC2 instances.
        
     1. The test represents the **Red** in the **Red, Green, Refactor** iteration of TDD.
 
-1. **GREEN** --> Create the EC2 instances by adding the tasks to the
+1. **GREEN** --> Start the EC2 instances by adding the tasks to the
    **main.yml**.
 
     1. cd aws-ec2-instances/defaults
