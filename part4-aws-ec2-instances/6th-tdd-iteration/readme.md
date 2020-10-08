@@ -196,13 +196,13 @@ The purpose of this iteration is to start the EC2 instances.
         - name: Output the EC2 Facts
           copy:
             content: "{{ ec2_facts }}"
-            dest: "{{ role_path}}/files/ec2_facts/{{ lookup('pipe','date +%m-%d-%Y-%H-%M-%S') }}_facts_for_started"
+            dest: "{{ role_path}}/files/ec2_facts/{{ lookup('pipe','date +%m-%d-%Y-%H-%M-%S') }}_facts"
           delegate_to: localhost
         
         - name: Output the EC2 Inventory Information
           copy:
             content: "{{ ec2_results | join('\n') }}"
-            dest: "{{ role_path}}/files/ec2_facts/{{ lookup('pipe','date +%m-%d-%Y-%H-%M-%S') }}_inventory_for_started"
+            dest: "{{ role_path}}/files/ec2_facts/{{ lookup('pipe','date +%m-%d-%Y-%H-%M-%S') }}_inventory"
           delegate_to: localhost
           when: ec2_results and ec2_results | length > 0
         ```
@@ -325,6 +325,8 @@ The purpose of this iteration is to start the EC2 instances.
           include_tasks: "{{ role_path }}/tasks/main/output_facts_and_inventory.yml"
        ```
     
+    1. cd ../defaults
+    
     1. In the **aws-ec2-instances/defaults/main.yml** file, add the following **ec2_instance** to the 
        **ec2_instances** variable.
     
@@ -337,6 +339,8 @@ The purpose of this iteration is to start the EC2 instances.
             key_name: "your_keypair"
             action: "create"
         ```
+    
+    1. cd ..
     
     1. Run `molecule test`.  The test should pass.
     
