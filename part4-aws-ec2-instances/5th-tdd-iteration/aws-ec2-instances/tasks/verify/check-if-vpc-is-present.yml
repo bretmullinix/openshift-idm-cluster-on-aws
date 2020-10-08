@@ -1,0 +1,15 @@
+- name: Gather facts on the AWS VPC using the Tag 'Name'
+  ec2_vpc_net_info:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    filters:
+      "tag:Name": "{{ aws_vpc.name }}"
+  register: vpc_info
+
+
+- name: Fail if the VPC does not exist
+  fail:
+    msg:  "The VPC called '{{ aws_vpc.name }}' does not exist."
+  when:
+    - vpc_info.vpcs is not defined or vpc_info.vpcs | length  == 0

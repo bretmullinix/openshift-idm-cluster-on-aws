@@ -1,0 +1,17 @@
+- name: Add AWS Keys
+  include_tasks: "{{ role_path }}/tasks/main/add-aws-keys.yml"
+
+- name: Get the VPC information
+  include_tasks: "{{ role_path }}/tasks/main/get_vpc_facts.yml"
+
+- name: Get the VPC subnet information
+  include_tasks: "{{ role_path }}/tasks/main/get_vpc_subnet_facts.yml"
+
+- name: Delete the EC2 Instances
+  include: "{{ role_path }}/tasks/main/delete_ec2_instance.yml current_ec2_instance={{ item.name }}"
+  with_items: "{{ ec2_instances }}"
+  when: item.action == 'delete'
+
+
+- name: Create the EC2 Instances and Output Results
+  include_tasks: "{{ role_path }}/tasks/main/create_ec2_instances.yml"
