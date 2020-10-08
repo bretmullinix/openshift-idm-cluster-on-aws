@@ -1,6 +1,6 @@
 # 6th TDD Iteration --> Start the AWS EC2 Instances
 
-Last updated: 10.07.2020
+Last updated: 10.08.2020
 
 ## Purpose
 
