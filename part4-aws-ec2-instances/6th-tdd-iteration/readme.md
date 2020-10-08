@@ -21,28 +21,32 @@ The purpose of this iteration is to start the EC2 instances.
     1. Add the following tasks to the **check-if-ec2-instance-is-started.yml** file.
     
         ```yaml
+        - name: Populate filter for EC2 Instance
+          set_fact:
+            filter_for_ec2_info: "{{  {'tag:Name': current_ec2_instance,
+                                        'instance-state-name': 'running' }
+                                  }}"
         - name: Get EC2 instance information
           ec2_instance_info:
             aws_access_key: "{{ aws_access_key }}"
             aws_secret_key: "{{ aws_secret_key }}"
             region: "{{ aws_region }}"
-            filters:
-              "tag:Name": "{{ current_ec2_instance }}"
+            filters: "{{ filter_for_ec2_info }}"
           register: ec2_info
+        
+        - name: Print EC2 Info
+          debug:
+            var: ec2_info
         
         - name: Fail the task if the EC2 Instance is not started
           set_fact:
             ec2_instances_not_started: "{{ ec2_instances_not_started + [current_ec2_instance] }}"
           when:
-              (
-              ec2_info.instances is not defined or
-              ec2_info.instances and ec2_info.instances | length == 0
-              ) or
-              (
-              ec2_info.instances and ec2_info.instances | length > 0 and
-              ec2_info.instances[0].state is defined and
-              ec2_info.instances[0].state["name"] != 'running'
-              )
+            (
+            ec2_info.instances is not defined or
+            ec2_info.instances and ec2_info.instances | length == 0
+            )
+
         ```
     1. cd ../..
     1. Run `molecule create`
