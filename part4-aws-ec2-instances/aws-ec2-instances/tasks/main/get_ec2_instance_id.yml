@@ -1,0 +1,16 @@
+- name: Get EC2 instance information
+  ec2_instance_info:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    filters:
+      "tag:Name": "{{ current_ec2_instance }}"
+  register: ec2_info
+
+- name: Populate Instance Id
+  set_fact:
+    ec2_instance_ids: "{{ ec2_instance_ids + [ec2_info.instances[0].instance_id] }}"
+  when:
+    ec2_info.instances and ec2_info.instances | length > 0 and
+    ec2_info.instances[0].state is defined and
+    ec2_info.instances[0].state["name"] != 'terminated'
