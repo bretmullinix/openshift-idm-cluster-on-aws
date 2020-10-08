@@ -324,7 +324,7 @@ The purpose of this iteration is to start the EC2 instances.
     1. In the **aws-ec2-instances/defaults/main.yml** file, add the following **ec2_instance** to the 
        **ec2_instances** variable.
     
-        ``yaml
+         ```yaml
           - name: third_instance
             ami: "ami-00594b9c138e6303d"
             instance_type: "t2.medium"
@@ -332,7 +332,7 @@ The purpose of this iteration is to start the EC2 instances.
             subnet_name: "aws_infrastructure_control_subnet"
             key_name: "your_keypair"
             action: "create"
-        ``
+        ```
     
     1. Run `molecule test`.  The test should pass.
     
