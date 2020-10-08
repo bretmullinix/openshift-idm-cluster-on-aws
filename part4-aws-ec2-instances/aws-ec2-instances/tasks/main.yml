@@ -16,6 +16,8 @@
 - name: Create the EC2 Instances and Output Results
   include_tasks: "{{ role_path }}/tasks/main/create_ec2_instances.yml"
 
-
 - name: Start the EC2 Instances
-  include: "{{ role_path }}/tasks/main/start_ec2_instances.yml"
+  include_tasks: "{{ role_path }}/tasks/main/start_ec2_instances.yml"
+
+- name: Output the EC2 Instance Facts and Inventory for 'create' and 'start' actions
+  include_tasks: "{{ role_path }}/tasks/main/output_facts_and_inventory.yml"

@@ -127,11 +127,15 @@ The purpose of this iteration is to start the EC2 instances.
         
         - name: Populate Instance Id
           set_fact:
-            ec2_instance_ids: "{{ ec2_instance_ids + [ec2_info.instances[0].instance_id] }}"
+            ec2_instance_ids: "{{ ec2_instance_ids + [item_to_get_id_for.instance_id] }}"
+          with_items: "{{ ec2_info.instances }}"
+          loop_control:
+            loop_var: item_to_get_id_for
           when:
-            ec2_info.instances and ec2_info.instances | length > 0 and
-            ec2_info.instances[0].state is defined and
-            ec2_info.instances[0].state["name"] != 'terminated'
+            - ec2_info is defined
+            - ec2_info.instances is defined
+            - ec2_info.instances | length > 0
+            - item_to_get_id_for.state.name != 'terminated'
         ```
     
     1. Create the file **start_ec2_instances.yml**
@@ -157,6 +161,46 @@ The purpose of this iteration is to start the EC2 instances.
             state: running
             wait: yes
           when: ec2_instance_ids | length > 0
+          register: started_ec2_facts
+        
+        - name: Create a folder to hold the ec2 facts
+          file:
+            path: "{{ role_path }}/files/ec2_facts"
+            state: directory
+            mode: '0755'
+          delegate_to: localhost
+        
+        - name: Initialize EC2 list of dictionaries
+          set_fact:
+            ec2_results: []
+        
+        
+        - name: Populate the EC2 list of dictionaries
+          set_fact:
+            ec2_results: "{{ ec2_results +
+                         ['name:  ' + item.tags.Name  ]
+                         + [ 'public_ip:  ' + item.public_ip  ]
+                         + [ 'private_ip:  ' + item.private_ip  ]
+                         + [ 'key_pair:  ' + item.key_name ]
+                         + [ 'ssh connection: ssh -i ' + role_path  + '/files/private_keys/'
+                         + item.key_name
+                         + ' centos@' + item.public_ip ]
+                         + ['\n']
+                         }}"
+          with_items: "{{ started_ec2_facts.instances }}"
+        
+        - name: Output the EC2 Facts
+          copy:
+            content: "{{ ec2_facts }}"
+            dest: "{{ role_path}}/files/ec2_facts/{{ lookup('pipe','date +%m-%d-%Y-%H-%M-%S') }}_facts_for_started"
+          delegate_to: localhost
+        
+        - name: Output the EC2 Inventory Information
+          copy:
+            content: "{{ ec2_results | join('\n') }}"
+            dest: "{{ role_path}}/files/ec2_facts/{{ lookup('pipe','date +%m-%d-%Y-%H-%M-%S') }}_inventory_for_started"
+          delegate_to: localhost
+          when: ec2_results and ec2_results | length > 0
         ```
     
     1. cd ..
@@ -165,7 +209,7 @@ The purpose of this iteration is to start the EC2 instances.
     
         ```yaml
         - name: Start the EC2 Instances
-          include: "{{ role_path }}/tasks/main/start_ec2_instances.yml"
+          include_tasks: "{{ role_path }}/tasks/main/start_ec2_instances.yml"
        ```
     
     1. cd ../defaults
@@ -190,6 +234,110 @@ The purpose of this iteration is to start the EC2 instances.
   
 1. **REFACTOR** --> Does any of the code need **Refactoring**?
 
-    Looks like the Ansible role does not need any refactoring, so we have finished this TDD iteration.
+    We output Ansible Facts and Inventory for EC2 instances with the actions of **create**
+    and **start**.  We need to consolidate this into one output at the end.
+    
+    1. cd **tasks/main**
+    
+    1. Create the file **output_facts_and_inventory.yml**.
+    
+    1. Add the following content to the file.
+    
+        ```yaml
+        - name: Initialize list of EC2 instances Ids
+          set_fact:
+            ec2_instance_ids: "{{ [] }}"
+        
+        - name: Get list of EC2 Instances
+          include: "{{ role_path }}/tasks/main/get_ec2_instance_id.yml current_ec2_instance={{ item.name }}"
+          with_items: "{{ ec2_instances }}"
+          when: item.action == 'start' or item.action == 'create'
+        
+        - name: Get EC2 instance facts for those with an action of 'start' and 'create'
+          ec2_instance_info:
+            instance_ids: "{{ ec2_instance_ids }}"
+            aws_access_key: "{{ aws_access_key }}"
+            aws_secret_key: "{{ aws_secret_key }}"
+            region: "{{ aws_region }}"
+          when: ec2_instance_ids | length > 0
+          register: ec2_facts_to_output
+        
+        - name: Create a folder to hold the ec2 facts
+          file:
+            path: "{{ role_path }}/files/ec2_facts"
+            state: directory
+            mode: '0755'
+          delegate_to: localhost
+        
+        - name: Initialize EC2 list of dictionaries
+          set_fact:
+            ec2_results: []
+        
+        
+        - name: Populate the EC2 list of dictionaries
+          set_fact:
+            ec2_results: "{{ ec2_results +
+                         ['name:  ' + item.tags.Name  ]
+                         + [ 'public_ip:  ' + item.public_ip_address  ]
+                         + [ 'private_ip:  ' + item.private_ip_address  ]
+                         + [ 'key_pair:  ' + item.key_name ]
+                         + [ 'ssh connection: ssh -i ' + role_path  + '/files/private_keys/'
+                         + item.key_name
+                         + ' centos@' + item.public_ip_address ]
+                         + ['\n']
+                         }}"
+          with_items: "{{ ec2_facts_to_output.instances }}"
+          when:
+            -  ec2_facts_to_output is defined
+            -  ec2_facts_to_output.instances is defined
+        
+        - name: Output the EC2 Facts
+          copy:
+            content: "{{ ec2_facts }}"
+            dest: "{{ role_path}}/files/ec2_facts/{{ lookup('pipe','date +%m-%d-%Y-%H-%M-%S') }}_facts"
+          delegate_to: localhost
+          when: ec2_facts is defined
+        
+        - name: Output the EC2 Inventory Information
+          copy:
+            content: "{{ ec2_results | join('\n') }}"
+            dest: "{{ role_path}}/files/ec2_facts/{{ lookup('pipe','date +%m-%d-%Y-%H-%M-%S') }}_inventory"
+          delegate_to: localhost
+          when: ec2_results and ec2_results | length > 0
+        ```
+    
+    1. In the **start_ec2_instances.yml** file, starting with the task labeled **Create a folder to hold the
+       ec2 facts**, remove this task and any following task.
+       
+    1. In the **create_ec2_instances.yml** file, starting with the task labeled **Recursively remove ec2 
+       facts directory**, remove this task and any following task.
+       
+    1. cd ..
+    
+    1. Add the following task to the end of the **main.yml**
+    
+        ```yaml
+        - name: Output the EC2 Instance Facts and Inventory for 'create' and 'start' actions
+          include_tasks: "{{ role_path }}/tasks/main/output_facts_and_inventory.yml"
+       ```
+    
+    1. In the **aws-ec2-instances/defaults/main.yml** file, add the following **ec2_instance** to the 
+       **ec2_instances** variable.
+    
+        ``yaml
+          - name: third_instance
+            ami: "ami-00594b9c138e6303d"
+            instance_type: "t2.medium"
+            root_volume_size: 25
+            subnet_name: "aws_infrastructure_control_subnet"
+            key_name: "your_keypair"
+            action: "create"
+        ``
+    
+    1. Run `molecule test`.  The test should pass.
+    
+        The code looks pretty good, so we have completed our 6th TDD iteration.
+    
+    
 
 [**<--Back to main instructions**](../readme.md#6thTDD)
