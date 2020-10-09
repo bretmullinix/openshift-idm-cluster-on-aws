@@ -1,0 +1,8 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: "Include aws-ec2-instance verify.yml"
+      include_role:
+        name: "aws-ec2-instances"
+        tasks_from: "verify"

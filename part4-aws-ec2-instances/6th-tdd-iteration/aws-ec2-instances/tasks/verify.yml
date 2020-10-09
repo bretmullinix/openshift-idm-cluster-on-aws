@@ -1,0 +1,11 @@
+- name: Check if the AWS Keys are present.
+  include_tasks: "{{ role_path }}/tasks/verify/check-if-the-aws-keys-are-present.yml"
+
+- name: Check if the AWS VPC is present.
+  include_tasks: "{{ role_path }}/tasks/verify/check-if-vpc-is-present.yml"
+
+- name: Check if the AWS VPC subnet is present.
+  include_tasks: "{{ role_path }}/tasks/verify/check-if-vpc-subnet-is-present.yml"
+
+- name: Validate the EC2 Instances.
+  include_tasks: "{{ role_path }}/tasks/verify/validate_ec2_instances.yml"

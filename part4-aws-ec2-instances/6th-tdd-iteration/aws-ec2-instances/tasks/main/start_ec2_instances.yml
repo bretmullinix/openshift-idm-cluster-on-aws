@@ -1,0 +1,19 @@
+- name: Initialize list of EC2 instances Ids
+  set_fact:
+    ec2_instance_ids: "{{ [] }}"
+
+- name: Get list of EC2 Instances
+  include: "{{ role_path }}/tasks/main/get_ec2_instance_id.yml current_ec2_instance={{ item.name }}"
+  with_items: "{{ ec2_instances }}"
+  when: item.action == 'start'
+
+- name: Start EC2 Instances
+  ec2:
+    instance_ids: "{{ ec2_instance_ids }}"
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    state: running
+    wait: yes
+  when: ec2_instance_ids | length > 0
+  register: started_ec2_facts

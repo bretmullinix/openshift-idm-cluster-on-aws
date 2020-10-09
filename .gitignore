@@ -8,3 +8,5 @@ my_keypair
 ec2_facts/
 vault_secret
 .idea/
+.travis.yml
+.yamllint
