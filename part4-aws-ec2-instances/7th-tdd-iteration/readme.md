@@ -66,7 +66,7 @@ The purpose of this iteration is to start the EC2 instances.
             msg: "The '{{ item.name }}' EC2 instance action '{{ item.action }}' is not valid.
                       You must choose either the action 'create', 'delete', or 'start'."
           with_items: " {{ ec2_instances }}"
-          when: item.action != "create" or item.action != "delete" or item.action != "start"
+          when: item.action != "create" and item.action != "delete" and item.action != "start"
         ```
        
     1. cd ../..
