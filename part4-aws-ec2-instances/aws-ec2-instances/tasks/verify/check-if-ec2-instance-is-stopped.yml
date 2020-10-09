@@ -1,0 +1,25 @@
+- name: Populate filter for EC2 Instance
+  set_fact:
+    filter_for_ec2_info: "{{  {'tag:Name': current_ec2_instance,
+                                        'instance-state-name': 'stopped' }
+                                  }}"
+- name: Get EC2 instance information
+  ec2_instance_info:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    filters: "{{ filter_for_ec2_info }}"
+  register: ec2_stop_info
+
+- name: Print Info on EC2 instance information
+  debug:
+    var: ec2_stop_info
+
+- name: Add the task to the ec2_start_info list if the EC2 Instance is not stopped
+  set_fact:
+    ec2_instances_not_stopped: "{{ ec2_instances_not_stopped + [current_ec2_instance] }}"
+  when: >
+    ec2_stop_info is undefined or
+    ec2_stop_info.instances is undefined or
+    ec2_stop_info.instances | length == 0
+

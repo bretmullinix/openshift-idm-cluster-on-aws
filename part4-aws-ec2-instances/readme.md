@@ -1,6 +1,6 @@
-# Create or Destroy EC2 Instances on AWS
+# Create, Delete, Start, and Stop EC2 Instances on AWS with Useful Output
 
-Last updated: 09.25.2020
+Last updated: 10.09.2020
 
 ## Purpose
 
@@ -120,6 +120,7 @@ Docker
 1. <a name="4thTDD"></a> Create the AWS EC2 instances using the [4th TDD Iteration](./4th-tdd-iteration).
 1. <a name="5thTDD"></a> Delete the AWS EC2 instances using the [5th TDD Iteration](./5th-tdd-iteration).
 1. <a name="6thTDD"></a> Start the AWS EC2 instances using the [6th TDD Iteration](./6th-tdd-iteration).
+1. <a name="7thTDD"></a> Stop the AWS EC2 instances using the [7th TDD Iteration](./7th-tdd-iteration).
 
 The output is one or two time stamped files in
 the **aws-ec2-instances/files/ec2_facts** folder. Below is an example:

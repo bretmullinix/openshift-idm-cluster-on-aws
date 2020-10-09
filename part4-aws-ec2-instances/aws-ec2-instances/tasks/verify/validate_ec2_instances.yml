@@ -1,9 +1,10 @@
 - name: Fail if EC2 instance action is invalid
   fail:
     msg: "The '{{ item.name }}' EC2 instance action '{{ item.action }}' is not valid.
-                    You must choose either the action 'create', 'delete', or 'start'."
+                    You must choose either the action 'create', 'delete', 'start', or 'stop'."
   with_items: " {{ ec2_instances }}"
-  when: item.action != "create" and item.action != "delete" and item.action != "start"
+  when: item.action != "create" and item.action != "delete" and item.action != "start" and
+    item.action != "stop"
 
 
 - name: Initialize list of EC2 instances that have not been created
@@ -47,3 +48,18 @@
   fail:
     msg: "The following EC2 instances did not get started: {{ ec2_instances_not_started | join(',') }}"
   when: ec2_instances_not_started | length > 0
+
+- name: Initialize list of EC2 instances that have not been stopped
+  set_fact:
+    ec2_instances_not_stopped: "{{ [] }}"
+
+- name: Check to see if AWS EC2 instances are stopped
+  include: "{{ role_path }}/tasks/verify/check-if-ec2-instance-is-stopped.yml
+                current_ec2_instance={{ item.name }}"
+  with_items: "{{ ec2_instances }}"
+  when: item.action == 'stop'
+
+- name: Fail if any AWS EC2 instances are not stopped
+  fail:
+    msg: "The following EC2 instances did not get stopped: {{ ec2_instances_not_stopped | join(',') }}"
+  when: ec2_instances_not_stopped | length > 0

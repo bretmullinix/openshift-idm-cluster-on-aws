@@ -32,21 +32,19 @@ The purpose of this iteration is to start the EC2 instances.
             aws_secret_key: "{{ aws_secret_key }}"
             region: "{{ aws_region }}"
             filters: "{{ filter_for_ec2_info }}"
-          register: ec2_info
+          register: ec2_start_info
         
         - name: Print EC2 Info
           debug:
-            var: ec2_info
+            var: ec2_start_info
         
-        - name: Fail the task if the EC2 Instance is not started
+        - name: Add the task to the ec2_start_info list if the EC2 Instance is not started
           set_fact:
             ec2_instances_not_started: "{{ ec2_instances_not_started + [current_ec2_instance] }}"
-          when:
-            (
-            ec2_info.instances is not defined or
-            ec2_info.instances and ec2_info.instances | length == 0
-            )
-
+          when: >
+            ec2_start_info is undefined or
+            ec2_start_info.instances is undefined or
+            ec2_start_info.instances | length == 0
         ```
     1. cd ../..
     1. Run `molecule create`
