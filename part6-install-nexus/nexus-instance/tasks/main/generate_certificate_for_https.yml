@@ -1,0 +1,35 @@
+- name: Delete the SSL Directory for Nexus Server
+  file:
+    path: "{{ nexus_ssl_dir }}"
+    state: absent
+
+- name: Create the SSL Directory for Nexus Server
+  file:
+    path: "{{ nexus_ssl_dir }}"
+    state: directory
+    mode: '0755'
+    owner: nexus
+    group: nexus
+
+
+- name: Generate Java keystore needed for Nexus
+  shell: "keytool -genkeypair -keystore {{ nexus_ssl_dir }}/keystore.jks -storepass password -alias {{ domain_name }} \
+           -keyalg RSA -keysize 2048 -validity 5000 -keypass password \
+           -dname 'CN=*.{{ domain_name }}, OU=Sonatype, O=Sonatype, L=Unspecified, ST=Unspecified, C=US' \
+           -ext 'SAN=DNS:{{ fqdn }},DNS:clm.{{ domain_name }},DNS:repo.{{ domain_name }},DNS:www.{{ domain_name }}' -noprompt"
+
+- name: Generate PEM encoded public certificate file
+  shell: "keytool -exportcert -keystore {{ nexus_ssl_dir }}/keystore.jks -alias {{ domain_name }} -storepass password -rfc > {{ nexus_ssl_dir }}/example.cert -noprompt"
+
+- name: Convert our keystore to a PKCS12 keystore.  More widely used.
+  shell: "keytool -importkeystore -srckeystore {{ nexus_ssl_dir }}/keystore.jks -destkeystore {{ nexus_ssl_dir }}/example.p12
+                  -deststorepass password -srcstorepass password -deststoretype PKCS12 -noprompt"
+
+
+- name: Change permissions on the nexus software folder to 0755 recursively
+  file:
+    path: "/opt/nexus"
+    mode: 0755
+    owner: nexus
+    group: nexus
+    recurse: True

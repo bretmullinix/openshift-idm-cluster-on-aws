@@ -5,4 +5,11 @@ yum_installs:
   - name: "tar"
     install_name: "tar"
 yum_backend: dnf
-hostname: nexus-server
+domain_name: example.com
+fqdn: nexus-server.{{ domain_name }}
+
+use_ssl: true
+use_my_certs: false
+private_key_file_name: privkey.key
+self_signed_certificate: fullchain.cer
+nexus_ssl_dir: /opt/nexus/sonatype-work/nexus3/etc/ssl
