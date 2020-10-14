@@ -1,0 +1,31 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  become: true
+  become_method: sudo
+  tasks:
+    - name: Include the module vars file.
+      include_vars:
+        file: ../../defaults/main.yml
+
+    - name: Include the module vars file.
+      include_vars:
+        file: ../../vars/main.yml
+
+    - name: Determine if yum packages exist
+      include_tasks: tasks/check-if-yum-packages-are-installed.yml
+
+    - name: collect facts about system services
+      service_facts:
+      register: services_state
+
+    - name: Determine if firewalld exists
+      include_tasks: tasks/add-firewalld.yml
+
+    - name:  Determine if firewall ports are open
+      include_tasks: tasks/open-ports-with-firewalld.yml
+
+    - name:  Determine if the Nexus Software is Installed
+      include_tasks: tasks/is_nexus_software_installed.yml

@@ -1,0 +1,42 @@
+---
+- name: Install the Required Libraries
+  yum:
+    name: "{{ item.name }}"
+    state: present
+    use_backend: "{{ yum_backend }}"
+  with_items: "{{ yum_installs }}"
+
+- name: Install Firewalld Service
+  yum:
+    name: firewalld
+    state: present
+
+- name:  Start and enable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Open Ports for Nexus
+  firewalld:
+    port: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  with_items: "{{ open_nexus_ports }}"
+
+
+- name: collect facts about system services
+  service_facts:
+  register: services_state
+
+- name: Check to see if nexus is installed
+  set_fact:
+    nexus_service: "{{ item.value }}"
+  loop: "{{ lookup('dict', services_state.ansible_facts.services) }}"
+  when: item.key == 'nexus.service'
+
+- name: Install Nexus Software
+  include_tasks: "{{role_path}}/tasks/main/install_nexus.yml"
+  when: nexus_service is not defined
+

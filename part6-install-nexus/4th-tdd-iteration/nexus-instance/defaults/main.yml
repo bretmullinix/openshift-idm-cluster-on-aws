@@ -1,0 +1,8 @@
+---
+yum_installs:
+  - name: "java-1.8.0-openjdk-devel"
+    install_name: "java-1.8.0-openjdk"
+  - name: "tar"
+    install_name: "tar"
+yum_backend: dnf
+hostname: nexus-server

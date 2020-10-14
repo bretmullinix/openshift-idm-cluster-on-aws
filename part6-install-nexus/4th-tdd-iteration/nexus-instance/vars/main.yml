@@ -1,0 +1,9 @@
+---
+# vars file for nexus-instance
+open_nexus_ports:
+  - "8081/tcp"
+  - "8082/tcp"
+  - "8083/tcp"
+nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"
+nexus_file_name: "nexus-3.28.0-01"
+nexus_file:  "{{ nexus_file_name }}-unix.tar.gz"

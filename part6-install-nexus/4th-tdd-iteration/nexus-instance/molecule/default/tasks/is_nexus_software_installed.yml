@@ -1,0 +1,10 @@
+- name: Get Nexus Service
+  set_fact:
+    nexus_service: "{{ item.value }}"
+  loop: "{{ lookup('dict', services_state.ansible_facts.services) }}"
+  when: item.key == 'nexus.service'
+
+- name: Fail if Nexus is not installed
+  fail:
+    msg: "The nexus service is not installed"
+  when: nexus_service is not defined
