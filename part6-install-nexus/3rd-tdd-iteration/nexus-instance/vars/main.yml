@@ -8,3 +8,6 @@ open_nexus_ports:
 nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"
 nexus_file_name: "nexus-3.28.0-01"
 nexus_file:  "{{ nexus_file_name }}-unix.tar.gz"
+nexus_ssl_dir: /opt/nexus/sonatype-work/nexus3/etc/ssl
+nexus_properties_dir: /opt/nexus/sonatype-work/nexus3/etc
+nexus_jetty_config_dir: /opt/nexus/nexus-3.28.0-01/etc/jetty

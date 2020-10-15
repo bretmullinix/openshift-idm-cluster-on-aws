@@ -1,6 +1,6 @@
 # Installation of Nexus on AWS
 
-Last updated: 10.05.2020
+Last updated: 10.15.2020
 
 ## Purpose
 
@@ -91,27 +91,42 @@ Python virtual environment and Ansible Molecule.
     yum_backend: dnf
     
     domain_name: example.com
-    fqdn: nexus-server.{{ domain_name }}
-    
+    fqdn: nexus-server.{{ domain_name }}    
     use_ssl: true
-    nexus_ssl_dir: /opt/nexus/sonatype-work/nexus3/etc/ssl
-    nexus_properties_dir: /opt/nexus/sonatype-work/nexus3/etc
-    nexus_jetty_config_dir: /opt/nexus/nexus-3.28.0-01/etc/jetty
     ssl_cert_organization: 'ACME CORP'
     ```
 
-    The explanation of the **default/main.yml** file can be found 
-    [here](../part5-register-idm-client/readme.md#default_main_explanation).
-
+    The variable deserves some explanation:
+    
+     1. **yum_installs** --> The software installed on the target server and needed by 
+        Nexus to run.
+        
+     1. **yum_backend** --> The **yum** backend used.  The values are the same
+        used for the property **use_backend** in the **yum** Ansible module.
+        
+     1. **domain_name** --> The domain name for the target server.
+     
+     1. **fqdn** --> The fully qualified domain name of the target server.
+     
+     1. **use_ssl** --> Configures Nexus to use SSL.
+     
 1. cd vars
 1. Edit the file **main.yml** and add the following variables:
 
     ```yaml
-    open_nexus_ports:
-      - "8081/tcp"
-      - "8082/tcp"
-      - "8083/tcp"
-      - "8443/tcp"
+    ---
+    # vars file for nexus-instance
+     open_nexus_ports:
+       - "8081/tcp"
+       - "8082/tcp"
+       - "8083/tcp"
+       - "8443/tcp"
+     nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"
+     nexus_file_name: "nexus-3.28.0-01"
+     nexus_file:  "{{ nexus_file_name }}-unix.tar.gz"
+     nexus_ssl_dir: /opt/nexus/sonatype-work/nexus3/etc/ssl
+     nexus_properties_dir: /opt/nexus/sonatype-work/nexus3/etc
+     nexus_jetty_config_dir: /opt/nexus/nexus-3.28.0-01/etc/jetty
     ```
     
     The variable deserves some explanation:
@@ -119,6 +134,31 @@ Python virtual environment and Ansible Molecule.
     1. **open_nexus_ports** = The ports to open up for the nexus
        server.
 
+    1. **nexus_software_sha1_checksum** --> The sha1 hash for the downloaded nexus software file.
+    
+    1. **nexus_file_name** --> The prefix of the downloaded nexus software file.  The prefix ends in
+       the nexus version.
+       
+    1. **nexus_file** --> The full name of the downloaded nexus software file.
+    
+    1. **nexus_ssl_dir** --> The directory where the Java keystore and certificates
+       will be placed for SSL.  **Note:**  This directory may change depending on the software
+       release included in this Ansible role.  Currently, the role contains version
+       **3.28.0-01**.  If you plan on changing the version as is described below,
+       please make sure the directory is the same.
+            
+    1. **nexus_properties_dir** --> The directory location of the **nexus.properties**.  
+       **Note:**  This directory may change depending on the software
+       release included in this Ansible role.  Currently, the role contains version
+       **3.28.0-01**.  If you plan on changing the version as is described below,
+       please make sure the directory is the same.
+    
+    1. **nexus_jetty_config_dir** --> The directory location of the Nexus Jetty
+       Server.  **Note:**  This directory may change depending on the software
+       release included in this Ansible role.  Currently, the role contains version
+       **3.28.0-01**.  If you plan on changing the version as is described below,
+       please make sure the directory is the same.
+    
 1. cd ..
 1. Make the file "vault_secret".  This file will be used to 
    store your vault password.
@@ -391,24 +431,8 @@ Python virtual environment and Ansible Molecule.
 1. <a name="1stTDD"></a> Install the required yum packages in the [1st TDD Iteration](./1st-tdd-iteration).
 1. <a name="2ndTDD"></a> Install **firewalld** to protect and open only necessary ports [2nd TDD Iteration](./2nd-tdd-iteration).
 1. <a name="3rdTDD"></a> Make sure the Nexus server ports are open in the [3rd TDD Iteration](./3rd-tdd-iteration).
-1. Add the following variables to the **vars/main.yml** file: 
-
-    ```yaml
-    nexus_software_sha1_checksum: "fd7cc1031492aa711517f2e97a4df3fd94f91844"
-    nexus_file_name: "nexus-3.28.0-01"
-    nexus_file:  "{{ nexus_file_name }}-unix.tar.gz"
-    ```
-    
-    Let's explain these variables.
-    
-    1. **nexus_software_sha1_checksum** --> The sha1 hash for the downloaded nexus software file.
-    
-    1. **nexus_file_name** --> The prefix of the downloaded nexus software file.  The prefix ends in
-       the nexus version.
-       
-    1. **nexus_file** --> The full name of the downloaded nexus software file.
-    
-1. Copy down the the **nexus_instance/files/nexus_software** folder and contents from this git repo
+  
+1. Copy the **nexus_instance/files/nexus_software** folder and contents from this git repo
    to the **files** directory.
 
     **NOTE:**  The nexus files in the **nexus_software** folder were created by doing the following:

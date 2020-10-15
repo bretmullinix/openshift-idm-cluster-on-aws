@@ -10,9 +10,6 @@ domain_name: example.com
 fqdn: nexus-server.{{ domain_name }}
 
 use_ssl: true
-nexus_ssl_dir: /opt/nexus/sonatype-work/nexus3/etc/ssl
-nexus_properties_dir: /opt/nexus/sonatype-work/nexus3/etc
-nexus_jetty_config_dir: /opt/nexus/nexus-3.28.0-01/etc/jetty
 ssl_cert_organization: 'ACME CORP'
 ssl_cert_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
