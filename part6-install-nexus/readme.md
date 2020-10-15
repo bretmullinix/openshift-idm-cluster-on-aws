@@ -93,7 +93,6 @@ Python virtual environment and Ansible Molecule.
     domain_name: example.com
     fqdn: nexus-server.{{ domain_name }}    
     use_ssl: true
-    ssl_cert_organization: 'ACME CORP'
     ```
 
     The variable deserves some explanation:
@@ -166,12 +165,12 @@ Python virtual environment and Ansible Molecule.
 1. Run the following command to encrypt your **SSL cert password**.
 
       ``` 
-      ansible-vault encrypt_string "[your_ssl_cert_password here]" --vault-password-file ./vault_secret
+      ansible-vault encrypt_string "[your_nexus_jetty_keystore_password here]" --vault-password-file ./vault_secret
       ```
 1. Copy the output from **!vault** to the last line before **Encryption successful**.
 1. cd defaults
 1. Open up the main.yml file.
-1. Add the variable "ssl_cert_password", and paste the copied encrypted password
+1. Add the variable "nexus_jetty_keystore_password", and paste the copied encrypted password
    as the value.
 1. Save the file.
 1. cd molecule/default
@@ -454,8 +453,7 @@ Python virtual environment and Ansible Molecule.
     
     1. Run 'sha1 [your downloaded file]'.  Copy this hash and replace the **nexus_software_sha1_checksum**
        value with this hash.  The hash compares the original hash to the resulting tar file after re-combining the
-       parts, and when the file is copied by Ansible to the target server, the hash is used to ensure no corruption 
-       with the file. 
+       parts, and when the file is copied by Ansible to the target server, the hash ensures no file corruption. 
     
     1. mkdir nexus_software
     
@@ -475,10 +473,13 @@ Python virtual environment and Ansible Molecule.
          ```    
 
 1. <a name="4thTDD"></a> Install the Nexus server software in the [4th TDD Iteration](./4th-tdd-iteration).
+1. <a name="5thTDD"></a> Configure SSL for the Nexus Server in the [5th TDD Iteration](./5th-tdd-iteration).
 
-After the 4th TDD, we can login to our Sonatype Nexus Server by using our public IP address for the
-target server in AWS and using the port **8081**.  Here is a screen shot of what you should expect.  Your IP
+After the 5th TDD, we can login to our Sonatype Nexus Server by using our public IP address for the
+target server in AWS and using the port **8443**.  Here is a screen shot of what you should expect.  Your IP
 address will be different.
+
+**TODO:** REPLACE IMAGE WITH SSL....
 
 ![installed-sonatype-nexus](../images/installed_nexus_repo_picture.png)
     

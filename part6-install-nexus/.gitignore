@@ -5,3 +5,4 @@ private_keys/
 ec2_facts/
 vault_secret
 *.tar.gz
+certs/

@@ -11,20 +11,53 @@
     owner: nexus
     group: nexus
 
+- name: Generate Private Key
+  openssl_privatekey:
+    path: "{{ nexus_ssl_dir }}/nexis.pem"
+    size: 2048
 
-- name: Generate Java keystore needed for Nexus
-  shell: "keytool -genkeypair -keystore {{ nexus_ssl_dir }}/keystore.jks -storepass password -alias {{ domain_name }} \
-           -keyalg RSA -keysize 2048 -validity 5000 -keypass password \
-           -dname 'CN=*.{{ domain_name }}, OU=Sonatype, O=Sonatype, L=Unspecified, ST=Unspecified, C=US' \
-           -ext 'SAN=DNS:{{ fqdn }},DNS:clm.{{ domain_name }},DNS:repo.{{ domain_name }},DNS:www.{{ domain_name }}' -noprompt"
+- name: Generate Certificate Signing Request
+  openssl_csr:
+    path: "{{ nexus_ssl_dir }}/nexis.csr"
+    privatekey_path: "{{ nexus_ssl_dir }}/nexis.pem"
+    common_name: "{{ fqdn }}"
 
-- name: Generate PEM encoded public certificate file
-  shell: "keytool -exportcert -keystore {{ nexus_ssl_dir }}/keystore.jks -alias {{ domain_name }} -storepass password -rfc > {{ nexus_ssl_dir }}/nexus.cert -noprompt"
+- name: Generate Self Signed Certificate
+  openssl_certificate:
+    path: "{{ nexus_ssl_dir }}/nexis.cert"
+    privatekey_path: "{{ nexus_ssl_dir }}/nexis.pem"
+    csr_path: "{{ nexus_ssl_dir }}/nexis.csr"
+    provider: selfsigned
 
-- name: Convert our keystore to a PKCS12 keystore.  More widely used.
-  shell: "keytool -importkeystore -srckeystore {{ nexus_ssl_dir }}/keystore.jks -destkeystore {{ nexus_ssl_dir }}/nexus.p12
-                  -deststorepass password -srcstorepass password -deststoretype PKCS12 -noprompt"
+- name: "Convert the signed certificate into a PKCS12 file with the attached private key"
+  openssl_pkcs12:
+    friendly_name: nexus
+    action: export
+    path: "{{ nexus_ssl_dir }}/nexis.p12"
+    privatekey_path: "{{ nexus_ssl_dir }}/nexis.pem"
+    passphrase: "{{ nexus_jetty_keystore_password }}"
+    certificate_path: "{{ nexus_ssl_dir }}/nexis.cert"
+    state: present
 
+- name: Create Keystore and Add Self Signed Certificate and Private Key to the KeyStore
+  command:  "keytool -importkeystore -srckeystore '{{ nexus_ssl_dir }}/nexis.p12' -srcstoretype pkcs12
+             -srcalias nexus -destkeystore '{{ nexus_ssl_dir }}/keystore.jks'
+             -deststoretype jks -deststorepass '{{ nexus_jetty_keystore_password }}'
+             -srcstorepass '{{ nexus_jetty_keystore_password }}' -destalias nexus -noprompt"
+
+- name: Create Jetty HTTPS Properties
+  template:
+    src: "{{ role_path }}/templates/jetty-https.xml.j2"
+    dest: "{{ nexus_jetty_config_dir }}/jetty-https.xml"
+    owner: nexus
+    group: nexus
+
+- name: Create Nexus Properties
+  template:
+    src: "{{ role_path }}/templates/nexus.properties.j2"
+    dest: "{{ nexus_properties_dir }}/nexus.properties"
+    owner: nexus
+    group: nexus
 
 - name: Change permissions on the nexus software folder to 0755 recursively
   file:
@@ -33,3 +66,8 @@
     owner: nexus
     group: nexus
     recurse: True
+
+- name: Restart Nexus
+  service:
+    name: nexus
+    state: restarted
