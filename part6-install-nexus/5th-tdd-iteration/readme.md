@@ -251,7 +251,7 @@ The purpose of this iteration is to configure and run Nexus using SSL on the tar
     1. cd ..
     
     1. Run `molecule converge`.  The command runs the **tasks/main.yml**,
-    and the Nexus software installs.
+    and the Nexus software is configured for SSL.
     
     1. Run `molecule verify`. The test should pass.  The test represents
     the **Green** in the **Red, Green, Refactor** iteration of TDD.
