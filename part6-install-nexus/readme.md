@@ -82,13 +82,22 @@ Python virtual environment and Ansible Molecule.
 1. Add the following variables to the **default/main.yml** file
  
     ```yaml
-     yum_installs:
-       - name: "java-1.8.0-openjdk-devel"
-         install_name: "java-1.8.0-openjdk"
-       - name: "tar"
-         install_name: "tar"
-     yum_backend: dnf
-     hostname: nexus-server
+    ---
+    yum_installs:
+      - name: "java-1.8.0-openjdk-devel"
+        install_name: "java-1.8.0-openjdk"
+      - name: "tar"
+        install_name: "tar"
+    yum_backend: dnf
+    
+    domain_name: example.com
+    fqdn: nexus-server.{{ domain_name }}
+    
+    use_ssl: true
+    nexus_ssl_dir: /opt/nexus/sonatype-work/nexus3/etc/ssl
+    nexus_properties_dir: /opt/nexus/sonatype-work/nexus3/etc
+    nexus_jetty_config_dir: /opt/nexus/nexus-3.28.0-01/etc/jetty
+    ssl_cert_organization: 'ACME CORP'
     ```
 
     The explanation of the **default/main.yml** file can be found 
@@ -102,6 +111,7 @@ Python virtual environment and Ansible Molecule.
       - "8081/tcp"
       - "8082/tcp"
       - "8083/tcp"
+      - "8443/tcp"
     ```
     
     The variable deserves some explanation:
@@ -109,6 +119,21 @@ Python virtual environment and Ansible Molecule.
     1. **open_nexus_ports** = The ports to open up for the nexus
        server.
 
+1. cd ..
+1. Make the file "vault_secret".  This file will be used to 
+   store your vault password.
+1. Open up "vault_secret" and enter your password for ansible vault.
+1. Run the following command to encrypt your **SSL cert password**.
+
+      ``` 
+      ansible-vault encrypt_string "[your_ssl_cert_password here]" --vault-password-file ./vault_secret
+      ```
+1. Copy the output from **!vault** to the last line before **Encryption successful**.
+1. cd defaults
+1. Open up the main.yml file.
+1. Add the variable "ssl_cert_password", and paste the copied encrypted password
+   as the value.
+1. Save the file.
 1. cd molecule/default
 1. Edit the **converge.yml** and add `become: true` before the **tasks:** keyword.
 
@@ -127,10 +152,10 @@ Python virtual environment and Ansible Molecule.
       - name: nexus-server
     provisioner:
       name: ansible
-      log: true
       config_options:
         defaults:
           remote_user: centos
+          vault_password_file: ${MOLECULE_PROJECT_DIRECTORY}/vault_secret
         privileged_escalation:
           become: true
           become_ask_pass: false

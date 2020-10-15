@@ -5,4 +5,19 @@ yum_installs:
   - name: "tar"
     install_name: "tar"
 yum_backend: dnf
-hostname: nexus-server
+
+domain_name: example.com
+fqdn: nexus-server.{{ domain_name }}
+
+use_ssl: true
+nexus_ssl_dir: /opt/nexus/sonatype-work/nexus3/etc/ssl
+nexus_properties_dir: /opt/nexus/sonatype-work/nexus3/etc
+nexus_jetty_config_dir: /opt/nexus/nexus-3.28.0-01/etc/jetty
+ssl_cert_organization: 'ACME CORP'
+ssl_cert_password: !vault |
+  $ANSIBLE_VAULT;1.1;AES256
+  63613630306531303766383834323862353734646564633733306631326137656462653464366235
+  3461356432313066333731383233653134393530393365610a366363643164613731636434313337
+  33313835613162363166363564643063306431346335366431303139323930383032333636363130
+  6536613031376337360a356334353464666638633361323162646566393361313737386333346135
+  3934

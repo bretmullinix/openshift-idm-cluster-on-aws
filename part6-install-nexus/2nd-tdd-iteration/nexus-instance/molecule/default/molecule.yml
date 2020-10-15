@@ -9,10 +9,10 @@ platforms:
   - name: nexus-server
 provisioner:
   name: ansible
-  log: true
   config_options:
     defaults:
       remote_user: centos
+      vault_password_file: ${MOLECULE_PROJECT_DIRECTORY}/vault_secret
     privileged_escalation:
       become: true
       become_ask_pass: false

@@ -43,3 +43,4 @@
 
 - name: Add Self Signed Certificate to Jetty Key Store
   include_tasks: "{{role_path}}/tasks/main/generate_certificate_for_https.yml"
+  when: use_ssl == true

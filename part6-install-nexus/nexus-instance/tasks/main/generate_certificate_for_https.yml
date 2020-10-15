@@ -19,10 +19,10 @@
            -ext 'SAN=DNS:{{ fqdn }},DNS:clm.{{ domain_name }},DNS:repo.{{ domain_name }},DNS:www.{{ domain_name }}' -noprompt"
 
 - name: Generate PEM encoded public certificate file
-  shell: "keytool -exportcert -keystore {{ nexus_ssl_dir }}/keystore.jks -alias {{ domain_name }} -storepass password -rfc > {{ nexus_ssl_dir }}/example.cert -noprompt"
+  shell: "keytool -exportcert -keystore {{ nexus_ssl_dir }}/keystore.jks -alias {{ domain_name }} -storepass password -rfc > {{ nexus_ssl_dir }}/nexus.cert -noprompt"
 
 - name: Convert our keystore to a PKCS12 keystore.  More widely used.
-  shell: "keytool -importkeystore -srckeystore {{ nexus_ssl_dir }}/keystore.jks -destkeystore {{ nexus_ssl_dir }}/example.p12
+  shell: "keytool -importkeystore -srckeystore {{ nexus_ssl_dir }}/keystore.jks -destkeystore {{ nexus_ssl_dir }}/nexus.p12
                   -deststorepass password -srcstorepass password -deststoretype PKCS12 -noprompt"
 
 

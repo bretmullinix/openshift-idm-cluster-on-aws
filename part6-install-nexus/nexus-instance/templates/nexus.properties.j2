@@ -1,0 +1,16 @@
+# Jetty section
+# application-port=8081
+# application-host=0.0.0.0
+# nexus-context-path=/
+
+
+nexus-args=${jetty.etc}/jetty.xml,${jetty.etc}/jetty-https.xml,${jetty.etc}/jetty-requestlog.xml
+application-port-ssl=8443
+ssl.etc=${karaf.data}/etc/ssl
+
+# Nexus section
+# nexus-edition=nexus-pro-edition
+# nexus-features=\
+#  nexus-pro-feature
+
+# nexus.hazelcast.discovery.isEnabled=true
