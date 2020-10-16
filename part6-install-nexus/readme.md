@@ -464,7 +464,7 @@ Python virtual environment and Ansible Molecule.
     
     1. Replace the **nexus_software** folder in the **nexus_instance/files/** directory with this one.
     
-    1. Make sure your the following variables in **vars/main.yml** are populated according to your new tar file
+    1. Make sure the following variables in **vars/main.yml** are populated according to your new tar file
        and sha1 hash:
     
          ```yaml
