@@ -115,8 +115,8 @@ The purpose of this iteration is to configure and run Nexus using SSL on the tar
     1. We added the line `<Set name="certAlias">nexus</Set>`.  When we install SSL, we create a cert
        with an **alias** of **nexus**.  We need to let Jetty know the cert alias.
        
-    1. When we add the SSL keystore, the passwords all change to the **nexus_jetty_keystore_password**.
-       We add the code `{{ nexus_jetty_keystore_password }}` to the file where Jetty requires the password
+    1. When we add the SSL keystore, the certificate passwords are set to the **nexus_jetty_keystore_password**
+       variable value.  We add the code `{{ nexus_jetty_keystore_password }}` to the file where Jetty requires the password
        change.
     
 1. Make the file **jetty-https.xml.j2**
