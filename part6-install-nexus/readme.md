@@ -130,7 +130,7 @@ Python virtual environment and Ansible Molecule.
     
     The variable deserves some explanation:
     
-    1. **open_nexus_ports** = The ports to open up for the nexus
+    1. **open_nexus_ports** --> The ports to open up for the nexus
        server.
 
     1. **nexus_software_sha1_checksum** --> The sha1 hash for the downloaded nexus software file.
