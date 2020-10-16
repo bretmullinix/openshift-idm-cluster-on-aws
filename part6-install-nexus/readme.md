@@ -480,9 +480,6 @@ After the 5th TDD, we can login to our Sonatype Nexus Server by using our public
 target server in AWS and using the port **8443**.  Here is a screen shot of what you should expect.  Your IP
 address will be different.
 
-**TODO:** REPLACE IMAGE WITH SSL....
-
 ![installed-sonatype-nexus](../images/installed_nexus_repo_picture.png)
     
-
 We have finished the nexus tutorial.  Please continue with the tutorials [here](../readme.md).
