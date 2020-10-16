@@ -9,7 +9,6 @@ yum_backend: dnf
 domain_name: example.com
 fqdn: nexus-server.{{ domain_name }}
 use_ssl: true
-certs_local_directory: "{{role_path}}/files/certs"
 nexus_jetty_keystore_password: !vault |
   $ANSIBLE_VAULT;1.1;AES256
   33616131656163343934323331393566323832663732623366393435653136636637613262373839
