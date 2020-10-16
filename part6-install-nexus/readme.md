@@ -244,6 +244,7 @@ Python virtual environment and Ansible Molecule.
     The explanation of the variables can be found 
     [here](../part5-register-idm-client/readme.md#vars_main_explanation).
 
+1. cd ..
 1. Delete the **create.yml** file.
 
 1. Add the following content to the **create.yml** file.
