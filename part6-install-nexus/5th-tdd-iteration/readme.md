@@ -153,7 +153,7 @@ The purpose of this iteration is to configure and run Nexus using SSL on the tar
         nexus-args=${jetty.etc}/jetty.xml,${jetty.etc}/jetty-https.xml,${jetty.etc}/jetty-requestlog.xml
         ```
     
-    1. Also, in the property above, we add the **jetty-https.yml** file to let Nexus know we
+    1. Also, in the property above, we added the **jetty-https.yml** file to let Nexus know we
        plan on using https, and the configuration in this file.
        
     1. We inform Nexus we plan on using port **8443** with the following line.
