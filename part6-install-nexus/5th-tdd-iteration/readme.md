@@ -295,7 +295,7 @@ The purpose of this iteration is to configure and run Nexus using SSL on the tar
             state: restarted
         ```   
            
-        The tasks configure the Nexus software on the target server for SSL.  Let's explain these tasks:
+        The tasks configure the Nexus software on the target server for SSL. 
         
         Let's explain these tasks.
         
