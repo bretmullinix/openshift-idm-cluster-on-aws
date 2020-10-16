@@ -330,7 +330,7 @@ The purpose of this iteration is to configure and run Nexus using SSL on the tar
         
         1. **Create Jetty HTTPS Properties** --> Converts the Jinja2 **jetty-https.xml.j2**
            to a new **jetty-https.xml** file and overwrites the default jetty https configuration.
-           NOTE: If you change the Nexus software included in this Ansible role, 
+           NOTE: If you change the Nexus software included in this ansible role, 
            you might have to change the **nexus_jetty_config_dir** variable value to where the 
            Jetty configuration exists.
            
