@@ -119,7 +119,8 @@ The purpose of this iteration is to configure and run Nexus using SSL on the tar
        variable value.  We add the code `{{ nexus_jetty_keystore_password }}` to the file where Jetty requires the password
        change.
     
-1. Make the file **jetty-https.xml.j2**
+1. Make the file **nexus.properties.j2**
+
 1. Add the following content to the file.
 
     ```yaml
