@@ -173,7 +173,7 @@ Python virtual environment and Ansible Molecule.
 1. Add the variable "nexus_jetty_keystore_password", and paste the copied encrypted password
    as the value.
 1. Save the file.
-1. cd molecule/default
+1. cd ../molecule/default
 1. Edit the **converge.yml** and add `become: true` before the **tasks:** keyword.
 
 1. Remove the **molecule.yml** file.
