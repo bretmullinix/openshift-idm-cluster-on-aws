@@ -154,7 +154,7 @@ The purpose of this iteration is to configure and run Nexus using SSL on the tar
         ```
     
     1. Also, in the property above, we added the **jetty-https.yml** file to let Nexus know we
-       plan on using https, and the configuration in this file.
+       plan on using https and to use the SSL configuration in this file.
        
     1. We inform Nexus we plan on using port **8443** with the following line.
     
