@@ -24,8 +24,11 @@
     - name: Determine if firewalld exists
       include_tasks: tasks/add-firewalld.yml
 
-    - name:  Determine if firewall ports are open
+    - name: Determine if firewall ports are open
       include_tasks: tasks/open-ports-with-firewalld.yml
 
-    - name:  Determine if the Nexus Software is Installed
+    - name: Determine if the Nexus Software is Installed
       include_tasks: tasks/is_nexus_software_installed.yml
+
+    - name: Determine if SSH has been configured for Nexus Server
+      include_tasks: tasks/check-if-ssh-is-installed-and-working.yml

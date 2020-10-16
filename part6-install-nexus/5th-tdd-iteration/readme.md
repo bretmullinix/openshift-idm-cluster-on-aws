@@ -1,6 +1,6 @@
 # 5th TDD Iteration -->  Securing Nexus with SSL
 
-Last updated: 10.14.2020
+Last updated: 10.16.2020
 
 ## Purpose
 
@@ -134,16 +134,31 @@ The purpose of this iteration is to configure and run Nexus using SSL on the tar
 
     ```
 
-1. cd nexus-instance/molecule/default
+1. cd nexus-instance/molecule/default/tasks
 
 1. **RED** --> Test to see if Nexus is installed.
+    1. Create the file **check-if-ssh-is-installed-and-working.yml**
     
-    1. Add the following code to the end of **verify.yml**.
+    1. Add the following code to the end of **check-if-ssh-is-installed-and-working.yml**.
         
         **TODO:** Task(s) under construction....
         
         ```yaml
+         - name: Check that the somefile.conf exists
+           stat:
+             path: "{{ nexus_ssl_dir }}/keystore.jks"
+           register: stat_result
        
+         - name: Fail If Keystore doesn't exist
+           fail:
+             msg: "SSL has not been configured.  You don't have a Java Keystore file for the certs."
+           when: not stat_result.stat.exists
+       
+       
+         - name: Check that you can connect (GET) to a page and it returns a status 200
+           uri:
+             url: "{{ 'https://' + hostvars[inventory_hostname]['ansible_default_ipv4']['address'] + ':8443' }}"
+             validate_certs: no
         ```
            
         The tasks above checks to see if the Nexus server is configured for SSL.
@@ -243,7 +258,7 @@ The purpose of this iteration is to configure and run Nexus using SSL on the tar
     1. Add the following code to the **main.yml** file
     
         ```yaml
-        - name: Add Self Signed Certificate to Jetty Key Store
+        - name: Configure Nexus for SSL
           include_tasks: "{{role_path}}/tasks/main/generate_certificate_for_https.yml"
           when: use_ssl == true
        ```

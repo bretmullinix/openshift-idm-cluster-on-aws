@@ -1,3 +1,7 @@
+- name: Set the Host Name for the Target Server
+  hostname:
+    name: "{{ fqdn }}"
+
 - name: Delete the SSL Directory for Nexus Server
   file:
     path: "{{ nexus_ssl_dir }}"

@@ -1,0 +1,15 @@
+- name: Check that the somefile.conf exists
+  stat:
+    path: "{{ nexus_ssl_dir }}/keystore.jks"
+  register: stat_result
+
+- name: Fail If Keystore doesn't exist
+  fail:
+    msg: "SSL has not been configured.  You don't have a Java Keystore file for the certs."
+  when: not stat_result.stat.exists
+
+
+- name: Check that you can connect (GET) to a page and it returns a status 200
+  uri:
+    url: "{{ 'https://' + hostvars[inventory_hostname]['ansible_default_ipv4']['address'] + ':8443' }}"
+    validate_certs: no

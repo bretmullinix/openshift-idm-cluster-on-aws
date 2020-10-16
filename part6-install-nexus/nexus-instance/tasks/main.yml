@@ -41,6 +41,6 @@
   when: nexus_service is not defined
 
 
-- name: Add Self Signed Certificate to Jetty Key Store
+- name: Configure Nexus for SSL
   include_tasks: "{{role_path}}/tasks/main/generate_certificate_for_https.yml"
   when: use_ssl == true
